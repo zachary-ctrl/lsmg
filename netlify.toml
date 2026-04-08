@@ -1,0 +1,36 @@
+[build]
+  command = "npm run build"
+  publish = "dist/client"
+
+[dev]
+  port = 8888
+  targetPort = 3000
+
+[[edge_functions]]
+  path = "/api/news"
+  function = "news-proxy"
+
+[[edge_functions]]
+  path = "/admin/*"
+  function = "admin-auth"
+
+[[redirects]]
+  from = "/admin"
+  to   = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/"
+  to   = "/admin/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

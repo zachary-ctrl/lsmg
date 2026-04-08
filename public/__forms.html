@@ -1,0 +1,51 @@
+<!-- public/__forms.html — only for Netlify's build bot detection -->
+<html>
+<body>
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact" />
+    <input type="hidden" name="recipient-email" value="info@lastshotmediagroup.com" />
+    <input name="name" />
+    <input name="email" />
+    <select name="inquiry-type"></select>
+    <input name="subject" />
+    <textarea name="message"></textarea>
+    <input name="bot-field" />
+  </form>
+
+  <form name="booking-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="booking-inquiry" />
+    <input type="hidden" name="recipient-email" value="info@lastshotmediagroup.com" />
+    <input name="name" />
+    <input name="company" />
+    <input name="email" />
+    <input name="phone" />
+    <input name="artist" />
+    <input name="event-date" />
+    <input name="location" />
+    <select name="event-type"></select>
+    <select name="budget"></select>
+    <textarea name="details"></textarea>
+    <input name="bot-field" />
+  </form>
+
+  <form name="talent-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="talent-submission" />
+    <input name="first-name" />
+    <input name="last-name" />
+    <input name="email" />
+    <input name="phone" />
+    <select name="talent-type"></select>
+    <input name="location" />
+    <input name="instagram" />
+    <input name="portfolio" />
+    <textarea name="bio"></textarea>
+    <input name="bot-field" />
+  </form>
+
+  <form name="os-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="os-waitlist" />
+    <input name="email" />
+    <input name="bot-field" />
+  </form>
+</body>
+</html>
