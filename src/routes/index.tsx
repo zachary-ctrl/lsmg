@@ -1,12 +1,77 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 })
 
+interface TickerItem {
+  id: number
+  text: string
+  linkUrl: string | null
+  linkType: string
+  isActive: boolean
+}
+
+function LiveTicker() {
+  const [items, setItems] = useState<TickerItem[]>([])
+
+  useEffect(() => {
+    fetch('/api/live-ticker')
+      .then((res) => res.json())
+      .then((data) => setItems(data.items || []))
+      .catch(() => {})
+    const interval = setInterval(() => {
+      fetch('/api/live-ticker')
+        .then((res) => res.json())
+        .then((data) => setItems(data.items || []))
+        .catch(() => {})
+    }, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  if (items.length === 0) return null
+
+  return (
+    <div className="relative overflow-hidden" style={{ background: '#0a0002', borderBottom: '2px solid var(--red)', padding: '12px 0' }}>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="flex items-center gap-4 overflow-hidden">
+          <div className="flex items-center gap-2 flex-shrink-0" style={{ zIndex: 1 }}>
+            <span className="live-pulse-dot" />
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', fontWeight: 700 }}>LIVE</span>
+          </div>
+          <div className="flex-1 overflow-hidden" style={{ maskImage: 'linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent)' }}>
+            <div className="flex items-center gap-10 whitespace-nowrap" style={{ animation: `ticker ${Math.max(20, items.length * 8)}s linear infinite` }}>
+              {[...items, ...items].map((item, i) => {
+                const content = (
+                  <span className="inline-flex items-center gap-3">
+                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 1, color: 'var(--white)' }}>{item.text}</span>
+                    <span style={{ width: 4, height: 4, background: 'var(--red)', borderRadius: '50%', display: 'inline-block', opacity: 0.5 }} />
+                  </span>
+                )
+                if (item.linkUrl) {
+                  const isExternal = item.linkType === 'external' || item.linkUrl.startsWith('http')
+                  if (isExternal) {
+                    return <a key={`${item.id}-${i}`} href={item.linkUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--red)] transition-colors">{content}</a>
+                  }
+                  return <Link key={`${item.id}-${i}`} to={item.linkUrl} className="hover:text-[var(--red)] transition-colors">{content}</Link>
+                }
+                return <span key={`${item.id}-${i}`}>{content}</span>
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function HomePage() {
   return (
     <div style={{ paddingTop: 0 }}>
+      {/* Live Ticker */}
+      <LiveTicker />
+
       {/* Hero */}
       <section className="min-h-screen flex items-center relative overflow-hidden" style={{ padding: '80px 40px' }}>
         <div className="absolute inset-0" style={{

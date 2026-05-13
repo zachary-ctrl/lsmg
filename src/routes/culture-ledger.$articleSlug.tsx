@@ -20,7 +20,7 @@ interface Article {
 }
 
 interface Comment {
-  id: string
+  id: number
   name: string
   text: string
   createdAt: string
