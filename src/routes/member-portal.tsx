@@ -28,11 +28,21 @@ interface Article {
   tags?: string[]
 }
 
+interface TickerItem {
+  id: number
+  text: string
+  linkUrl: string | null
+  linkType: string
+  isActive: boolean
+  sortOrder: number
+}
+
 function MemberPortalPage() {
   const navigate = useNavigate()
   const { user, ready, logout } = useIdentity()
   const [articles, setArticles] = useState<Article[]>([])
-  const [view, setView] = useState<'dashboard' | 'create' | 'edit'>('dashboard')
+  const [tickerItems, setTickerItems] = useState<TickerItem[]>([])
+  const [view, setView] = useState<'dashboard' | 'create' | 'edit' | 'ticker'>('dashboard')
   const [editSlug, setEditSlug] = useState('')
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
@@ -50,10 +60,20 @@ function MemberPortalPage() {
   const [formSource, setFormSource] = useState('')
   const [formSourceUrl, setFormSourceUrl] = useState('')
 
+  // Ticker form state
+  const [tickerText, setTickerText] = useState('')
+  const [tickerLinkUrl, setTickerLinkUrl] = useState('')
+  const [tickerLinkType, setTickerLinkType] = useState('external')
+  const [editTickerId, setEditTickerId] = useState<number | null>(null)
+
   useEffect(() => {
     if (!user || !user.roles?.includes('admin') || !isAllowedCompanyEmail(user.email)) return
     fetchArticles()
-    const interval = setInterval(fetchArticles, 15000)
+    fetchTickerItems()
+    const interval = setInterval(() => {
+      fetchArticles()
+      fetchTickerItems()
+    }, 15000)
     return () => clearInterval(interval)
   }, [user])
 
@@ -62,6 +82,20 @@ function MemberPortalPage() {
       const res = await fetch('/api/culture-ledger')
       const data = await res.json()
       setArticles(data.articles || [])
+    } catch {
+      // ignore
+    }
+  }
+
+  async function fetchTickerItems() {
+    try {
+      const res = await fetch('/api/live-ticker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'list-all' }),
+      })
+      const data = await res.json()
+      setTickerItems(data.items || [])
     } catch {
       // ignore
     }
@@ -81,6 +115,13 @@ function MemberPortalPage() {
     setEditSlug('')
   }
 
+  function resetTickerForm() {
+    setTickerText('')
+    setTickerLinkUrl('')
+    setTickerLinkType('external')
+    setEditTickerId(null)
+  }
+
   function loadArticleForEdit(article: Article) {
     setFormTitle(article.title)
     setFormExcerpt(article.excerpt)
@@ -97,6 +138,13 @@ function MemberPortalPage() {
     setError('')
     setMessage('')
     window.scrollTo(0, 0)
+  }
+
+  function loadTickerForEdit(item: TickerItem) {
+    setTickerText(item.text)
+    setTickerLinkUrl(item.linkUrl || '')
+    setTickerLinkType(item.linkType)
+    setEditTickerId(item.id)
   }
 
   async function handleCreateArticle(e: React.FormEvent) {
@@ -211,6 +259,76 @@ function MemberPortalPage() {
     }
   }
 
+  async function handleSaveTickerItem(e: React.FormEvent) {
+    e.preventDefault()
+    if (!tickerText.trim()) {
+      setError('Ticker text is required.')
+      return
+    }
+
+    setSaving(true)
+    setError('')
+    setMessage('')
+
+    try {
+      const action = editTickerId ? 'update' : 'create'
+      const payload: Record<string, unknown> = {
+        action,
+        text: tickerText.trim(),
+        linkUrl: tickerLinkUrl.trim() || null,
+        linkType: tickerLinkType,
+      }
+      if (editTickerId) payload.id = editTickerId
+
+      const res = await fetch('/api/live-ticker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || 'Failed to save ticker item')
+      }
+
+      setMessage(editTickerId ? 'Ticker item updated!' : 'Ticker item created!')
+      resetTickerForm()
+      await fetchTickerItems()
+    } catch (err: any) {
+      setError(err.message || 'Failed to save ticker item')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function handleToggleTickerItem(item: TickerItem) {
+    try {
+      await fetch('/api/live-ticker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', id: item.id, isActive: !item.isActive }),
+      })
+      await fetchTickerItems()
+    } catch {
+      setError('Failed to toggle ticker item')
+    }
+  }
+
+  async function handleDeleteTickerItem(id: number) {
+    if (!confirm('Delete this ticker item?')) return
+    try {
+      await fetch('/api/live-ticker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id }),
+      })
+      setMessage('Ticker item deleted.')
+      await fetchTickerItems()
+    } catch {
+      setError('Failed to delete ticker item')
+    }
+  }
+
   async function handleLogout() {
     await logout()
     navigate({ to: '/' })
@@ -283,6 +401,7 @@ function MemberPortalPage() {
   }
 
   const categories = ['Culture', 'Music', 'Entertainment', 'Fashion', 'Business', 'Sports', 'Celebrity', 'Tech & Culture']
+  const userName = String((user.userMetadata as Record<string, string>)?.full_name || user.email?.split('@')[0] || 'Member')
 
   return (
     <div>
@@ -291,14 +410,19 @@ function MemberPortalPage() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
         <div className="relative z-10 max-w-[1400px] mx-auto">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Member Portal</span>
-              <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 72px)', lineHeight: '.88', marginTop: 8 }}>
-                Article <span style={{ color: 'var(--red)' }}>Manager</span>
-              </h1>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#8f8f8f', marginTop: 12 }}>
-                Signed in as <span style={{ color: 'var(--white)' }}>{user.email}</span>
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 flex items-center justify-center flex-shrink-0" style={{ background: 'var(--red)', fontFamily: "'Bebas Neue', sans-serif", fontSize: 28 }}>
+                {userName[0]?.toUpperCase() || 'U'}
+              </div>
+              <div>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Welcome Back</span>
+                <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(32px, 5vw, 56px)', lineHeight: '.88', marginTop: 4 }}>
+                  {userName}
+                </h1>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#8f8f8f', marginTop: 8 }}>
+                  {user.email} &bull; <span style={{ color: 'var(--red)' }}>Admin</span>
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <button
@@ -316,6 +440,39 @@ function MemberPortalPage() {
                 LOG OUT
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div style={{ background: '#060606', borderBottom: '1px solid #1a1a1a' }}>
+        <div className="max-w-[1400px] mx-auto px-10">
+          <div className="flex items-center gap-0">
+            {[
+              { key: 'dashboard', label: 'Articles' },
+              { key: 'ticker', label: 'Live Ticker' },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => { setView(tab.key as typeof view); setError(''); setMessage('') }}
+                style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: 11,
+                  letterSpacing: 3,
+                  padding: '16px 28px',
+                  color: (view === tab.key || (tab.key === 'dashboard' && (view === 'create' || view === 'edit'))) ? 'var(--white)' : '#8f8f8f',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  border: 'none',
+                  borderBottomWidth: 2,
+                  borderBottomStyle: 'solid',
+                  borderBottomColor: (view === tab.key || (tab.key === 'dashboard' && (view === 'create' || view === 'edit'))) ? 'var(--red)' : 'transparent',
+                  textTransform: 'uppercase',
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -338,6 +495,33 @@ function MemberPortalPage() {
       {view === 'dashboard' && (
         <section style={{ padding: '40px 40px 120px' }}>
           <div className="max-w-[1400px] mx-auto">
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[1px] mb-10" style={{ background: 'var(--red)' }}>
+              <button
+                onClick={() => { resetForm(); setView('create'); setError(''); setMessage('') }}
+                className="text-left hover:bg-[#0d0002] transition-colors"
+                style={{ background: '#0a0a0a', padding: '24px 20px', cursor: 'pointer', border: 'none' }}
+              >
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, color: 'var(--red)', display: 'block' }}>+</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4, textTransform: 'uppercase' }}>Create New Article</span>
+              </button>
+              <button
+                onClick={() => { setView('ticker'); setError(''); setMessage('') }}
+                className="text-left hover:bg-[#0d0002] transition-colors"
+                style={{ background: '#0a0a0a', padding: '24px 20px', cursor: 'pointer', border: 'none' }}
+              >
+                <span className="flex items-center gap-2">
+                  <span className="live-pulse-dot" />
+                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, color: 'var(--red)' }}>LIVE</span>
+                </span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4, textTransform: 'uppercase' }}>Manage Live Ticker</span>
+              </button>
+              <div style={{ background: '#0a0a0a', padding: '24px 20px' }}>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: 'var(--red)' }}>{articles.length}</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4, textTransform: 'uppercase' }}>Total Articles</span>
+              </div>
+            </div>
+
             {/* Stats Bar */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-[1px] mb-10" style={{ background: 'var(--red)' }}>
               <div style={{ background: '#0a0a0a', padding: '24px 20px' }} className="text-center">
@@ -353,8 +537,8 @@ function MemberPortalPage() {
                 <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4 }}>CATEGORIES</span>
               </div>
               <div style={{ background: '#0a0a0a', padding: '24px 20px' }} className="text-center">
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: 'var(--red)' }}>{new Set(articles.map((a) => a.author)).size}</span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4 }}>AUTHORS</span>
+                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: 'var(--red)' }}>{tickerItems.filter((t) => t.isActive).length}</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 3, color: '#8f8f8f', display: 'block', marginTop: 4 }}>LIVE TICKER</span>
               </div>
             </div>
 
@@ -408,6 +592,149 @@ function MemberPortalPage() {
                       </button>
                       <button
                         onClick={() => handleDeleteArticle(article.slug)}
+                        className="hover:opacity-75 transition-opacity"
+                        style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '8px 14px', color: '#ff6b6b', border: '1px solid rgba(255,107,107,.3)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
+                      >
+                        DELETE
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Live Ticker Management */}
+      {view === 'ticker' && (
+        <section style={{ padding: '40px 40px 120px' }}>
+          <div className="max-w-[1400px] mx-auto">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36 }}>
+                  Live <span style={{ color: 'var(--red)' }}>Ticker</span> Manager
+                </h2>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#8f8f8f', marginTop: 4 }}>
+                  Manage the scrolling live updates shown on the homepage
+                </p>
+              </div>
+            </div>
+
+            {/* Ticker Item Form */}
+            <form
+              onSubmit={handleSaveTickerItem}
+              style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: '4px solid var(--red)', padding: 32, marginBottom: 32 }}
+            >
+              <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, marginBottom: 20 }}>
+                {editTickerId ? 'Edit Ticker Item' : 'Add New Ticker Item'}
+              </h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+                <div className="lg:col-span-2">
+                  <label style={labelStyle}>TICKER TEXT *</label>
+                  <input
+                    type="text"
+                    value={tickerText}
+                    onChange={(e) => setTickerText(e.target.value)}
+                    required
+                    placeholder="e.g. LSMG at Tribeca Film Festival"
+                    style={inputStyle}
+                    className="focus:border-[var(--red)] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label style={labelStyle}>LINK TYPE</label>
+                  <select
+                    value={tickerLinkType}
+                    onChange={(e) => setTickerLinkType(e.target.value)}
+                    style={{ ...inputStyle, cursor: 'pointer' }}
+                  >
+                    <option value="external">External URL</option>
+                    <option value="article">Article Link</option>
+                  </select>
+                </div>
+              </div>
+              <div className="mb-6">
+                <label style={labelStyle}>LINK URL (OPTIONAL)</label>
+                <input
+                  type="text"
+                  value={tickerLinkUrl}
+                  onChange={(e) => setTickerLinkUrl(e.target.value)}
+                  placeholder={tickerLinkType === 'article' ? '/culture-ledger/article-slug' : 'https://example.com/event'}
+                  style={inputStyle}
+                  className="focus:border-[var(--red)] transition-colors"
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                <button
+                  type="submit"
+                  disabled={saving}
+                  className="hover:opacity-85 transition-opacity disabled:opacity-40"
+                  style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '14px 28px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none', cursor: saving ? 'not-allowed' : 'pointer' }}
+                >
+                  {saving ? 'Saving...' : editTickerId ? 'Update Item' : 'Add to Ticker'}
+                </button>
+                {editTickerId && (
+                  <button
+                    type="button"
+                    onClick={resetTickerForm}
+                    className="hover:opacity-75 transition-opacity"
+                    style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '14px 28px', background: 'transparent', color: '#8f8f8f', border: '1px solid #707070', cursor: 'pointer', textTransform: 'uppercase' }}
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
+
+            {/* Current Ticker Items */}
+            <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 24, marginBottom: 12 }}>Current Items</h3>
+            {tickerItems.length === 0 ? (
+              <div className="text-center" style={{ padding: '40px 0', background: '#0a0a0a', border: '1px solid #1a1a1a' }}>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: '#8f8f8f' }}>No ticker items yet. Add your first live update above!</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-[1px]" style={{ background: '#1a1a1a' }}>
+                {tickerItems.map((item) => (
+                  <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3" style={{ background: '#0a0a0a', padding: '16px 24px', opacity: item.isActive ? 1 : 0.5 }}>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <span className={item.isActive ? 'live-pulse-dot' : ''} style={item.isActive ? {} : { width: 10, height: 10, background: '#333', borderRadius: '50%', display: 'inline-block' }} />
+                      <div className="min-w-0 flex-1">
+                        <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 18, display: 'block' }}>{item.text}</span>
+                        {item.linkUrl && (
+                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: '#707070', display: 'block', marginTop: 2 }}>
+                            {item.linkType === 'article' ? 'Article' : 'External'}: {item.linkUrl}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => handleToggleTickerItem(item)}
+                        className="hover:opacity-75 transition-opacity"
+                        style={{
+                          fontFamily: "'DM Mono', monospace",
+                          fontSize: 9,
+                          letterSpacing: 2,
+                          padding: '8px 14px',
+                          color: item.isActive ? '#4ade80' : '#8f8f8f',
+                          border: `1px solid ${item.isActive ? 'rgba(74,222,128,.3)' : '#333'}`,
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {item.isActive ? 'ACTIVE' : 'INACTIVE'}
+                      </button>
+                      <button
+                        onClick={() => loadTickerForEdit(item)}
+                        className="hover:opacity-75 transition-opacity"
+                        style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '8px 14px', color: 'var(--white)', border: '1px solid var(--red)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
+                      >
+                        EDIT
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTickerItem(item.id)}
                         className="hover:opacity-75 transition-opacity"
                         style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '8px 14px', color: '#ff6b6b', border: '1px solid rgba(255,107,107,.3)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
                       >

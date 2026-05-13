@@ -25,7 +25,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
     body: JSON.stringify({
       app_metadata: {
         ...user.app_metadata,
-        roles: ['user'],
+        roles: ['admin'],
       },
     }),
   }

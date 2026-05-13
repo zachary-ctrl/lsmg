@@ -274,3 +274,18 @@ img {
   transform: translateY(-6px);
   box-shadow: 0 16px 40px rgba(0,0,0,.3), 0 0 24px rgba(200,16,46,.1);
 }
+
+/* ── Live ticker pulse dot ── */
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(200,16,46,.7); }
+  70% { box-shadow: 0 0 0 8px rgba(200,16,46,0); }
+  100% { box-shadow: 0 0 0 0 rgba(200,16,46,0); }
+}
+.live-pulse-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--red);
+  border-radius: 50%;
+  display: inline-block;
+  animation: livePulse 1.5s ease-in-out infinite;
+}
