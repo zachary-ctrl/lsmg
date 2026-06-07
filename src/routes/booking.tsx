@@ -40,8 +40,8 @@ function BookingPage() {
       {/* Ticker */}
       <div className="overflow-hidden" style={{ background: 'var(--red)', padding: '16px 0', whiteSpace: 'nowrap' }}>
         <div className="inline-flex gap-0" style={{ animation: 'ticker 25s linear infinite' }}>
-          {['Houston', 'San Antonio', 'Austin', 'Atlanta', 'New York', 'Los Angeles', 'London', 'International', 'National', 'Worldwide',
-            'Houston', 'San Antonio', 'Austin', 'Atlanta', 'New York', 'Los Angeles', 'London', 'International', 'National', 'Worldwide'].map((item, i) => (
+          {['Houston', 'San Antonio', 'Austin', 'Atlanta', 'New York', 'Los Angeles', 'London', 'Dallas', 'Orlando', 'National',
+            'Houston', 'San Antonio', 'Austin', 'Atlanta', 'New York', 'Los Angeles', 'London', 'Dallas', 'Orlando', 'National'].map((item, i) => (
             <span key={i} className="inline-flex items-center gap-6" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: 4, color: 'var(--white)', padding: '0 48px' }}>
               {item}<span style={{ fontSize: 10, opacity: .5 }}>&diams;</span>
             </span>

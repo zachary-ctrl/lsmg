@@ -112,7 +112,7 @@ function PRPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               Representation That<br /><span style={{ color: 'var(--red)' }}>Moves.</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>We represent models and multimedia talent for editorial, commercial, film, and entertainment work. Worldwide reach.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>We represent models and multimedia talent for editorial, commercial, film, and entertainment work. Dallas, Orlando, New York and Atlanta.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
             {[
@@ -295,7 +295,7 @@ function PRPage() {
               </div>
               <div>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', marginBottom: 4 }}>OPERATIONS</p>
-                <p style={{ fontSize: 18, color: '#fff' }}>Worldwide</p>
+                <p style={{ fontSize: 18, color: '#fff' }}>Dallas, Orlando, New York and Atlanta</p>
               </div>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">

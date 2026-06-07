@@ -114,11 +114,80 @@ img {
 
 /* Team card animations */
 .team-card {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  appearance: none;
+  border: none;
+  margin: 0;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
 }
 .team-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(200,16,46,.12);
+  transform: translateY(-8px);
+  box-shadow: 0 22px 50px rgba(200,16,46,.18);
+}
+.team-card:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+/* ── Enlarged, prominent team portraits ── */
+.team-photo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: linear-gradient(135deg, #160006, #080808);
+}
+.team-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(38%) contrast(1.05);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.55s ease;
+}
+.team-card:hover .team-photo {
+  transform: scale(1.06);
+  filter: grayscale(0%) contrast(1.08);
+}
+.team-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.team-photo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(8,8,8,.78) 100%);
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+.team-card:hover .team-photo-wrap::after {
+  opacity: 0.95;
+}
+.team-photo-cta {
+  position: absolute;
+  left: 28px;
+  bottom: 18px;
+  z-index: 2;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--white);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.team-card:hover .team-photo-cta {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .team-image-float {
@@ -955,4 +1024,124 @@ img {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+/* ════════════════════════════════════════════════════════
+   Premium motion engineering (steven.com-inspired)
+   ════════════════════════════════════════════════════════ */
+
+/* ── Staggered, word-by-word typography fade ── */
+@keyframes wordStagger {
+  from { opacity: 0; transform: translateY(40%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.word-stagger {
+  display: inline-block;
+  opacity: 0;
+  animation: wordStagger 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Team bio reveal modal ── */
+@keyframes bioOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes bioModalIn {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.bio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(4, 4, 4, 0.82);
+  backdrop-filter: blur(10px);
+  animation: bioOverlayIn 0.35s ease both;
+}
+.bio-modal {
+  position: relative;
+  width: 100%;
+  max-width: 940px;
+  max-height: 88vh;
+  overflow: hidden;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-top: 4px solid var(--red);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6), 0 0 60px rgba(200, 16, 46, 0.12);
+  animation: bioModalIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.bio-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-height: 88vh;
+  overflow-y: auto;
+}
+@media (min-width: 768px) {
+  .bio-modal-grid {
+    grid-template-columns: 42% 58%;
+  }
+}
+.bio-modal-photo {
+  position: relative;
+  min-height: 280px;
+  background: linear-gradient(135deg, #160006, #080808);
+}
+.bio-modal-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+@media (min-width: 768px) {
+  .bio-modal-photo {
+    min-height: 100%;
+  }
+}
+.bio-modal-body {
+  padding: 44px 40px;
+}
+.bio-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--white);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+}
+.bio-modal-close:hover {
+  background: var(--red);
+  border-color: var(--red);
+  transform: rotate(90deg);
+}
+
+/* ── Micro-interaction: subtle press feedback ── */
+.team-card:active {
+  transform: translateY(-4px) scale(0.995);
+}
+
+/* ── Respect reduced-motion preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  .word-stagger,
+  .bio-modal,
+  .bio-modal-overlay,
+  .team-photo,
+  .team-card {
+    animation: none !important;
+    transition: none !important;
+  }
+  .word-stagger { opacity: 1; transform: none; }
 }

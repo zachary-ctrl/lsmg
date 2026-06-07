@@ -61,7 +61,7 @@ function ContactPage() {
                 </div>
                 <div style={{ borderLeft: '4px solid var(--red)', paddingLeft: 24 }}>
                   <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', marginBottom: 6 }}>OPERATIONS</p>
-                  <p style={{ fontSize: 22, color: '#fff', fontFamily: "'Bebas Neue', sans-serif", letterSpacing: 1 }}>Worldwide</p>
+                  <p style={{ fontSize: 22, color: '#fff', fontFamily: "'Bebas Neue', sans-serif", letterSpacing: 1 }}>Dallas, Orlando, New York and Atlanta</p>
                 </div>
               </div>
 

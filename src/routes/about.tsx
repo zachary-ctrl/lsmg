@@ -1,9 +1,53 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
 })
+
+type Member = {
+  name: string
+  role: string
+  desc: string
+  bio: string
+  tags: string[]
+  image: string
+}
+
+const TEAM: Member[] = [
+  {
+    name: 'Zachary Heneden',
+    role: 'CO-FOUNDER · CO-CEO',
+    desc: 'Handles creative direction, PR execution, original series development, and day-to-day operational management across all LSMG divisions.',
+    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. He leads creative direction, PR execution, and original series development, and stays hands-on with day-to-day operations across every LSMG division — from the editorial desk to the booking floor.',
+    tags: ['Co-Founder', 'Co-CEO'],
+    image: '/team/zachary.jpg',
+  },
+  {
+    name: "Julien Serrano-O'Neil",
+    role: 'CO-FOUNDER · CO-CEO',
+    desc: 'Co-founder handling operational systems, business development, and organizational infrastructure. The operational backbone of LSMG.',
+    bio: 'Julien is the operational backbone of LSMG. He architects the systems, business-development pipelines, and organizational infrastructure that let the company move with the intensity of a counterculture movement and the precision of a serious enterprise. If it scales, Julien built the rails for it.',
+    tags: ['Co-CEO', 'Co-Founder'],
+    image: '/team/julien.jpg',
+  },
+  {
+    name: 'Alexandrea L.',
+    role: 'EDITOR IN CHIEF',
+    desc: "Editorial lead for LSMG's content output — press releases, editorial coverage, media campaigns, and content strategy across all divisions.",
+    bio: "Alexandrea sets the editorial standard for everything LSMG publishes. As Editor in Chief she owns press releases, editorial coverage, and media-campaign strategy across all divisions, making sure every word that carries the LSMG name lands with intent and authority.",
+    tags: ['Editorial', 'Editor In Chief'],
+    image: '',
+  },
+  {
+    name: 'Ashley Diaz',
+    role: 'VP and Brand Strategy Lead',
+    desc: 'Brand positioning, visual identity strategy, and market positioning for LSMG and its clients.',
+    bio: 'As VP and Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
+    tags: ['Brand Strategy', 'Strategy Lead'],
+    image: '/team/ashley.jpg',
+  },
+]
 
 function useScrollReveal() {
   const ref = useRef<HTMLDivElement>(null)
@@ -27,8 +71,80 @@ function useScrollReveal() {
   return ref
 }
 
+/* steven.com-style magnetic pull — subtly pulls an element toward the cursor */
+function Magnetic({
+  children,
+  strength = 0.35,
+  className,
+  style,
+}: {
+  children: React.ReactNode
+  strength?: number
+  className?: string
+  style?: React.CSSProperties
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (e.clientX - (rect.left + rect.width / 2)) * strength
+    const y = (e.clientY - (rect.top + rect.height / 2)) * strength
+    el.style.transform = `translate(${x}px, ${y}px)`
+  }
+  const reset = () => {
+    const el = ref.current
+    if (el) el.style.transform = 'translate(0, 0)'
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{ transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'transform', ...style }}
+      onMouseMove={handleMove}
+      onMouseLeave={reset}
+    >
+      {children}
+    </div>
+  )
+}
+
+/* Staggered, word-by-word typography fade */
+function StaggerText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+  const words = text.split(' ')
+  return (
+    <span className={className} style={style}>
+      {words.map((word, i) => (
+        <span key={`${word}-${i}`} className="word-stagger" style={{ animationDelay: `${0.2 + i * 0.045}s` }}>
+          {word}
+          {i < words.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 function AboutPage() {
   const revealRef = useScrollReveal()
+  const [active, setActive] = useState<Member | null>(null)
+
+  // Lock scroll + handle Escape while the bio modal is open
+  useEffect(() => {
+    if (!active) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActive(null)
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [active])
+
   return (
     <div ref={revealRef}>
       {/* Page Hero */}
@@ -36,10 +152,10 @@ function AboutPage() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
         <div className="relative z-10 max-w-[1400px] mx-auto">
           <span className="scroll-reveal" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase', animation: 'fadeUp .7s ease both' }}>Our Story</span>
-          <h1 className="scroll-reveal" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88', animation: 'fadeUp .7s ease .1s both' }}>
-            About <span style={{ color: 'var(--red)' }}>LSMG</span>
+          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
+            <StaggerText text="About" /> <span style={{ color: 'var(--red)' }}><span className="word-stagger" style={{ animationDelay: '0.34s' }}>LSMG</span></span>
           </h1>
-          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .2s both' }}>Last Shot Media Group is an independent creative holding company operating worldwide. We built it because the industry needed something different.</p>
+          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. We built it because the industry needed something different.</p>
         </div>
       </div>
 
@@ -52,18 +168,18 @@ function AboutPage() {
               <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', margin: '12px 0' }}>
                 Built<br /><span style={{ color: 'var(--red)' }}>Different.</span>
               </h2>
-              <div className="w-[60px] h-[3px] my-5" style={{ background: 'var(--red)' }} />
+              <div className="w-[60px] h-[3px] my-5 line-reveal" style={{ background: 'var(--red)' }} />
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group was founded with a simple principle: creative talent deserves full-stack business infrastructure. Not just a publicist. Not just a booking agent. Everything — under one roof, owned and operated by people who actually live in the culture.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We are worldwide and unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We operate across Dallas, Orlando, New York and Atlanta — unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>Six divisions. One vision. We operate where PR, media, booking, production, training, and licensing intersect — and we build career infrastructure for artists and brands who are serious about longevity.</p>
             </div>
             <div>
               <div className="grid grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
                 {[
                   { value: '6', label: 'Divisions' },
-                  { value: 'Global', label: 'Operations', accent: true },
+                  { value: '4', label: 'Cities', accent: true },
                   { value: '2022', label: 'Founded' },
-                  { value: '\u221E', label: 'Last Shot Taken', accent: true },
+                  { value: '∞', label: 'Last Shot Taken', accent: true },
                 ].map((s) => (
                   <div key={s.label} className="text-center glow-hover" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease' }}
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
@@ -76,7 +192,7 @@ function AboutPage() {
               </div>
               <div className="scroll-reveal" style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: '4px solid var(--red)', padding: 36, marginTop: 2 }}>
                 <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, marginBottom: 12 }}>Our Identity</h4>
-                <p style={{ fontSize: 15, color: '#9c9c9c', lineHeight: 1.7 }}>Unapologetic creative ambition backed by serious operational muscle. We move with the intensity of a counterculture movement and the precision of a global enterprise. Red, Black, White. No compromise on vision or execution.</p>
+                <p style={{ fontSize: 15, color: '#9c9c9c', lineHeight: 1.7 }}>Unapologetic creative ambition backed by serious operational muscle. We move with the intensity of a counterculture movement and the precision of an enterprise built to last. Red, Black, White. No compromise on vision or execution.</p>
               </div>
             </div>
           </div>
@@ -91,35 +207,75 @@ function AboutPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Tap any portrait to read their full bio.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 2, background: 'var(--red)' }}>
-            {[
-              { name: 'Zachary Heneden', role: 'CO-FOUNDER · CO-CEO', desc: 'Handles creative direction, PR execution, original series development, and day-to-day operational management across all LSMG divisions.', tags: ['Co-Founder', 'Co-CEO'], image: '/team/zachary.jpg' },
-              { name: "Julien Serrano-O'Neil", role: 'CO-FOUNDER · CO-CEO', desc: 'Co-founder handling operational systems, business development, and organizational infrastructure. The operational backbone of LSMG.', tags: ['Co-CEO', 'Co-Founder'], image: '/team/julien.jpg' },
-              { name: 'Alexandrea L.', role: 'EDITOR IN CHIEF', desc: 'Editorial lead for LSMG\'s content output — press releases, editorial coverage, media campaigns, and content strategy across all divisions.', tags: ['Editorial', 'Editor In Chief'], image: '' },
-              { name: 'Ashley Diaz', role: 'BRAND STRATEGY LEAD', desc: 'Brand positioning, visual identity strategy, and market positioning for LSMG and its clients.', tags: ['Brand Strategy', 'Strategy Lead'], image: '/team/ashley.jpg' },
-            ].map((member, idx) => (
-              <div key={member.name} className="scroll-reveal team-card" style={{ background: '#0a0a0a', padding: 40, borderTop: '4px solid var(--red)', animationDelay: `${idx * 0.15}s` }}>
-                {member.image ? (
-                  <img src={member.image} alt={member.name} className="w-20 h-20 object-cover object-top mb-6 team-image-float" style={{ border: '1px solid var(--red)' }} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 2, background: 'var(--red)' }}>
+            {TEAM.map((member, idx) => (
+              <button
+                key={member.name}
+                type="button"
+                onClick={() => setActive(member)}
+                className="scroll-reveal team-card group text-left"
+                style={{ background: '#0a0a0a', borderTop: '4px solid var(--red)', animationDelay: `${idx * 0.12}s`, cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
+                aria-label={`View bio for ${member.name}`}
+              >
+                <div className="team-photo-wrap">
+                  {member.image ? (
+                    <img src={member.image} alt={member.name} className="team-photo" />
+                  ) : (
+                    <div className="team-photo team-photo-placeholder">
+                      <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 96, color: 'var(--red)', opacity: 0.5 }}>
+                        {member.name.charAt(0)}
+                      </span>
+                    </div>
+                  )}
+                  <span className="team-photo-cta">View Bio &rarr;</span>
+                </div>
+                <div style={{ padding: 28, flex: 1 }}>
+                  <h3 className="team-name-slide" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, lineHeight: 1 }}>{member.name}</h3>
+                  <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', margin: '10px 0 0', textTransform: 'uppercase' }}>{member.role}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bio Modal */}
+      {active && (
+        <div className="bio-modal-overlay" onClick={() => setActive(null)} role="dialog" aria-modal="true" aria-label={`${active.name} biography`}>
+          <div className="bio-modal" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="bio-modal-close" onClick={() => setActive(null)} aria-label="Close">
+              &times;
+            </button>
+            <div className="bio-modal-grid">
+              <div className="bio-modal-photo">
+                {active.image ? (
+                  <img src={active.image} alt={active.name} />
                 ) : (
-                  <div className="w-20 h-20 flex items-center justify-center mb-6 text-4xl team-image-float" style={{ background: 'linear-gradient(135deg,#1a0005,#080808)', border: '1px solid var(--red)' }}>👤</div>
+                  <div className="team-photo-placeholder" style={{ height: '100%' }}>
+                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>
+                      {active.name.charAt(0)}
+                    </span>
+                  </div>
                 )}
-                <h3 className="team-name-slide" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36 }}>{member.name}</h3>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', margin: '8px 0 16px' }}>{member.role}</p>
-                <p className="team-bio-fade" style={{ fontSize: 15, color: '#9c9c9c', lineHeight: 1.7 }}>{member.desc}</p>
-                <div className="flex flex-wrap gap-2 mt-5">
-                  {member.tags.map((tag, i) => (
-                    <span key={tag} className="team-tag-pop" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: i === member.tags.length - 1 ? 'var(--red)' : 'var(--mid)', border: `1px solid ${i === member.tags.length - 1 ? 'var(--red)' : '#222'}`, padding: '6px 14px' }}>{tag}</span>
+              </div>
+              <div className="bio-modal-body">
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', textTransform: 'uppercase' }}>Leadership</span>
+                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 64px)', lineHeight: '.9', margin: '8px 0 6px' }}>{active.name}</h3>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, color: 'var(--red)', textTransform: 'uppercase', marginBottom: 24 }}>{active.role}</p>
+                <div className="w-[60px] h-[3px] mb-6" style={{ background: 'var(--red)' }} />
+                <p style={{ fontSize: 16, color: '#cfcfcf', lineHeight: 1.8, marginBottom: 28 }}>{active.bio}</p>
+                <div className="flex flex-wrap gap-2">
+                  {active.tags.map((tag, i) => (
+                    <span key={tag} style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: i === active.tags.length - 1 ? 'var(--red)' : 'var(--mid)', border: `1px solid ${i === active.tags.length - 1 ? 'var(--red)' : '#222'}`, padding: '6px 14px' }}>{tag}</span>
                   ))}
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-
         </div>
-      </section>
+      )}
 
       {/* CTA */}
       <section className="text-center" style={{ padding: '120px 40px' }}>
@@ -129,9 +285,11 @@ function AboutPage() {
             This Is<br />Your <span style={{ color: 'var(--red)' }}>Last Shot.</span>
           </h2>
           <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you're looking to be a client, join the team, or partner with LSMG on something larger — the door is open.</p>
-          <Link to="/contact" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: 3, padding: '18px 48px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
-            Get In Touch
-          </Link>
+          <Magnetic className="inline-block" strength={0.45}>
+            <Link to="/contact" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: 3, padding: '18px 48px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
+              Get In Touch
+            </Link>
+          </Magnetic>
         </div>
       </section>
     </div>

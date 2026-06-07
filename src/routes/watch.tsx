@@ -245,9 +245,6 @@ function WatchPage() {
             <a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:bg-[var(--red)] hover:text-[var(--white)] transition-colors" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'transparent', color: 'var(--red)', textTransform: 'uppercase', border: '1px solid var(--red)' }}>
               Apple Podcasts
             </a>
-            <a href="https://twitch.tv/lastshotmediagroup" target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:bg-[var(--red)] hover:text-[var(--white)] transition-colors" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'transparent', color: 'var(--red)', textTransform: 'uppercase', border: '1px solid var(--red)' }}>
-              Twitch
-            </a>
             <a href="https://instagram.com/lastshotmediagroup" target="_blank" rel="noopener noreferrer" className="inline-flex items-center hover:bg-[var(--red)] hover:text-[var(--white)] transition-colors" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'transparent', color: 'var(--red)', textTransform: 'uppercase', border: '1px solid var(--red)' }}>
               Instagram
             </a>
