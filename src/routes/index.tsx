@@ -81,7 +81,7 @@ function HomePage() {
         <div className="relative z-10 max-w-[1400px] mx-auto w-full">
           <div className="inline-flex items-center gap-3 mb-6" style={{ animation: 'fadeUp .7s ease both' }}>
             <span className="w-10 h-[1px]" style={{ background: 'var(--red)' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)' }}>Worldwide &middot; Est. 2022</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)' }}>Dallas, Orlando, New York and Atlanta &middot; Est. 2022</span>
           </div>
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(72px, 12vw, 160px)', lineHeight: '.85', marginBottom: 32, animation: 'fadeUp .7s ease .1s both' }}>
             LAST<br /><span style={{ color: 'var(--red)' }}>SHOT</span><br />MEDIA
@@ -106,8 +106,8 @@ function HomePage() {
       {/* Ticker */}
       <div className="overflow-hidden" style={{ background: 'var(--red)', padding: '16px 0', whiteSpace: 'nowrap' }}>
         <div className="inline-flex gap-0" style={{ animation: 'ticker 25s linear infinite' }}>
-          {['PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Worldwide',
-            'PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Worldwide'].map((item, i) => (
+          {['PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Dallas · Orlando · New York · Atlanta',
+            'PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Dallas · Orlando · New York · Atlanta'].map((item, i) => (
             <span key={i} className="inline-flex items-center gap-6" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: 4, color: 'var(--white)', padding: '0 48px' }}>
               {item}<span style={{ fontSize: 10, opacity: .5 }}>&diams;</span>
             </span>
@@ -120,7 +120,7 @@ function HomePage() {
         {[
           { value: '6', label: 'Business Divisions' },
           { value: '200K+', label: 'Client Streams', accent: true },
-          { value: 'Global', label: 'Worldwide Operations' },
+          { value: '4', label: 'Cities' },
           { value: '\u221E', label: 'Last Shot Taken', accent: true },
         ].map((stat) => (
           <div key={stat.label} className="text-center glow-hover" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease' }}
@@ -241,7 +241,7 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: 2, background: 'var(--red)' }}>
             {[
               { num: '01', title: 'Independent & Accountable', desc: 'No corporate overhead. No conflicting interests. Every client gets direct attention from the founders.' },
-              { num: '02', title: 'Worldwide Reach', desc: 'Operating globally with press access and active expansion into international markets.' },
+              { num: '02', title: 'Multi-City Reach', desc: 'Operating across Dallas, Orlando, New York and Atlanta with press access and active expansion into new markets.' },
               { num: '03', title: 'Full-Stack Creative', desc: 'PR, production, booking, training, and licensing under one roof. Your story told everywhere it needs to be told.' },
               { num: '04', title: 'Results, Not Promises', desc: 'Measurable deliverables. Transparent reporting. Real press placements, real bookings, real results.' },
             ].map((card) => (

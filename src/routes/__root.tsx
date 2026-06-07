@@ -22,21 +22,21 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Last Shot Media Group | LSMG — Worldwide',
+        title: 'Last Shot Media Group | LSMG — Dallas, Orlando, New York and Atlanta',
       },
       {
         name: 'description',
         content:
-          'Last Shot Media Group is an independent creative holding company operating worldwide. PR, talent booking, media production, communications, and more.',
+          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. PR, talent booking, media production, communications, and more.',
       },
       {
         property: 'og:title',
-        content: 'Last Shot Media Group | LSMG — Worldwide',
+        content: 'Last Shot Media Group | LSMG — Dallas, Orlando, New York and Atlanta',
       },
       {
         property: 'og:description',
         content:
-          'Last Shot Media Group is an independent creative holding company operating worldwide. PR, talent booking, media production, communications, and more.',
+          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. PR, talent booking, media production, communications, and more.',
       },
       {
         property: 'og:image',
@@ -118,7 +118,7 @@ function PageLoader() {
         <span style={{ color: 'var(--white)' }}>LS</span>
         <span style={{ color: 'var(--red)' }}>MG</span>
       </div>
-      <div className="loader-sub">Worldwide</div>
+      <div className="loader-sub">Dallas, Orlando, New York and Atlanta</div>
     </div>
   )
 }
@@ -305,7 +305,7 @@ function Footer() {
               <span style={{ color: 'var(--red)' }}>MG</span>
             </div>
             <p className="text-[15px] text-[#8f8f8f] leading-[1.75] max-w-[320px]">
-              An independent creative holding company operating across PR, talent booking, media production, communications, and licensing. Worldwide.
+              An independent creative holding company operating across PR, talent booking, media production, communications, and licensing. Dallas, Orlando, New York and Atlanta.
             </p>
           </div>
           <div>
@@ -343,8 +343,7 @@ function Footer() {
               <li><a href="https://www.youtube.com/channel/UCqaNPrCXK07Q1YYbSvChaOQ" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">YouTube</a></li>
               <li><a href="https://open.spotify.com/show/17PGdRA2WnVjpbLDeeZlgR" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Spotify</a></li>
               <li><a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Apple Podcasts</a></li>
-              <li><a href="https://twitch.tv/lastshotmediagroup" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Twitch</a></li>
-              <li><span className="text-[15px] text-[#8f8f8f]">Worldwide</span></li>
+              <li><span className="text-[15px] text-[#8f8f8f]">Dallas, Orlando, New York and Atlanta</span></li>
             </ul>
           </div>
         </div>
@@ -357,7 +356,6 @@ function Footer() {
             <a href="https://www.youtube.com/channel/UCqaNPrCXK07Q1YYbSvChaOQ" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">YOUTUBE</a>
             <a href="https://open.spotify.com/show/17PGdRA2WnVjpbLDeeZlgR" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">SPOTIFY</a>
             <a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">APPLE PODCASTS</a>
-            <a href="https://twitch.tv/lastshotmediagroup" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">TWITCH</a>
             <a href="https://twitter.com/lastshotmg" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">TWITTER</a>
           </div>
         </div>
