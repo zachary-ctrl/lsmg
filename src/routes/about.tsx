@@ -47,6 +47,14 @@ const TEAM: Member[] = [
     tags: ['Brand Strategy', 'Strategy Lead'],
     image: '/team/ashley.jpg',
   },
+  {
+    name: 'James P. Claude',
+    role: 'CHIEF TECHNOLOGY OFFICER',
+    desc: 'Oversees global technology strategy, leading engineering, cybersecurity, and data science teams to deliver robust, scalable solutions.',
+    bio: 'James P. Claude is a visionary C-level technology executive with over 20 years of experience driving digital transformation, scaling enterprise infrastructure, and pioneering cutting-edge product innovation. As Chief Technology Officer at LSMG, James oversees the company’s global technology strategy, leading high-performance engineering, cybersecurity, and data science teams to deliver robust, scalable solutions that power the business forward. Throughout his career he has built a reputation for bridging the gap between complex technological capabilities and high-level business strategy, specializing in cloud architecture, machine learning integration, and modernizing legacy systems to optimize operational efficiency and maximize ROI. He holds an M.S. in Computer Science from Stanford University and a B.S. in Computer Engineering from the Massachusetts Institute of Technology (MIT).',
+    tags: ['Technology', 'CTO'],
+    image: '/team/james.png',
+  },
 ]
 
 function useScrollReveal() {
