@@ -17,10 +17,10 @@ type Member = {
 const TEAM: Member[] = [
   {
     name: 'Zachary Heneden',
-    role: 'CO-FOUNDER · CO-CEO',
-    desc: 'Handles creative direction, PR execution, original series development, and day-to-day operational management across all LSMG divisions.',
-    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. He leads creative direction, PR execution, and original series development, and stays hands-on with day-to-day operations across every LSMG division — from the editorial desk to the booking floor.',
-    tags: ['Co-Founder', 'Co-CEO'],
+    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF',
+    desc: 'Handles creative direction, PR execution, original series development, editorial output, and day-to-day operational management across all LSMG divisions.',
+    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. As Creative Director and Editor in Chief he leads creative direction, PR execution, original series development, and the editorial standard for everything LSMG publishes — from press releases to media-campaign strategy. He stays hands-on with day-to-day operations across every LSMG division, from the editorial desk to the booking floor.',
+    tags: ['Co-CEO', 'Creative Director', 'Editor In Chief'],
     image: '/team/zachary.jpg',
   },
   {
@@ -30,14 +30,6 @@ const TEAM: Member[] = [
     bio: 'Julien is the operational backbone of LSMG. He architects the systems, business-development pipelines, and organizational infrastructure that let the company move with the intensity of a counterculture movement and the precision of a serious enterprise. If it scales, Julien built the rails for it.',
     tags: ['Co-CEO', 'Co-Founder'],
     image: '/team/julien.jpg',
-  },
-  {
-    name: 'Alexandrea L.',
-    role: 'EDITOR IN CHIEF',
-    desc: "Editorial lead for LSMG's content output — press releases, editorial coverage, media campaigns, and content strategy across all divisions.",
-    bio: "Alexandrea sets the editorial standard for everything LSMG publishes. As Editor in Chief she owns press releases, editorial coverage, and media-campaign strategy across all divisions, making sure every word that carries the LSMG name lands with intent and authority.",
-    tags: ['Editorial', 'Editor In Chief'],
-    image: '',
   },
   {
     name: 'Ashley Diaz',
@@ -145,11 +137,19 @@ function AboutPage() {
       if (e.key === 'Escape') setActive(null)
     }
     document.addEventListener('keydown', onKey)
+    // Lock scroll without a layout shift: hiding the scrollbar widens the page
+    // and pushes centered content sideways, so pad the gap it leaves behind.
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     const prevOverflow = document.body.style.overflow
+    const prevPaddingRight = document.body.style.paddingRight
     document.body.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    }
     return () => {
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prevOverflow
+      document.body.style.paddingRight = prevPaddingRight
     }
   }, [active])
 
