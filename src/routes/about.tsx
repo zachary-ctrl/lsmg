@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -33,9 +33,9 @@ const TEAM: Member[] = [
   },
   {
     name: 'Ashley Diaz',
-    role: 'VP and Brand Strategy Lead',
+    role: 'Brand Strategy Lead',
     desc: 'Brand positioning, visual identity strategy, and market positioning for LSMG and its clients.',
-    bio: 'As VP and Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
+    bio: 'As Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
     tags: ['Brand Strategy', 'Strategy Lead'],
     image: '/team/ashley.jpg',
   },
@@ -129,12 +129,28 @@ function StaggerText({ text, className, style }: { text: string; className?: str
 function AboutPage() {
   const revealRef = useScrollReveal()
   const [active, setActive] = useState<Member | null>(null)
+  const [closing, setClosing] = useState(false)
+
+  // Fluid, dondregreen-style dismissal: play the exit animation first, then
+  // unmount — so the bio never cuts off abruptly the way a hard unmount does.
+  const closeBio = useCallback(() => {
+    setClosing(true)
+    window.setTimeout(() => {
+      setActive(null)
+      setClosing(false)
+    }, 420)
+  }, [])
+
+  const openBio = useCallback((member: Member) => {
+    setClosing(false)
+    setActive(member)
+  }, [])
 
   // Lock scroll + handle Escape while the bio modal is open
   useEffect(() => {
     if (!active) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActive(null)
+      if (e.key === 'Escape') closeBio()
     }
     document.addEventListener('keydown', onKey)
     // Lock scroll without a layout shift: hiding the scrollbar widens the page
@@ -151,7 +167,7 @@ function AboutPage() {
       document.body.style.overflow = prevOverflow
       document.body.style.paddingRight = prevPaddingRight
     }
-  }, [active])
+  }, [active, closeBio])
 
   return (
     <div ref={revealRef}>
@@ -171,7 +187,7 @@ function AboutPage() {
       <section style={{ padding: '120px 40px' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
-            <div>
+            <div className="scroll-reveal">
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>The Company</span>
               <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', margin: '12px 0' }}>
                 Built<br /><span style={{ color: 'var(--red)' }}>Different.</span>
@@ -188,8 +204,8 @@ function AboutPage() {
                   { value: '4', label: 'Cities', accent: true },
                   { value: '2022', label: 'Founded' },
                   { value: '∞', label: 'Last Shot Taken', accent: true },
-                ].map((s) => (
-                  <div key={s.label} className="text-center glow-hover" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease' }}
+                ].map((s, i) => (
+                  <div key={s.label} className="text-center glow-hover scroll-reveal" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease, opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${i * 0.08}s` }}
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   >
@@ -222,9 +238,9 @@ function AboutPage() {
               <button
                 key={member.name}
                 type="button"
-                onClick={() => setActive(member)}
+                onClick={() => openBio(member)}
                 className="scroll-reveal team-card group text-left"
-                style={{ background: '#0a0a0a', borderTop: '4px solid var(--red)', animationDelay: `${idx * 0.12}s`, cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
+                style={{ background: '#0a0a0a', borderTop: '4px solid var(--red)', transitionDelay: `${idx * 0.09}s`, cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
                 aria-label={`View bio for ${member.name}`}
               >
                 <div className="team-photo-wrap">
@@ -251,9 +267,9 @@ function AboutPage() {
 
       {/* Bio Modal */}
       {active && (
-        <div className="bio-modal-overlay" onClick={() => setActive(null)} role="dialog" aria-modal="true" aria-label={`${active.name} biography`}>
-          <div className="bio-modal" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="bio-modal-close" onClick={() => setActive(null)} aria-label="Close">
+        <div className={`bio-modal-overlay${closing ? ' bio-modal-overlay--closing' : ''}`} onClick={closeBio} role="dialog" aria-modal="true" aria-label={`${active.name} biography`}>
+          <div className={`bio-modal${closing ? ' bio-modal--closing' : ''}`} onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="bio-modal-close" onClick={closeBio} aria-label="Close">
               &times;
             </button>
             <div className="bio-modal-grid">

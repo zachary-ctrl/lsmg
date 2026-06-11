@@ -155,54 +155,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Featured Client */}
-      <section style={{ padding: '120px 40px', background: '#060606' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-            <div>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Featured Client</span>
-              <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
-                JAY?<span style={{ color: 'var(--red)' }}>DUHHH</span>
-              </h2>
-              <div className="w-[60px] h-[3px] my-5" style={{ background: 'var(--red)' }} />
-              <p style={{ fontSize: 18, color: '#888', lineHeight: 1.8, marginBottom: 32 }}>
-                Jada Gibson — Richmond, VA-based recording artist with 200K+ independent streams. Debut project <strong style={{ color: '#fff' }}>"Fairy Funk"</strong> — a genre-defying blend of R&B, funk, and alternative soul. LSMG handles full-service PR, media pitching, and press campaign strategy.
-              </p>
-              <div className="flex flex-wrap gap-2 mt-6">
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'var(--mid)', border: '1px solid #222', padding: '6px 14px' }}>Fairy Funk Genre</span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'var(--red)', border: '1px solid var(--red)', padding: '6px 14px' }}>200K+ Streams</span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'var(--mid)', border: '1px solid #222', padding: '6px 14px' }}>R&B / Soul / Funk</span>
-              </div>
-              <div className="mt-10 flex flex-wrap gap-4">
-                <a href="https://instagram.com/iamjayduhhh" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 hover:border-[var(--white)] transition-colors" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'transparent', color: 'var(--white)', textTransform: 'uppercase', border: '1px solid #707070' }}>
-                  @iamjayduhhh
-                </a>
-                <Link to="/pr" className="inline-flex items-center gap-2.5 hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
-                  Our PR Work
-                </Link>
-              </div>
-            </div>
-            <div style={{ background: 'linear-gradient(135deg,#1a0005,#080808)', border: '1px solid #2a0008', borderLeft: '4px solid var(--red)', overflow: 'hidden', position: 'relative' }}>
-              <img src="/jada.jpeg" alt="Jada Gibson — JAY?DUHHH" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: 400 }} />
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,.85))', padding: '48px 32px 32px' }}>
-                <p style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 48, color: 'var(--red)', lineHeight: 1 }}>FAIRY FUNK</p>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, color: '#8f8f8f', marginTop: 8 }}>Debut Project &middot; Available Now</p>
-                <div className="flex gap-10 mt-6">
-                  <div>
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: '#fff' }}>200K+</div>
-                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: '#8f8f8f' }}>Streams</div>
-                  </div>
-                  <div>
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, color: '#fff' }}>Indie</div>
-                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: '#8f8f8f' }}>Independent</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* LSMG Studios Teaser */}
       <section style={{ padding: '120px 40px', background: 'linear-gradient(135deg,#080808 0%,#0d0002 100%)' }}>
         <div className="max-w-[1400px] mx-auto">

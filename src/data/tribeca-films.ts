@@ -20,6 +20,12 @@ export interface TribecaFilmCard {
   credits: string
   blurb: string
   dates: string
+  /** Official still/poster from the Tribeca Festival film directory. */
+  poster?: string
+  /** Canonical Tribeca Festival listing for the film. */
+  tribecaUrl?: string
+  /** Matching Last Shot Podcast episode, when one exists. */
+  spotify?: { episodeId: string; title: string }
 }
 
 export const featuredFilms: Array<{
@@ -32,6 +38,9 @@ export const featuredFilms: Array<{
   tags: Array<{ label: string; variant?: 'red' }>
   screenings: Array<{ date: string; details: string }>
   gradient: string
+  poster?: string
+  tribecaUrl?: string
+  spotify?: { episodeId: string; title: string }
 }> = [
   {
     slug: 'mexicanamerican',
@@ -52,6 +61,8 @@ export const featuredFilms: Array<{
       { date: 'Jun 14', details: '6:00 PM — Village East' },
     ],
     gradient: 'linear-gradient(135deg, #1a0a0a 0%, #3d1a00 50%, #0a0a1a 100%)',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6890/medium_Mexicanamerican-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/mexicanamerican-2026',
   },
   {
     slug: 'airport-blvd',
@@ -73,6 +84,9 @@ export const featuredFilms: Array<{
       { date: 'Jun 10', details: '9:15 PM — AMC 19th St' },
     ],
     gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0d0d0d 100%)',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6960/medium_AIRPORT_BLVD-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/airport-blvd-2026',
+    spotify: { episodeId: '0fLvevcT5zcXjWY0SpoAnW', title: 'Tribeca 2026: Airport BLVD — An Interview with Alejandro Hendricks' },
   },
   {
     slug: 'the-lorraine',
@@ -91,6 +105,8 @@ export const featuredFilms: Array<{
       { date: 'Jun 5', details: 'World Premiere — Village East' },
     ],
     gradient: 'linear-gradient(135deg, #1a0505 0%, #2d0808 40%, #0a0a00 100%)',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6977/medium_TheLorraine-CLEAN-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/lorraine-2026',
   },
   {
     slug: 'they-fight',
@@ -108,6 +124,8 @@ export const featuredFilms: Array<{
       { date: 'World Premiere', details: '+ Red Carpet — Tribeca 2026' },
     ],
     gradient: 'linear-gradient(135deg, #000a1a 0%, #001a2d 50%, #0a0510 100%)',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7042/medium_They_Fight-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/they-fight-2026',
   },
 ]
 
@@ -119,6 +137,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Natalie Baszile & Hyacinth Parker · EP: Dawn Porter',
     blurb: "Mother-daughter directing team follows the Nelson brothers as they race to become America's largest Black farmers — and face two straight years of poor harvests. Executive produced by Dawn Porter.",
     dates: 'Jun 6 World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7011/medium_Harvest-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/harvest-2026',
   },
   {
     slug: 'tropic-sun',
@@ -127,6 +147,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Elisee Junior St Preux · Producer: Naturi Naughton-Lewis',
     blurb: "The first narrative feature about mental health filmed entirely on land in Haiti. A poetic debut funded in part by Morehouse College’s Black Men’s Research Institute.",
     dates: 'Jun 11 · Jun 14',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6934/medium_The_Tropic_Sun_and_His_Eyes-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/the-tropic-sun-and-his-eyes-2026',
   },
   {
     tag: 'Spotlight Narrative — Sony Classics',
@@ -134,6 +156,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Haifaa Al Mansour (Wadjda, Mary Shelley)',
     blurb: 'Saudi Arabian murder mystery from the director of Wadjda. Sony Pictures Classics theatrical June 19.',
     dates: 'Jun 9 U.S. Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7002/medium_Unidentified-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/unidentified-2026',
   },
   {
     tag: 'U.S. Narrative Competition — World Premiere',
@@ -141,6 +165,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Tori Lancaster · Stars: Imani Jade Powers, Betsey Brown',
     blurb: 'A debut feature about female friendship — where it begins, what tests it, and who you become because of it.',
     dates: 'Jun 5 8:45 PM World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6887/medium_Mother_Future_Self-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/mother-future-self-2026',
   },
   {
     tag: 'World Premiere — June 5 Beacon Theatre',
@@ -155,6 +181,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Angela Tucker · EP: Rachel Bloom, Ruth Ann Harnisch',
     blurb: 'A Tribeca Spotlight documentary examining how Hollywood depicts reproductive rights — executive produced by Rachel Bloom.',
     dates: 'Jun 7 World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6910/medium_HollywoodDoesAbortion-1_clean_16x9.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/hollywood-does-abortion-2026',
   },
   {
     tag: 'Hulu — World Premiere June 13',
@@ -162,6 +190,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dirs: Justin Krook & Michael Dwyer · Hulu',
     blurb: 'Hulu documentary about the Blink-182 drummer. World premiere June 13 at Spring Studios. Streams August 13.',
     dates: 'Jun 13 8:00 PM Spring Studios',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7279/medium_DANIELROJAS_16X9.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/travis-barker-louder-than-fear-2026',
   },
   {
     tag: 'Gala — World Premiere June 5',
@@ -169,6 +199,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Music Documentary · 42West',
     blurb: 'After years away, Sara Bareilles returns to the studio. An intimate music documentary about grief, absence, and what makes her most honest album yet.',
     dates: 'Jun 5 Gala Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6931/medium_Sarah_Bareilles_-_Good_Grief-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/sara-bareilles-good-grief-2026',
   },
   {
     tag: 'World Premiere — June 5',
@@ -176,6 +208,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Ellie Sachs · Stars: Hasan Minhaj, David Cross, Thomas Mann',
     blurb: 'Writer-director-star Ellie Sachs makes her feature debut alongside Hasan Minhaj, David Cross, and Thomas Mann in the U.S. Narrative Competition.',
     dates: 'Jun 5 World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6914/medium_Lucy_Schulman-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/lucy-schulman-2026',
   },
   {
     tag: 'Netflix — Red Carpet June 10',
@@ -183,6 +217,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Rebecca Gitlitz · Netflix · Streams June 26',
     blurb: "Chris Evert and Martina Navratilova received parallel cancer diagnoses as their rivalry ended. A Netflix documentary about friendship after the match.",
     dates: 'Jun 10 Red Carpet 4:15 PM, SVA',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6986/medium_Chris___Martina_-_The_Final_Set-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/chris-martina-the-final-set-2026',
   },
   {
     tag: 'U.S. Narrative Competition — Jun 4',
@@ -190,6 +226,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Sam Scott · Stars: Gwenlyn Cumyn, Julian Richings',
     blurb: 'An indie rock band finds an infectious guitar riff that opens a portal to a scarier dimension. Escape From Tribeca section. Photo call June 4.',
     dates: 'Jun 4 Photo Call + World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7039/medium_Turn_It_Up_-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/turn-it-up-2026',
   },
   {
     tag: 'Spotlight+ — June 10',
@@ -197,6 +235,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Stars: Reeve Carney, Eva Noblezada, André De Shields',
     blurb: 'The Tony Award-winning Broadway cast reunites for the West End film adaptation. First-come first-served P&I — arrive early.',
     dates: 'Jun 10 AMC P&I',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7049/medium_Hadestown_-_The_Musical-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/hadestown-the-musical-2026',
   },
   {
     tag: 'World Premiere — June 6',
@@ -204,6 +244,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Josh Greenbaum · Dana Carvey, Will Ferrell, Maya Rudolph',
     blurb: 'Peabody Award-winning director explores the legacy of SNL presidential impressions with the legends who made them. June 6, 5pm, Spring Studios.',
     dates: 'Jun 6 5:00 PM Spring Studios',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6950/medium_Playing_POTUS-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/playing-potus-2026',
   },
   {
     tag: 'Vulture Festival — June 13–14',
@@ -218,6 +260,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Sam Pollard · 42West',
     blurb: "Sam Pollard documents the Black-owned Lorraine Hotel in Memphis — a civil rights haven, and the site of Dr. King’s assassination.",
     dates: 'Jun 5 World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6977/medium_TheLorraine-CLEAN-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/lorraine-2026',
   },
   {
     tag: 'World Premiere — June 12',
@@ -225,6 +269,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Alison Chernick · Roberta Smith, Jerry Saltz, Cindy Sherman',
     blurb: 'Portrait of critics Roberta Smith and Jerry Saltz through the artists who defined their world — Cindy Sherman, Mickalene Thomas, Lena Dunham, Larry Gagosian.',
     dates: 'Jun 12 5:30 PM',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6959/medium_Houseofcriticism-melindapinecone-1_clean_16x9.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/house-of-criticism-2026',
   },
   {
     tag: 'World Premiere — June 4',
@@ -232,6 +278,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Henry Chaisson · Escape From Tribeca',
     blurb: "A woman returns to her childhood home to care for her dying father and confronts the house’s dark, malevolent energy. Press day in person June 4, 2–4 PM.",
     dates: 'Jun 4 World Premiere 9:15 PM',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7008/medium_Recluse-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/recluse-2026',
   },
   {
     tag: 'Documentary — World Premiere',
@@ -239,6 +287,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Adam Paul Verity · Spotlight Documentary',
     blurb: "Behind the on-air persona of one of New York’s most recognizable broadcasters. World premiere June 12.",
     dates: 'Jun 12 World Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6967/medium_Whipple_s_World-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/whipple-s-world-2026',
   },
   {
     tag: '25th Anniversary 4K Restoration',
@@ -253,6 +303,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Greg Kohs · Spotlight Documentary',
     blurb: "A pioneering scientist races to develop the world’s first FDA-approved drug to delay aging in dogs — and what it reveals about how we love and lose.",
     dates: 'Jun 5 5:30 PM Village East',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7047/medium_The_A-Word_-_The_Future_of_Aging-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/a-word-the-future-of-aging-2026',
   },
   {
     tag: 'Viewpoints — World Premiere',
@@ -260,6 +312,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Gabriela Diaz Arp',
     blurb: "A documentary world premiere in the Viewpoints section from David Magdael & Associates’ Tribeca 2026 slate.",
     dates: 'Jun Tribeca Viewpoints',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6970/medium_Matinino-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/matinino-2026',
   },
   {
     tag: 'Tribeca Games — Pier 57 Jun 10–14',
@@ -274,6 +328,9 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: Branislav Jankic · Subject: Monika “Jac” Jagaciak',
     blurb: "Former supermodel Monika “Jac” Jagaciak’s transformation into a jiu-jitsu champion. Editorial interview + formal critical review both in progress at The Ledger.",
     dates: 'Tribeca Premiere',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6858/medium_WhiteBelt-clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/white-belt-2026',
+    spotify: { episodeId: '6uX0M0goku7HOocMpOfEr1', title: 'Tribeca 2026: White Belt — An Interview with Branislav Jankic & Monika Jagaciak' },
   },
   {
     tag: 'Sony Classics — Advance Screened',
@@ -281,6 +338,8 @@ export const secondaryFilms: TribecaFilmCard[] = [
     credits: 'Dir: David Wain · Zoey Deutch, Jon Hamm, John Slattery',
     blurb: 'A David Wain comedy. Embed under June 10 embargo. Press materials reviewed. In theaters July 10, Sony Classics.',
     dates: 'Jun 10 Tribeca (Embargo lifts)',
+    poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/7024/medium_Gail_Daughtry_and_the_Celebrity_Sex_Pass-Clean-16x9-01.jpg',
+    tribecaUrl: 'https://tribecafilm.com/films/gail-daughtry-and-the-celebrity-sex-pass-2026',
   },
 ]
 

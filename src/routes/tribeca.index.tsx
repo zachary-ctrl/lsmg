@@ -128,6 +128,17 @@ function TribecaIndex() {
                 className="tc-film-feature-thumb-bg"
                 style={{ background: film.gradient }}
               />
+              {film.poster && (
+                <img
+                  className="tc-poster-img"
+                  src={film.poster}
+                  alt={`${film.title} — official Tribeca Festival still`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
+              )}
             </div>
             <div>
               <div className="tc-credits">{film.director}</div>
@@ -161,6 +172,23 @@ function TribecaIndex() {
               >
                 Read Coverage →
               </Link>
+              {film.spotify && (
+                <div className="tc-podcast">
+                  <div className="tc-podcast-label">
+                    ▶ The Last Shot Podcast — Tribeca 2026 Interview
+                  </div>
+                  <iframe
+                    className="tc-podcast-embed"
+                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    title={film.spotify.title}
+                  />
+                </div>
+              )}
             </div>
           </article>
         ))}
@@ -179,6 +207,25 @@ function TribecaIndex() {
         <div className="tc-films-grid">
           {secondaryFilms.map((film, i) => (
             <article key={i} className="tc-film-card">
+              {film.poster && (
+                <a
+                  className="tc-film-card-poster"
+                  href={film.tribecaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${film.title} on the Tribeca Festival site`}
+                >
+                  <img
+                    src={film.poster}
+                    alt={`${film.title} — official Tribeca Festival still`}
+                    loading="lazy"
+                    onError={(e) => {
+                      const parent = e.currentTarget.parentElement
+                      if (parent) parent.style.display = 'none'
+                    }}
+                  />
+                </a>
+              )}
               <div className="tc-film-card-tag">{film.tag}</div>
               <h4>
                 {film.slug ? (
@@ -194,6 +241,23 @@ function TribecaIndex() {
               <div className="tc-dates">
                 <strong>{film.dates}</strong>
               </div>
+              {film.spotify && (
+                <div className="tc-podcast tc-podcast-card">
+                  <div className="tc-podcast-label">
+                    ▶ The Last Shot Podcast Interview
+                  </div>
+                  <iframe
+                    className="tc-podcast-embed"
+                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    title={film.spotify.title}
+                  />
+                </div>
+              )}
             </article>
           ))}
         </div>

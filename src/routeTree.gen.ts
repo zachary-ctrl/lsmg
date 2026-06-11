@@ -16,17 +16,16 @@ import { Route as PrRouteImport } from './routes/pr'
 import { Route as MemberPortalRouteImport } from './routes/member-portal'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as CreativeOsRouteImport } from './routes/creative-os'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TribecaIndexRouteImport } from './routes/tribeca.index'
-import { Route as TribecaScheduleRouteImport } from './routes/tribeca.schedule'
-import { Route as TribecaFilmsFilmSlugRouteImport } from './routes/tribeca.films.$filmSlug'
 import { Route as CultureLedgerIndexRouteImport } from './routes/culture-ledger.index'
+import { Route as TribecaScheduleRouteImport } from './routes/tribeca.schedule'
 import { Route as CultureLedgerArticleSlugRouteImport } from './routes/culture-ledger.$articleSlug'
+import { Route as TribecaFilmsFilmSlugRouteImport } from './routes/tribeca.films.$filmSlug'
 
 const WatchRoute = WatchRouteImport.update({
   id: '/watch',
@@ -63,11 +62,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreativeOsRoute = CreativeOsRouteImport.update({
-  id: '/creative-os',
-  path: '/creative-os',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -98,19 +92,14 @@ const TribecaIndexRoute = TribecaIndexRouteImport.update({
   path: '/tribeca/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TribecaScheduleRoute = TribecaScheduleRouteImport.update({
-  id: '/tribeca/schedule',
-  path: '/tribeca/schedule',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TribecaFilmsFilmSlugRoute = TribecaFilmsFilmSlugRouteImport.update({
-  id: '/tribeca/films/$filmSlug',
-  path: '/tribeca/films/$filmSlug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CultureLedgerIndexRoute = CultureLedgerIndexRouteImport.update({
   id: '/culture-ledger/',
   path: '/culture-ledger/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TribecaScheduleRoute = TribecaScheduleRouteImport.update({
+  id: '/tribeca/schedule',
+  path: '/tribeca/schedule',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CultureLedgerArticleSlugRoute =
@@ -119,6 +108,11 @@ const CultureLedgerArticleSlugRoute =
     path: '/culture-ledger/$articleSlug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TribecaFilmsFilmSlugRoute = TribecaFilmsFilmSlugRouteImport.update({
+  id: '/tribeca/films/$filmSlug',
+  path: '/tribeca/films/$filmSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -126,7 +120,6 @@ export interface FileRoutesByFullPath {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/creative-os': typeof CreativeOsRoute
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
@@ -134,11 +127,11 @@ export interface FileRoutesByFullPath {
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
-  '/tribeca/': typeof TribecaIndexRoute
-  '/tribeca/schedule': typeof TribecaScheduleRoute
-  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
+  '/tribeca/schedule': typeof TribecaScheduleRoute
   '/culture-ledger/': typeof CultureLedgerIndexRoute
+  '/tribeca/': typeof TribecaIndexRoute
+  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -146,7 +139,6 @@ export interface FileRoutesByTo {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/creative-os': typeof CreativeOsRoute
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
@@ -154,11 +146,11 @@ export interface FileRoutesByTo {
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
-  '/tribeca': typeof TribecaIndexRoute
-  '/tribeca/schedule': typeof TribecaScheduleRoute
-  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
+  '/tribeca/schedule': typeof TribecaScheduleRoute
   '/culture-ledger': typeof CultureLedgerIndexRoute
+  '/tribeca': typeof TribecaIndexRoute
+  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -167,7 +159,6 @@ export interface FileRoutesById {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/creative-os': typeof CreativeOsRoute
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
@@ -175,11 +166,11 @@ export interface FileRoutesById {
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
-  '/tribeca/': typeof TribecaIndexRoute
-  '/tribeca/schedule': typeof TribecaScheduleRoute
-  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
+  '/tribeca/schedule': typeof TribecaScheduleRoute
   '/culture-ledger/': typeof CultureLedgerIndexRoute
+  '/tribeca/': typeof TribecaIndexRoute
+  '/tribeca/films/$filmSlug': typeof TribecaFilmsFilmSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -189,7 +180,6 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/creative-os'
     | '/login'
     | '/media'
     | '/member-portal'
@@ -197,11 +187,11 @@ export interface FileRouteTypes {
     | '/press'
     | '/upload'
     | '/watch'
-    | '/tribeca/'
-    | '/tribeca/schedule'
-    | '/tribeca/films/$filmSlug'
     | '/culture-ledger/$articleSlug'
+    | '/tribeca/schedule'
     | '/culture-ledger/'
+    | '/tribeca/'
+    | '/tribeca/films/$filmSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -209,7 +199,6 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/creative-os'
     | '/login'
     | '/media'
     | '/member-portal'
@@ -217,11 +206,11 @@ export interface FileRouteTypes {
     | '/press'
     | '/upload'
     | '/watch'
-    | '/tribeca'
-    | '/tribeca/schedule'
-    | '/tribeca/films/$filmSlug'
     | '/culture-ledger/$articleSlug'
+    | '/tribeca/schedule'
     | '/culture-ledger'
+    | '/tribeca'
+    | '/tribeca/films/$filmSlug'
   id:
     | '__root__'
     | '/'
@@ -229,7 +218,6 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/creative-os'
     | '/login'
     | '/media'
     | '/member-portal'
@@ -237,11 +225,11 @@ export interface FileRouteTypes {
     | '/press'
     | '/upload'
     | '/watch'
-    | '/tribeca/'
-    | '/tribeca/schedule'
-    | '/tribeca/films/$filmSlug'
     | '/culture-ledger/$articleSlug'
+    | '/tribeca/schedule'
     | '/culture-ledger/'
+    | '/tribeca/'
+    | '/tribeca/films/$filmSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -250,7 +238,6 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
-  CreativeOsRoute: typeof CreativeOsRoute
   LoginRoute: typeof LoginRoute
   MediaRoute: typeof MediaRoute
   MemberPortalRoute: typeof MemberPortalRoute
@@ -258,11 +245,11 @@ export interface RootRouteChildren {
   PressRoute: typeof PressRoute
   UploadRoute: typeof UploadRoute
   WatchRoute: typeof WatchRoute
-  TribecaIndexRoute: typeof TribecaIndexRoute
-  TribecaScheduleRoute: typeof TribecaScheduleRoute
-  TribecaFilmsFilmSlugRoute: typeof TribecaFilmsFilmSlugRoute
   CultureLedgerArticleSlugRoute: typeof CultureLedgerArticleSlugRoute
+  TribecaScheduleRoute: typeof TribecaScheduleRoute
   CultureLedgerIndexRoute: typeof CultureLedgerIndexRoute
+  TribecaIndexRoute: typeof TribecaIndexRoute
+  TribecaFilmsFilmSlugRoute: typeof TribecaFilmsFilmSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -316,13 +303,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/creative-os': {
-      id: '/creative-os'
-      path: '/creative-os'
-      fullPath: '/creative-os'
-      preLoaderRoute: typeof CreativeOsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -365,20 +345,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TribecaIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/tribeca/schedule': {
-      id: '/tribeca/schedule'
-      path: '/tribeca/schedule'
-      fullPath: '/tribeca/schedule'
-      preLoaderRoute: typeof TribecaScheduleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/tribeca/films/$filmSlug': {
-      id: '/tribeca/films/$filmSlug'
-      path: '/tribeca/films/$filmSlug'
-      fullPath: '/tribeca/films/$filmSlug'
-      preLoaderRoute: typeof TribecaFilmsFilmSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/culture-ledger/': {
       id: '/culture-ledger/'
       path: '/culture-ledger'
@@ -386,11 +352,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CultureLedgerIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tribeca/schedule': {
+      id: '/tribeca/schedule'
+      path: '/tribeca/schedule'
+      fullPath: '/tribeca/schedule'
+      preLoaderRoute: typeof TribecaScheduleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/culture-ledger/$articleSlug': {
       id: '/culture-ledger/$articleSlug'
       path: '/culture-ledger/$articleSlug'
       fullPath: '/culture-ledger/$articleSlug'
       preLoaderRoute: typeof CultureLedgerArticleSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tribeca/films/$filmSlug': {
+      id: '/tribeca/films/$filmSlug'
+      path: '/tribeca/films/$filmSlug'
+      fullPath: '/tribeca/films/$filmSlug'
+      preLoaderRoute: typeof TribecaFilmsFilmSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -402,7 +382,6 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
-  CreativeOsRoute: CreativeOsRoute,
   LoginRoute: LoginRoute,
   MediaRoute: MediaRoute,
   MemberPortalRoute: MemberPortalRoute,
@@ -410,11 +389,11 @@ const rootRouteChildren: RootRouteChildren = {
   PressRoute: PressRoute,
   UploadRoute: UploadRoute,
   WatchRoute: WatchRoute,
-  TribecaIndexRoute: TribecaIndexRoute,
-  TribecaScheduleRoute: TribecaScheduleRoute,
-  TribecaFilmsFilmSlugRoute: TribecaFilmsFilmSlugRoute,
   CultureLedgerArticleSlugRoute: CultureLedgerArticleSlugRoute,
+  TribecaScheduleRoute: TribecaScheduleRoute,
   CultureLedgerIndexRoute: CultureLedgerIndexRoute,
+  TribecaIndexRoute: TribecaIndexRoute,
+  TribecaFilmsFilmSlugRoute: TribecaFilmsFilmSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
