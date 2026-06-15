@@ -1,7 +1,25 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect, useCallback } from 'react'
+import {
+  featuredFilms,
+  secondaryFilms,
+  outdoorScreenings,
+} from '../data/tribeca-films'
 
 export const Route = createFileRoute('/culture-ledger/')({
+  head: () => ({
+    meta: [
+      {
+        title:
+          'The LSMG Ledger — Culture, Music & Tribeca 2026 Coverage',
+      },
+      {
+        name: 'description',
+        content:
+          "The LSMG Ledger is Last Shot Media Group's daily editorial publication — pop culture, music, entertainment, and complete on-the-ground Tribeca 2026 coverage. Independent press.",
+      },
+    ],
+  }),
   component: CultureLedgerPage,
 })
 
@@ -44,20 +62,6 @@ function timeAgo(date: string) {
   return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-function getCategoryColor(category: string): string {
-  const map: Record<string, string> = {
-    Music: '#C8102E',
-    Entertainment: '#8B5CF6',
-    Fashion: '#EC4899',
-    Business: '#F59E0B',
-    Celebrity: '#EF4444',
-    Sports: '#10B981',
-    'Tech & Culture': '#3B82F6',
-    Culture: '#C8102E',
-  }
-  return map[category] || 'var(--red)'
-}
-
 function CultureLedgerPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [liveArticles, setLiveArticles] = useState<LiveArticle[]>([])
@@ -97,38 +101,41 @@ function CultureLedgerPage() {
   }, [])
 
   // Fetch live RSS feed articles
-  const fetchLiveFeed = useCallback((forceRefresh = false) => {
-    if (forceRefresh) {
-      setIsRefreshing(true)
-    } else {
-      setLiveLoading(true)
-    }
-    setLiveError('')
-    const params = new URLSearchParams()
-    if (activeCategory !== 'All') params.set('category', activeCategory)
-    if (forceRefresh) params.set('refresh', '1')
-    params.set('_ts', Date.now().toString())
-    const query = params.toString()
-    fetch(`/api/live-feed${query ? `?${query}` : ''}`, { cache: 'no-store' })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then((data) => {
-        setLiveArticles(data.articles || [])
-        setLiveFetchedAt(data.fetchedAt || '')
-        if (data.error) {
-          setLiveError(data.error)
-        }
-      })
-      .catch((err) => {
-        setLiveError('Failed to fetch live feed. Please try again.')
-      })
-      .finally(() => {
-        setLiveLoading(false)
-        setIsRefreshing(false)
-      })
-  }, [activeCategory])
+  const fetchLiveFeed = useCallback(
+    (forceRefresh = false) => {
+      if (forceRefresh) {
+        setIsRefreshing(true)
+      } else {
+        setLiveLoading(true)
+      }
+      setLiveError('')
+      const params = new URLSearchParams()
+      if (activeCategory !== 'All') params.set('category', activeCategory)
+      if (forceRefresh) params.set('refresh', '1')
+      params.set('_ts', Date.now().toString())
+      const query = params.toString()
+      fetch(`/api/live-feed${query ? `?${query}` : ''}`, { cache: 'no-store' })
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`)
+          return res.json()
+        })
+        .then((data) => {
+          setLiveArticles(data.articles || [])
+          setLiveFetchedAt(data.fetchedAt || '')
+          if (data.error) {
+            setLiveError(data.error)
+          }
+        })
+        .catch(() => {
+          setLiveError('Failed to fetch live feed. Please try again.')
+        })
+        .finally(() => {
+          setLiveLoading(false)
+          setIsRefreshing(false)
+        })
+    },
+    [activeCategory],
+  )
 
   useEffect(() => {
     fetchLiveFeed()
@@ -139,112 +146,135 @@ function CultureLedgerPage() {
 
   const allCategories = ['All', 'Music', 'Entertainment', 'Fashion', 'Business', 'Sports', 'Tech & Culture', 'Celebrity', 'Culture']
   const filtered = activeCategory === 'All' ? articles : articles.filter((a) => a.category === activeCategory)
-
-  // For the ticker, use live articles
   const tickerArticles = liveArticles.slice(0, 6)
 
   return (
-    <div>
-      {/* Hero */}
-      <div className="relative overflow-hidden" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)', background: 'linear-gradient(135deg,#080808 0%,#0d0002 100%)' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
-        <div className="relative z-10 max-w-[1400px] mx-auto">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Publication</span>
-          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
-            The LSMG <span style={{ color: 'var(--red)' }}>Ledger</span>
-          </h1>
-          <p style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 700, marginTop: 24, lineHeight: 1.75 }}>Pop culture, music, entertainment, and media — through the LSMG lens. Original editorial coverage plus live stories from across the web.</p>
-          <div className="flex items-center gap-4 mt-6">
-            <span className="flex items-center gap-2">
-              <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' }} />
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#4ade80' }}>LIVE</span>
-            </span>
-            <span style={{ width: 4, height: 4, background: 'var(--red)', borderRadius: '50%', display: 'inline-block' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#8f8f8f' }}>BY LSMG</span>
-            <span style={{ width: 4, height: 4, background: 'var(--red)', borderRadius: '50%', display: 'inline-block' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#8f8f8f' }}>UPDATED IN REAL TIME</span>
+    <div className="tribeca-page">
+      {/* TOP BAR */}
+      <div className="tc-topbar">
+        <div className="tc-topbar-inner">
+          <div className="tc-topbar-left">
+            <span>The LSMG Ledger</span>
+            <span className="tc-dot">&#9679;</span>
+            <span>Culture · Music · Entertainment</span>
+            <span className="tc-dot">&#9679;</span>
+            <span>Updated in Real Time</span>
           </div>
+          <div>Independent Press — Daily Edition</div>
         </div>
       </div>
 
-      {/* Breaking News Ticker */}
-      <div style={{ background: 'var(--red)', padding: '10px 0', overflow: 'hidden' }}>
-        <div className="flex items-center gap-8" style={{ animation: 'ticker 30s linear infinite', whiteSpace: 'nowrap' }}>
-          {[...tickerArticles, ...tickerArticles].map((item, i) => (
-            <span key={i} className="flex items-center gap-3">
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'rgba(255,255,255,.6)' }}>TRENDING</span>
-              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, color: '#fff' }}>{item.title}</span>
-              <span style={{ width: 6, height: 6, background: 'rgba(255,255,255,.3)', borderRadius: '50%', display: 'inline-block' }} />
-            </span>
+      {/* MASTHEAD */}
+      <header className="tc-masthead">
+        <div className="tc-masthead-inner">
+          <div className="tc-masthead-meta">
+            <div>Volume 1</div>
+            <div>The Daily Edition</div>
+          </div>
+          <div>
+            <h1 className="tc-masthead-title">
+              The LSMG
+              <br />
+              <em>Ledger</em>
+            </h1>
+          </div>
+          <div className="tc-masthead-meta tc-right">
+            <div>lastshotmediagroup.com</div>
+            <div>Dallas → New York</div>
+          </div>
+        </div>
+        <div className="tc-masthead-divider">
+          <hr />
+          <span>Culture, Music &amp; Media — with Special Tribeca 2026 Coverage</span>
+          <hr />
+          <hr />
+        </div>
+      </header>
+
+      {/* SUB-NAV */}
+      <nav className="tc-nav">
+        <div className="tc-nav-inner">
+          <a href="#daily" className="tc-current">
+            Daily Edition
+          </a>
+          <a href="#tribeca-coverage">Tribeca 2026</a>
+          <Link to="/tribeca/schedule">Festival Schedule</Link>
+          {featuredFilms.slice(0, 3).map((f) => (
+            <Link key={f.slug} to="/tribeca/films/$filmSlug" params={{ filmSlug: f.slug }}>
+              {f.title}
+            </Link>
           ))}
         </div>
-      </div>
+      </nav>
 
-      {/* Tab Switcher */}
-      <section style={{ padding: '32px 40px 0', background: '#060606' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex items-center gap-0 border-b border-[#1a1a1a]">
-            <button
-              onClick={() => setActiveTab('lsmg')}
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 11,
-                letterSpacing: 3,
-                padding: '16px 28px',
-                color: activeTab === 'lsmg' ? 'var(--white)' : '#8f8f8f',
-                background: 'transparent',
-                cursor: 'pointer',
-                border: 'none',
-                borderBottomWidth: 2,
-                borderBottomStyle: 'solid',
-                borderBottomColor: activeTab === 'lsmg' ? 'var(--red)' : 'transparent',
-              }}
-            >
-              LSMG ORIGINALS
-            </button>
-            <button
-              onClick={() => setActiveTab('trending')}
-              style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 11,
-                letterSpacing: 3,
-                padding: '16px 28px',
-                color: activeTab === 'trending' ? 'var(--white)' : '#8f8f8f',
-                background: 'transparent',
-                cursor: 'pointer',
-                border: 'none',
-                borderBottomWidth: 2,
-                borderBottomStyle: 'solid',
-                borderBottomColor: activeTab === 'trending' ? 'var(--red)' : 'transparent',
-              }}
-            >
-              TRENDING NOW
-            </button>
+      {/* BREAKING TICKER */}
+      {tickerArticles.length > 0 && (
+        <div style={{ background: 'var(--tc-ink)', padding: '10px 0', overflow: 'hidden', borderBottom: '4px solid var(--tc-red)' }}>
+          <div className="flex items-center gap-8" style={{ animation: 'ticker 30s linear infinite', whiteSpace: 'nowrap' }}>
+            {[...tickerArticles, ...tickerArticles].map((item, i) => (
+              <span key={i} className="flex items-center gap-3">
+                <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 10, letterSpacing: 2, color: 'var(--tc-red)' }}>TRENDING</span>
+                <span style={{ fontFamily: 'var(--tc-serif)', fontWeight: 900, fontSize: 16, color: 'var(--tc-cream)' }}>{item.title}</span>
+                <span style={{ width: 6, height: 6, background: 'var(--tc-red)', borderRadius: '50%', display: 'inline-block' }} />
+              </span>
+            ))}
           </div>
         </div>
+      )}
+
+      {/* LEAD */}
+      <section className="tc-lead">
+        <div className="tc-lead-tag">
+          &#9679; The LSMG Ledger &#9679; Pop Culture, Music &amp; Media
+        </div>
+        <h2 className="tc-lead-headline">
+          The Culture, <em>As It Happens</em>
+        </h2>
+        <p className="tc-lead-deck">
+          Last Shot Media Group's daily editorial publication — original
+          reporting on music, entertainment, fashion, and media, alongside
+          live-curated stories from across the web and complete on-the-ground
+          coverage of the 2026 Tribeca Festival.
+        </p>
+        <p className="tc-lead-byline">
+          <strong>The LSMG Editorial Desk</strong> &nbsp;—&nbsp; Independent
+          Press &nbsp;|&nbsp; Dallas, Orlando, New York &amp; Atlanta
+        </p>
       </section>
 
-      {/* Category Filter */}
-      <section style={{ padding: '24px 40px 0', background: '#060606' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex flex-wrap gap-2">
+      {/* DAILY EDITION */}
+      <section id="daily" className="tc-section">
+        <div className="tc-section-header">
+          <span className="tc-section-num">▸</span>
+          <h2 className="tc-section-title">The Daily Ledger</h2>
+          <span className="tc-section-meta">Originals &amp; Live Feed</span>
+        </div>
+
+        {/* Tab + Category controls */}
+        <div className="lg-controls">
+          <div className="lg-tabs">
+            <button
+              type="button"
+              onClick={() => setActiveTab('lsmg')}
+              className={activeTab === 'lsmg' ? 'lg-tab lg-tab-active' : 'lg-tab'}
+            >
+              LSMG Originals
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('trending')}
+              className={activeTab === 'trending' ? 'lg-tab lg-tab-active' : 'lg-tab'}
+            >
+              Trending Now
+            </button>
+          </div>
+          <div className="lg-cats">
             {allCategories.map((cat) => (
               <button
                 key={cat}
-                data-category={cat}
+                type="button"
                 onClick={() => setActiveCategory(cat)}
-                style={{
-                  fontFamily: "'DM Mono', monospace",
-                  fontSize: 10,
-                  letterSpacing: 3,
-                  padding: '8px 16px',
-                  background: activeCategory === cat ? getCategoryColor(cat) : 'transparent',
-                  color: activeCategory === cat ? '#fff' : '#8f8f8f',
-                  border: activeCategory === cat ? 'none' : '1px solid #222',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                }}
-                className="hover:opacity-85 transition-opacity"
+                className={activeCategory === cat ? 'lg-cat lg-cat-active' : 'lg-cat'}
               >
                 {cat}
               </button>
@@ -253,232 +283,467 @@ function CultureLedgerPage() {
         </div>
       </section>
 
-      {/* LSMG Originals Tab */}
+      {/* LSMG ORIGINALS */}
       {activeTab === 'lsmg' && (
-        <section style={{ padding: '40px 40px 80px', background: '#060606' }}>
-          <div className="max-w-[1400px] mx-auto">
-            {loading ? (
-              <div id="news-feed" className="text-center" style={{ padding: '80px 0' }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 3, color: '#8f8f8f' }}>LOADING ARTICLES...</span>
-              </div>
-            ) : filtered.length === 0 ? (
-              <div className="text-center" style={{ padding: '80px 0' }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 3, color: '#8f8f8f' }}>NO ARTICLES YET</span>
-              </div>
-            ) : (
-              <>
-                {/* Featured Hero Article */}
-                {filtered.length > 0 && (
-                  <Link
-                    to="/culture-ledger/$articleSlug"
-                    params={{ articleSlug: filtered[0].slug }}
-                    className="block mb-6 group relative overflow-hidden"
-                    style={{ background: '#0a0a0a', border: '1px solid #1a1a1a' }}
-                  >
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
-                      <div className="relative overflow-hidden" style={{ minHeight: 320 }}>
-                        {filtered[0].imageUrl ? (
-                          <img src={filtered[0].imageUrl} alt={filtered[0].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" style={{ position: 'absolute', inset: 0 }} />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #111 0%, #0d0002 100%)', position: 'absolute', inset: 0 }}>
-                            <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 120, color: 'rgba(200,16,46,.08)' }}>LSMG</span>
-                          </div>
-                        )}
-                        <div style={{ position: 'absolute', top: 16, left: 16 }}>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '5px 12px', background: getCategoryColor(filtered[0].category), color: '#fff' }}>{filtered[0].category.toUpperCase()}</span>
-                        </div>
-                      </div>
-                      <div style={{ padding: '40px 36px' }} className="flex flex-col justify-center">
-                        <div className="flex items-center gap-2 mb-4">
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: 'var(--red)', border: '1px solid rgba(200,16,46,.3)', padding: '3px 8px' }}>FEATURED</span>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: '#808080' }}>{timeAgo(filtered[0].publishedAt)}</span>
-                        </div>
-                        <h2 className="group-hover:text-[var(--red)] transition-colors" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(32px, 4vw, 52px)', lineHeight: '.94', marginBottom: 16 }}>{filtered[0].title}</h2>
-                        <p style={{ fontSize: 15, color: '#b3b3b3', lineHeight: 1.75, marginBottom: 20 }}>{filtered[0].excerpt}</p>
-                        <div className="flex items-center gap-3">
-                          <div style={{ width: 28, height: 28, background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 12, color: '#fff' }}>{filtered[0].author.charAt(0)}</span>
-                          </div>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#8f8f8f' }}>{filtered[0].author.toUpperCase()}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-
-                {/* Article Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1px]" style={{ background: '#1a1a1a' }}>
-                  {filtered.slice(1).map((article) => (
-                    <Link
-                      key={article.slug}
-                      to="/culture-ledger/$articleSlug"
-                      params={{ articleSlug: article.slug }}
-                      className="group flex flex-col"
-                      style={{ background: '#0a0a0a' }}
-                    >
-                      <div className="relative overflow-hidden" style={{ aspectRatio: '16/10' }}>
-                        {article.imageUrl ? (
-                          <img src={article.imageUrl} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #111 0%, #080808 100%)' }}>
-                            <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 48, color: 'rgba(200,16,46,.1)' }}>LSMG</span>
-                          </div>
-                        )}
-                        <div style={{ position: 'absolute', top: 10, left: 10 }}>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: 2, padding: '4px 8px', background: getCategoryColor(article.category), color: '#fff' }}>{article.category.toUpperCase()}</span>
-                        </div>
-                      </div>
-                      <div style={{ padding: '16px 18px 20px' }} className="flex flex-col flex-1">
-                        <h3 className="group-hover:text-[var(--red)] transition-colors" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, lineHeight: 1.05, marginBottom: 8, flex: 1 }}>{article.title}</h3>
-                        <p style={{ fontSize: 13, color: '#8f8f8f', lineHeight: 1.6, marginBottom: 12 }}>{article.excerpt.length > 100 ? article.excerpt.slice(0, 100) + '...' : article.excerpt}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div style={{ width: 20, height: 20, background: 'var(--red)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 9, color: '#fff' }}>{article.author.charAt(0)}</span>
-                            </div>
-                            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 1, color: '#808080' }}>{article.author.toUpperCase()}</span>
-                          </div>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: '#707070' }}>{timeAgo(article.publishedAt)}</span>
-                        </div>
-                      </div>
+        <div className="tc-films">
+          {loading ? (
+            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
+              Loading articles…
+            </p>
+          ) : filtered.length === 0 ? (
+            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
+              No articles yet
+            </p>
+          ) : (
+            <>
+              {/* Lead story */}
+              <article className="tc-film-feature">
+                <Link
+                  to="/culture-ledger/$articleSlug"
+                  params={{ articleSlug: filtered[0].slug }}
+                  className="tc-film-feature-thumb"
+                  data-num="01"
+                  data-section={filtered[0].category}
+                  style={{ display: 'block' }}
+                >
+                  <div className="tc-film-feature-thumb-bg" style={{ background: 'linear-gradient(135deg,#1a0a0a,#0a0a1a)' }} />
+                  {filtered[0].imageUrl && (
+                    <img
+                      className="tc-poster-img"
+                      src={filtered[0].imageUrl}
+                      alt={filtered[0].title}
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.style.display = 'none' }}
+                    />
+                  )}
+                </Link>
+                <div>
+                  <div className="tc-credits">
+                    {filtered[0].author} · {timeAgo(filtered[0].publishedAt)}
+                  </div>
+                  <h3>
+                    <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: filtered[0].slug }}>
+                      {filtered[0].title}
                     </Link>
-                  ))}
+                  </h3>
+                  <p className="tc-deck">{filtered[0].excerpt}</p>
+                  <div className="tc-tag-row">
+                    <span className="tc-tag tc-red-tag">{filtered[0].category}</span>
+                    <span className="tc-tag">Featured</span>
+                  </div>
+                  <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: filtered[0].slug }} className="tc-read">
+                    Read Article →
+                  </Link>
                 </div>
-              </>
-            )}
-          </div>
-        </section>
+              </article>
+
+              {/* Grid */}
+              <div className="tc-films-grid">
+                {filtered.slice(1).map((article) => (
+                  <article key={article.slug} className="tc-film-card">
+                    {article.imageUrl && (
+                      <Link
+                        to="/culture-ledger/$articleSlug"
+                        params={{ articleSlug: article.slug }}
+                        className="tc-film-card-poster"
+                      >
+                        <img
+                          src={article.imageUrl}
+                          alt={article.title}
+                          loading="lazy"
+                          onError={(e) => {
+                            const parent = e.currentTarget.parentElement
+                            if (parent) parent.style.display = 'none'
+                          }}
+                        />
+                      </Link>
+                    )}
+                    <div className="tc-film-card-tag">{article.category}</div>
+                    <h4>
+                      <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: article.slug }}>
+                        {article.title}
+                      </Link>
+                    </h4>
+                    <div className="tc-credits">{article.author}</div>
+                    <p className="tc-blurb">{article.excerpt.length > 120 ? article.excerpt.slice(0, 120) + '…' : article.excerpt}</p>
+                    <div className="tc-dates">
+                      <strong>{timeAgo(article.publishedAt)}</strong>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       )}
 
-      {/* Trending / Live Feed Tab */}
+      {/* TRENDING / LIVE FEED */}
       {activeTab === 'trending' && (
-        <section style={{ padding: '40px 40px 80px', background: '#060606' }}>
-          <div className="max-w-[1400px] mx-auto">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-2">
-                  <span style={{ width: 8, height: 8, background: '#4ade80', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s ease-in-out infinite' }} />
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: '#4ade80' }}>LIVE FEED</span>
+        <div className="tc-films">
+          <div className="flex items-center justify-between" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--tc-red)' }}>
+              ● Live Feed — Across the Web
+            </span>
+            <div className="flex items-center gap-3">
+              {liveFetchedAt && (
+                <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 9, letterSpacing: 2, color: 'var(--tc-gray)', textTransform: 'uppercase' }}>
+                  Updated {timeAgo(liveFetchedAt)}
                 </span>
-                <span style={{ width: 4, height: 4, background: 'var(--red)', borderRadius: '50%', display: 'inline-block' }} />
-                <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: '#8f8f8f' }}>ACROSS THE WEB</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {liveFetchedAt && (
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: '#707070' }}>
-                    UPDATED {timeAgo(liveFetchedAt)}
-                  </span>
-                )}
-                <button
-                  onClick={() => fetchLiveFeed(true)}
-                  className="hover:opacity-75 transition-opacity"
-                  disabled={isRefreshing}
-                  style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '6px 14px', color: 'var(--red)', border: '1px solid rgba(200,16,46,.3)', background: 'transparent', cursor: 'pointer' }}
-                >
-                  {isRefreshing ? 'REFRESHING...' : 'REFRESH'}
-                </button>
-              </div>
+              )}
+              <button
+                type="button"
+                onClick={() => fetchLiveFeed(true)}
+                disabled={isRefreshing}
+                style={{ fontFamily: 'var(--tc-mono)', fontSize: 9, letterSpacing: 2, padding: '6px 14px', color: 'var(--tc-red)', border: '1px solid var(--tc-red)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
+              >
+                {isRefreshing ? 'Refreshing…' : 'Refresh'}
+              </button>
             </div>
+          </div>
 
-            {liveLoading && liveArticles.length === 0 ? (
-              <div className="text-center" style={{ padding: '80px 0' }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 3, color: '#8f8f8f' }}>LOADING LIVE FEED...</span>
-              </div>
-            ) : liveArticles.length === 0 ? (
-              <div className="text-center" style={{ padding: '80px 0' }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 3, color: '#8f8f8f' }}>
-                  {liveError || 'NO TRENDING ARTICLES IN THIS CATEGORY'}
-                </span>
-                {liveError && (
-                  <div style={{ marginTop: 16 }}>
-                    <button
-                      onClick={() => fetchLiveFeed(true)}
-                      disabled={isRefreshing}
-                      style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, padding: '8px 20px', color: 'var(--red)', border: '1px solid rgba(200,16,46,.3)', background: 'transparent', cursor: 'pointer' }}
-                    >
-                      {isRefreshing ? 'RETRYING...' : 'TRY AGAIN'}
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <>
-                {/* Hero — large featured card */}
+          {liveLoading && liveArticles.length === 0 ? (
+            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
+              Loading live feed…
+            </p>
+          ) : liveArticles.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '60px 0' }}>
+              <p style={{ fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', textTransform: 'uppercase' }}>
+                {liveError || 'No trending articles in this category'}
+              </p>
+              {liveError && (
+                <button
+                  type="button"
+                  onClick={() => fetchLiveFeed(true)}
+                  disabled={isRefreshing}
+                  style={{ marginTop: 16, fontFamily: 'var(--tc-mono)', fontSize: 10, letterSpacing: 2, padding: '8px 20px', color: 'var(--tc-red)', border: '1px solid var(--tc-red)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
+                >
+                  {isRefreshing ? 'Retrying…' : 'Try Again'}
+                </button>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Lead story */}
+              <article className="tc-film-feature">
                 <a
                   href={liveArticles[0].url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block mb-6 group relative overflow-hidden"
-                  style={{ background: '#0a0a0a', border: '1px solid #1a1a1a' }}
+                  className="tc-film-feature-thumb"
+                  data-num=""
+                  data-section={liveArticles[0].source}
+                  style={{ display: 'block' }}
                 >
-                  <div className="relative" style={{ aspectRatio: '21/9', minHeight: 280 }}>
-                    <img src={liveArticles[0].imageUrl} alt={liveArticles[0].title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                    <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.3) 40%, transparent 100%)' }} />
-                    <div className="absolute bottom-0 left-0 right-0" style={{ padding: '32px 36px' }}>
-                      <div className="flex items-center gap-3 mb-3">
-                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, padding: '4px 10px', background: getCategoryColor(liveArticles[0].category), color: '#fff' }}>{liveArticles[0].category.toUpperCase()}</span>
-                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 2, color: 'rgba(255,255,255,.5)', border: '1px solid rgba(255,255,255,.15)', padding: '3px 8px' }}>{liveArticles[0].source.toUpperCase()}</span>
-                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: 'rgba(255,255,255,.4)' }}>{timeAgo(liveArticles[0].publishedAt)}</span>
-                      </div>
-                      <h2 className="group-hover:text-[var(--red)] transition-colors" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(28px, 4vw, 48px)', lineHeight: '.96', color: '#fff', marginBottom: 8 }}>{liveArticles[0].title}</h2>
-                      <p style={{ fontSize: 14, color: 'rgba(255,255,255,.6)', maxWidth: 600 }}>{liveArticles[0].excerpt}</p>
-                    </div>
-                    <div className="absolute top-4 right-4 flex items-center gap-2" style={{ background: 'rgba(0,0,0,.6)', padding: '6px 12px', backdropFilter: 'blur(4px)' }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'rgba(255,255,255,.6)' }}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: 2, color: 'rgba(255,255,255,.6)' }}>EXTERNAL</span>
-                    </div>
-                  </div>
+                  <div className="tc-film-feature-thumb-bg" style={{ background: 'linear-gradient(135deg,#0a0a0a,#1a1a2e)' }} />
+                  <img className="tc-poster-img" src={liveArticles[0].imageUrl} alt={liveArticles[0].title} loading="lazy" />
                 </a>
-
-                {/* Live article grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[1px]" style={{ background: '#1a1a1a' }}>
-                  {liveArticles.slice(1).map((article, i) => (
-                    <a
-                      key={`${article.title.substring(0, 30)}-${i}`}
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex flex-col"
-                      style={{ background: '#0a0a0a' }}
-                    >
-                      <div className="relative overflow-hidden" style={{ aspectRatio: '16/10' }}>
-                        <img src={article.imageUrl} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute top-0 left-0 right-0 flex items-center justify-between" style={{ padding: '10px' }}>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: 2, padding: '4px 8px', background: getCategoryColor(article.category), color: '#fff' }}>{article.category.toUpperCase()}</span>
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 8, letterSpacing: 1, padding: '4px 8px', background: 'rgba(0,0,0,.7)', color: 'rgba(255,255,255,.6)', backdropFilter: 'blur(4px)' }}>{article.source.toUpperCase()}</span>
-                        </div>
-                      </div>
-                      <div style={{ padding: '16px 18px 20px' }} className="flex flex-col flex-1">
-                        <h3 className="group-hover:text-[var(--red)] transition-colors" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, lineHeight: 1.05, marginBottom: 8, flex: 1 }}>{article.title}</h3>
-                        <p style={{ fontSize: 12, color: '#8f8f8f', lineHeight: 1.6, marginBottom: 10 }}>{article.excerpt.length > 90 ? article.excerpt.slice(0, 90) + '...' : article.excerpt}</p>
-                        <div className="flex items-center justify-between">
-                          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 1, color: '#808080' }}>{article.source.toUpperCase()}</span>
-                          <div className="flex items-center gap-2">
-                            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: '#707070' }}>{timeAgo(article.publishedAt)}</span>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#707070" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                          </div>
-                        </div>
-                      </div>
+                <div>
+                  <div className="tc-credits">
+                    {liveArticles[0].source} · {timeAgo(liveArticles[0].publishedAt)}
+                  </div>
+                  <h3>
+                    <a href={liveArticles[0].url} target="_blank" rel="noopener noreferrer">
+                      {liveArticles[0].title}
                     </a>
-                  ))}
+                  </h3>
+                  <p className="tc-deck">{liveArticles[0].excerpt}</p>
+                  <div className="tc-tag-row">
+                    <span className="tc-tag tc-red-tag">{liveArticles[0].category}</span>
+                    <span className="tc-tag">External</span>
+                  </div>
+                  <a href={liveArticles[0].url} target="_blank" rel="noopener noreferrer" className="tc-read">
+                    Read at {liveArticles[0].source} →
+                  </a>
                 </div>
-              </>
-            )}
-          </div>
-        </section>
+              </article>
+
+              {/* Grid */}
+              <div className="tc-films-grid">
+                {liveArticles.slice(1).map((article, i) => (
+                  <article key={`${article.title.substring(0, 24)}-${i}`} className="tc-film-card">
+                    <a href={article.url} target="_blank" rel="noopener noreferrer" className="tc-film-card-poster">
+                      <img src={article.imageUrl} alt={article.title} loading="lazy" />
+                    </a>
+                    <div className="tc-film-card-tag">{article.category} · {article.source}</div>
+                    <h4>
+                      <a href={article.url} target="_blank" rel="noopener noreferrer">
+                        {article.title}
+                      </a>
+                    </h4>
+                    <p className="tc-blurb">{article.excerpt.length > 110 ? article.excerpt.slice(0, 110) + '…' : article.excerpt}</p>
+                    <div className="tc-dates">
+                      <strong>{timeAgo(article.publishedAt)}</strong>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       )}
 
-      {/* About The Culture Ledger */}
-      <section style={{ padding: '100px 40px', background: 'var(--black)', borderTop: '1px solid #1a1a1a' }}>
-        <div className="max-w-[800px] mx-auto text-center">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>About</span>
-          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', margin: '16px 0' }}>
-            The LSMG <span style={{ color: 'var(--red)' }}>Ledger</span>
-          </h2>
-          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 24, lineHeight: 1.75 }}>The LSMG Ledger is LSMG's daily editorial publication covering pop culture, music, entertainment, fashion, and media. No spin, no agenda — just the culture as it happens. Live-curated stories from across the web alongside LSMG originals.</p>
-          <p style={{ fontSize: 15, color: '#8f8f8f', lineHeight: 1.75 }}>Published by Last Shot Media Group. Written by our editorial team with contributions from guest writers across the industry.</p>
+      {/* TRIBECA 2026 SPECIAL COVERAGE */}
+      <section id="tribeca-coverage" className="tc-section">
+        <div className="tc-section-header">
+          <span className="tc-section-num">▸</span>
+          <h2 className="tc-section-title">Tribeca 2026 — Special Coverage</h2>
+          <span className="tc-section-meta">June 3–14, 2026 · New York City</span>
         </div>
       </section>
+
+      <section className="tc-lead" style={{ marginTop: '1rem' }}>
+        <div className="tc-lead-tag">
+          &#9679; Live From New York &#9679; June 3–14, 2026
+        </div>
+        <h2 className="tc-lead-headline">
+          Tribeca at <em>25</em>
+        </h2>
+        <p className="tc-lead-deck">
+          The LSMG Ledger is credentialed press at the 2026 Tribeca Festival —
+          five team members on the ground across twelve days, covering the films,
+          the conversations, the games, and the culture that define this moment
+          in independent cinema.
+        </p>
+        <p className="tc-lead-byline">
+          <strong>Zachary Heneden</strong> &nbsp;—&nbsp; Editor in Chief
+          &nbsp;|&nbsp; Last Shot Media Group &nbsp;|&nbsp; Dallas → New York
+        </p>
+      </section>
+
+      {/* FEATURED FILMS */}
+      <main className="tc-films">
+        {featuredFilms.map((film) => (
+          <article key={film.slug} className="tc-film-feature">
+            <div
+              className="tc-film-feature-thumb"
+              data-num={film.num}
+              data-section={film.sectionLabel}
+            >
+              <div
+                className="tc-film-feature-thumb-bg"
+                style={{ background: film.gradient }}
+              />
+              {film.poster && (
+                <img
+                  className="tc-poster-img"
+                  src={film.poster}
+                  alt={`${film.title} — official Tribeca Festival still`}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                  }}
+                />
+              )}
+            </div>
+            <div>
+              <div className="tc-credits">{film.director}</div>
+              <h3>
+                <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>
+                  {film.title}
+                </Link>
+              </h3>
+              <p className="tc-deck">{film.deck}</p>
+              <div className="tc-tag-row">
+                {film.tags.map((tag) => (
+                  <span
+                    key={tag.label}
+                    className={`tc-tag${tag.variant === 'red' ? ' tc-red-tag' : ''}`}
+                  >
+                    {tag.label}
+                  </span>
+                ))}
+              </div>
+              <div className="tc-meta">
+                {film.screenings.map((s, i) => (
+                  <div key={i}>
+                    <strong>{s.date}</strong> {s.details}
+                  </div>
+                ))}
+              </div>
+              <Link
+                to="/tribeca/films/$filmSlug"
+                params={{ filmSlug: film.slug }}
+                className="tc-read"
+              >
+                Read Coverage →
+              </Link>
+              {film.spotify && (
+                <div className="tc-podcast">
+                  <div className="tc-podcast-label">
+                    ▶ The Last Shot Podcast — Tribeca 2026 Interview
+                  </div>
+                  <iframe
+                    className="tc-podcast-embed"
+                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    title={film.spotify.title}
+                  />
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </main>
+
+      {/* SECONDARY GRID */}
+      <section className="tc-section">
+        <div className="tc-section-header">
+          <span className="tc-section-num">▸</span>
+          <h2 className="tc-section-title">Full Coverage — 30+ Films</h2>
+          <span className="tc-section-meta">June 3–14, 2026</span>
+        </div>
+      </section>
+
+      <div className="tc-films">
+        <div className="tc-films-grid">
+          {secondaryFilms.map((film, i) => (
+            <article key={i} className="tc-film-card">
+              {film.poster && (
+                <a
+                  className="tc-film-card-poster"
+                  href={film.tribecaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${film.title} on the Tribeca Festival site`}
+                >
+                  <img
+                    src={film.poster}
+                    alt={`${film.title} — official Tribeca Festival still`}
+                    loading="lazy"
+                    onError={(e) => {
+                      const parent = e.currentTarget.parentElement
+                      if (parent) parent.style.display = 'none'
+                    }}
+                  />
+                </a>
+              )}
+              <div className="tc-film-card-tag">{film.tag}</div>
+              <h4>
+                {film.slug ? (
+                  <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>
+                    {film.title}
+                  </Link>
+                ) : (
+                  film.title
+                )}
+              </h4>
+              <div className="tc-credits">{film.credits}</div>
+              <p className="tc-blurb">{film.blurb}</p>
+              <div className="tc-dates">
+                <strong>{film.dates}</strong>
+              </div>
+              {film.spotify && (
+                <div className="tc-podcast tc-podcast-card">
+                  <div className="tc-podcast-label">
+                    ▶ The Last Shot Podcast Interview
+                  </div>
+                  <iframe
+                    className="tc-podcast-embed"
+                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
+                    width="100%"
+                    height="152"
+                    frameBorder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    title={film.spotify.title}
+                  />
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+
+      {/* 25TH ANNIVERSARY OUTDOOR */}
+      <section className="tc-section">
+        <div className="tc-section-header">
+          <span className="tc-section-num">▸</span>
+          <h2 className="tc-section-title">
+            25th Anniversary — Free Outdoor Screenings
+          </h2>
+          <span className="tc-section-meta">
+            Hudson Yards — Nightly 7 PM, Jun 4–14
+          </span>
+        </div>
+        <div className="tc-films-grid">
+          {outdoorScreenings.map((film, i) => (
+            <article key={i} className="tc-film-card">
+              <div className="tc-film-card-tag">{film.tag}</div>
+              <h4>{film.title}</h4>
+              <div className="tc-credits">{film.credits}</div>
+              <p className="tc-blurb">{film.blurb}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="tc-footer">
+        <div className="tc-footer-inner">
+          <div className="tc-footer-top">
+            <div className="tc-footer-brand">
+              <h2>
+                The LSMG <em>Ledger</em>
+              </h2>
+              <p>
+                The daily editorial publication of Last Shot Media Group.
+                Independent press — Dallas-based, internationally credentialed.
+                Covering the films, artists, and stories that deserve attention.
+              </p>
+            </div>
+            <div className="tc-footer-col">
+              <h4>Tribeca 2026</h4>
+              <a href="#tribeca-coverage">All Coverage</a>
+              <Link to="/tribeca/schedule">Daily Schedule</Link>
+              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'mexicanamerican' }}>
+                MEXICANAMERICAN
+              </Link>
+              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'harvest' }}>
+                HARVEST
+              </Link>
+              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'airport-blvd' }}>
+                AIRPORT BLVD
+              </Link>
+            </div>
+            <div className="tc-footer-col">
+              <h4>Last Shot Media Group</h4>
+              <Link to="/">Website</Link>
+              <a
+                href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Apple Podcasts
+              </a>
+              <a
+                href="https://open.spotify.com/show/0RqHPKHBk4sHPuJTNqpLia"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Spotify
+              </a>
+              <a
+                href="https://www.instagram.com/lastshotmediagroup"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Instagram
+              </a>
+            </div>
+          </div>
+          <div className="tc-footer-bottom">
+            <span>
+              &copy; 2026 Last Shot Media Group Holdings. The LSMG Ledger. All
+              Rights Reserved.
+            </span>
+            <span>Independent Press — Daily Edition</span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

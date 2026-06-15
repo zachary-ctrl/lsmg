@@ -180,12 +180,10 @@ function RootComponent() {
 const navLinks = [
   { to: '/' as const, label: 'Home' },
   { to: '/about' as const, label: 'About' },
-  { to: '/pr' as const, label: 'PR' },
+  { to: '/pr' as const, label: 'PR & Booking' },
   { to: '/media' as const, label: 'Media' },
   { to: '/watch' as const, label: 'Watch' },
-  { to: '/booking' as const, label: 'Booking' },
   { to: '/culture-ledger' as const, label: 'LSMG Ledger' },
-  { to: '/tribeca' as const, label: 'Tribeca 2026' },
   { to: '/member-portal' as const, label: 'Member Portal' },
 ]
 
@@ -314,7 +312,7 @@ function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR, Comms & Talent</Link></li>
-              <li><Link to="/booking" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LSMG Booking</Link></li>
+              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LSMG Booking</Link></li>
               <li><Link to="/media" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Media & Film</Link></li>
             </ul>
           </div>
@@ -324,9 +322,8 @@ function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/about" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">About</Link></li>
-              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Communications</Link></li>
+              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Booking</Link></li>
               <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">The LSMG Ledger</Link></li>
-              <li><Link to="/tribeca" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Tribeca 2026</Link></li>
               <li><Link to="/watch" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Watch</Link></li>
               <li><Link to="/contact" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Contact</Link></li>
               <li><Link to="/login" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Login</Link></li>
