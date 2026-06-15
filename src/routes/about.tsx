@@ -233,31 +233,30 @@ function AboutPage() {
             </h2>
             <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Tap any portrait to read their full bio.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 2, background: 'var(--red)' }}>
+          <div className="hm-team-grid">
             {TEAM.map((member, idx) => (
               <button
                 key={member.name}
                 type="button"
                 onClick={() => openBio(member)}
-                className="scroll-reveal team-card group text-left"
-                style={{ background: '#0a0a0a', borderTop: '4px solid var(--red)', transitionDelay: `${idx * 0.09}s`, cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
-                aria-label={`View bio for ${member.name}`}
+                className="hm-member scroll-reveal"
+                style={{ transitionDelay: `${idx * 0.07}s` }}
+                aria-label={`View bio for ${member.name}, ${member.role}`}
               >
-                <div className="team-photo-wrap">
-                  {member.image ? (
-                    <img src={member.image} alt={member.name} className="team-photo" />
-                  ) : (
-                    <div className="team-photo team-photo-placeholder">
-                      <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 96, color: 'var(--red)', opacity: 0.5 }}>
-                        {member.name.charAt(0)}
-                      </span>
-                    </div>
-                  )}
-                  <span className="team-photo-cta">View Bio &rarr;</span>
-                </div>
-                <div style={{ padding: 28, flex: 1 }}>
-                  <h3 className="team-name-slide" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, lineHeight: 1 }}>{member.name}</h3>
-                  <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', margin: '10px 0 0', textTransform: 'uppercase' }}>{member.role}</p>
+                {member.image ? (
+                  <img src={member.image} alt={member.name} className="hm-member-photo" loading="lazy" />
+                ) : (
+                  <div className="hm-member-placeholder">
+                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 96, color: 'var(--red)', opacity: 0.5 }}>
+                      {member.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <div className="hm-member-overlay">
+                  <div className="hm-member-name">{member.name}</div>
+                  <div className="hm-member-bar" />
+                  <div className="hm-member-role">{member.role}</div>
+                  <div className="hm-member-cta">View Bio &rarr;</div>
                 </div>
               </button>
             ))}

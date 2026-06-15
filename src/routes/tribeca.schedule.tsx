@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { TribecaNav } from './tribeca.index'
+import { TribecaNav } from '../components/TribecaNav'
 
 export const Route = createFileRoute('/tribeca/schedule')({
   head: () => ({
@@ -260,7 +260,7 @@ function TribecaSchedule() {
             </div>
             <div className="tc-footer-col">
               <h4>Tribeca 2026</h4>
-              <Link to="/tribeca">All Coverage</Link>
+              <Link to="/culture-ledger">All Coverage</Link>
               <Link to="/tribeca/schedule">Daily Schedule</Link>
               <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'mexicanamerican' }}>
                 MEXICANAMERICAN

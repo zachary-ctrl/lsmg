@@ -31,7 +31,7 @@ function TribecaFilmDetail() {
             This film page doesn't exist or hasn't been published yet.
           </p>
           <Link
-            to="/tribeca"
+            to="/culture-ledger"
             style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: '#C8102E' }}
           >
             ← Back to All Coverage
@@ -85,7 +85,7 @@ function TribecaFilmDetail() {
 
       <nav className="tc-nav">
         <div className="tc-nav-inner">
-          <Link to="/tribeca">← All Coverage</Link>
+          <Link to="/culture-ledger">← All Coverage</Link>
           {otherFilms.map((f) => (
             <Link key={f.slug} to="/tribeca/films/$filmSlug" params={{ filmSlug: f.slug }}>
               {f.title}
@@ -95,7 +95,7 @@ function TribecaFilmDetail() {
       </nav>
 
       <article className="tc-article">
-        <Link to="/tribeca" className="tc-article-back">
+        <Link to="/culture-ledger" className="tc-article-back">
           ← Back to All Coverage
         </Link>
         <div className="tc-article-section">{film.section}</div>
@@ -160,7 +160,7 @@ function TribecaFilmDetail() {
             </div>
             <div className="tc-footer-col">
               <h4>Tribeca 2026</h4>
-              <Link to="/tribeca">All Coverage</Link>
+              <Link to="/culture-ledger">All Coverage</Link>
               <Link to="/tribeca/schedule">Daily Schedule</Link>
             </div>
             <div className="tc-footer-col">
