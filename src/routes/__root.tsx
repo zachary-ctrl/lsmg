@@ -190,105 +190,93 @@ const navLinks = [
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  // Subtle, smooth scroll state — deepens the header background + adds a
+  // hairline shadow once the page leaves the very top.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close the mobile menu whenever we grow past the mobile breakpoint so it
+  // never lingers half-open when a resize crosses lg.
+  useEffect(() => {
+    if (!mobileOpen) return
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const onChange = () => mq.matches && setMobileOpen(false)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [mobileOpen])
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-[12px] border-b border-[var(--border)]" style={{ background: 'rgba(8,8,8,.92)', height: 64, transition: 'background 0.4s ease' }}>
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 h-full">
-        <div className="flex items-center justify-between h-full">
-          <Link to="/" className="flex items-center gap-3 group">
-            <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, letterSpacing: 4, lineHeight: 1 }}>
-              <span style={{ color: 'var(--white)' }}>LS</span>
-              <span style={{ color: 'var(--red)' }}>MG</span>
-            </span>
-          </Link>
+    <header className={`lsmg-header${scrolled ? ' lsmg-header--scrolled' : ''}${mobileOpen ? ' lsmg-header--menu-open' : ''}`}>
+      <div className="lsmg-header-bar max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+        <Link to="/" className="lsmg-logo" onClick={() => setMobileOpen(false)}>
+          <span style={{ color: 'var(--white)' }}>LS</span>
+          <span style={{ color: 'var(--red)' }}>MG</span>
+        </Link>
 
-          <nav className="hidden lg:flex items-center gap-0">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="text-[var(--light)] hover:text-[var(--white)] transition-all duration-300 [&.active]:text-[var(--white)] relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-full after:h-[1px] after:bg-[var(--red)] after:transition-all after:duration-300 [&.active]:after:w-full"
-                style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, padding: '8px 14px', whiteSpace: 'nowrap' }}
-              >
-                {link.label.toUpperCase()}
-              </Link>
-            ))}
+        <nav className="lsmg-nav">
+          {navLinks.map((link) => (
             <Link
-              to="/login"
-              className="ml-2 hover:opacity-85 transition-opacity"
-              style={{
-                background: 'transparent',
-                color: 'var(--white)',
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 10,
-                letterSpacing: 3,
-                padding: '10px 20px',
-                whiteSpace: 'nowrap',
-                border: '1px solid var(--red)',
-              }}
+              key={link.to}
+              to={link.to}
+              className="lsmg-nav-link [&.active]:text-[var(--white)] relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-full after:h-[1px] after:bg-[var(--red)] after:transition-all after:duration-300 [&.active]:after:w-full"
             >
-              LOGIN
+              {link.label.toUpperCase()}
             </Link>
-            <Link
-              to="/contact"
-              className="ml-2 hover:opacity-85 transition-opacity"
-              style={{
-                background: 'var(--red)',
-                color: 'var(--white)',
-                fontFamily: "'DM Mono', monospace",
-                fontSize: 10,
-                letterSpacing: 3,
-                padding: '10px 20px',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              CONTACT
-            </Link>
-          </nav>
+          ))}
+          <Link to="/login" className="lsmg-btn lsmg-btn-ghost">LOGIN</Link>
+          <Link to="/contact" className="lsmg-btn lsmg-btn-solid">CONTACT</Link>
+        </nav>
 
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden flex flex-col gap-[5px] p-2"
-            aria-label="Toggle menu"
-          >
-            <span className="w-6 h-[2px] bg-[var(--white)] transition-all" />
-            <span className="w-6 h-[2px] bg-[var(--white)] transition-all" />
-            <span className="w-6 h-[2px] bg-[var(--white)] transition-all" />
-          </button>
-        </div>
-
-        {mobileOpen && (
-          <nav className="lg:hidden pb-4 border-t border-[var(--border)] pt-4 flex flex-col gap-3" style={{ background: 'rgba(8,8,8,.98)', animation: 'pageEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both' }}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                onClick={() => setMobileOpen(false)}
-                className="text-[var(--light)] hover:text-[var(--white)] transition-colors"
-                style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, padding: '6px 0' }}
-              >
-                {link.label.toUpperCase()}
-              </Link>
-            ))}
-            <Link
-              to="/login"
-              onClick={() => setMobileOpen(false)}
-              className="text-[var(--white)] hover:text-[var(--red)] transition-colors"
-              style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, padding: '6px 0' }}
-            >
-              LOGIN
-            </Link>
-            <Link
-              to="/contact"
-              onClick={() => setMobileOpen(false)}
-              className="text-[var(--red)] hover:text-[var(--white)] transition-colors"
-              style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, padding: '6px 0' }}
-            >
-              CONTACT
-            </Link>
-          </nav>
-        )}
+        <button
+          onClick={() => setMobileOpen((v) => !v)}
+          className={`lsmg-burger${mobileOpen ? ' lsmg-burger--open' : ''}`}
+          aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
+
+      {/* Mobile menu — always mounted so it animates both open and closed. */}
+      <nav className={`lsmg-mobile-menu${mobileOpen ? ' lsmg-mobile-menu--open' : ''}`} aria-hidden={!mobileOpen}>
+        <div className="lsmg-mobile-inner max-w-[1400px] mx-auto px-4 sm:px-6">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              tabIndex={mobileOpen ? 0 : -1}
+              onClick={() => setMobileOpen(false)}
+              className="lsmg-mobile-link"
+            >
+              {link.label.toUpperCase()}
+            </Link>
+          ))}
+          <Link
+            to="/login"
+            tabIndex={mobileOpen ? 0 : -1}
+            onClick={() => setMobileOpen(false)}
+            className="lsmg-mobile-link lsmg-mobile-link--login"
+          >
+            LOGIN
+          </Link>
+          <Link
+            to="/contact"
+            tabIndex={mobileOpen ? 0 : -1}
+            onClick={() => setMobileOpen(false)}
+            className="lsmg-mobile-link lsmg-mobile-link--contact"
+          >
+            CONTACT
+          </Link>
+        </div>
+      </nav>
     </header>
   )
 }
