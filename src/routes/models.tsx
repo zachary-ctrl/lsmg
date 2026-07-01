@@ -353,7 +353,7 @@ function ModelsPage() {
               aria-label={`View ${m.name}'s portfolio`}
             >
               <img
-                src={cdn(m.gallery[0], 640, 860)}
+                src={cdn(m.gallery[0], 720, 960)}
                 alt={`${m.name} — LSMG ${m.categories.join(' and ')} model`}
                 className="mdl-featured-img"
                 loading="lazy"
@@ -402,14 +402,14 @@ function ModelsPage() {
             <button
               key={m.id}
               type="button"
-              className={`mdl-card${m.tall ? ' mdl-card-tall' : ''}`}
+              className="mdl-card"
               style={{ animationDelay: `${i * 0.07}s` }}
               onClick={() => openProfile(m)}
               aria-label={`View ${m.name}'s portfolio — ${m.categories.join(', ')}`}
             >
               <img
-                src={cdn(m.gallery[0], 720, m.tall ? 1040 : 860)}
-                alt={`${m.name} — LSMG ${m.categories.join(' and ')} model, ${m.location}`}
+                src={cdn(m.gallery[0], 720, 960)}
+                alt={`${m.name} — LSMG ${m.categories.join(' and ')} model`}
                 className="mdl-card-img"
                 loading="lazy"
               />
@@ -417,7 +417,6 @@ function ModelsPage() {
               <span className="mdl-card-overlay">
                 <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
                 <span className="mdl-card-name">{m.name}</span>
-                <span className="mdl-card-loc">{m.location}</span>
                 <span className="mdl-card-stats">
                   {m.stats.slice(0, 3).map((s) => (
                     <span key={s.label}>
@@ -450,79 +449,83 @@ function ModelsPage() {
         </div>
       </section>
 
-      {/* ───────────── Profile modal ───────────── */}
+      {/* ───────────── Profile lightbox ─────────────
+          Full-screen: the current shot is duplicated as a zoomed, blurred
+          backdrop, with the sharp, uncropped image + details floated on top. */}
       {active && (
         <div
-          className={`mdl-modal-overlay${closing ? ' mdl-modal-overlay--closing' : ''}`}
+          className={`mdl-lightbox${closing ? ' mdl-lightbox--closing' : ''}`}
           onClick={closeProfile}
           role="dialog"
           aria-modal="true"
           aria-label={`${active.name} portfolio`}
         >
-          <div className={`mdl-modal${closing ? ' mdl-modal--closing' : ''}`} onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="mdl-modal-close" onClick={closeProfile} aria-label="Close profile">
-              &times;
-            </button>
-            <div className="mdl-modal-grid">
-              {/* Carousel */}
-              <div className="mdl-carousel">
-                <div className="mdl-carousel-stage">
-                  <img
-                    key={slide}
-                    src={cdn(active.gallery[slide], 1100, 1380, 80)}
-                    alt={`${active.name} — shot ${slide + 1} of ${active.gallery.length}`}
-                    className="mdl-carousel-img"
-                  />
-                  {active.gallery.length > 1 && (
-                    <>
-                      <button type="button" className="mdl-car-nav mdl-car-prev" onClick={() => move(-1)} aria-label="Previous shot">&#8249;</button>
-                      <button type="button" className="mdl-car-nav mdl-car-next" onClick={() => move(1)} aria-label="Next shot">&#8250;</button>
-                      <span className="mdl-car-index">{slide + 1} / {active.gallery.length}</span>
-                    </>
-                  )}
+          <div
+            className="mdl-lightbox-backdrop"
+            aria-hidden="true"
+            style={{ backgroundImage: `url(${cdn(active.gallery[slide], 900, undefined, 45)})` }}
+          />
+          <div className="mdl-lightbox-scrim" aria-hidden="true" />
+          <button type="button" className="mdl-lightbox-close" onClick={closeProfile} aria-label="Close profile">
+            &times;
+          </button>
+          <div className="mdl-lightbox-panel" onClick={(e) => e.stopPropagation()}>
+            {/* Sharp image + carousel controls */}
+            <div className="mdl-lightbox-stage">
+              <img
+                key={slide}
+                src={cdn(active.gallery[slide], 1100, undefined, 82)}
+                alt={`${active.name} — shot ${slide + 1} of ${active.gallery.length}`}
+                className="mdl-lightbox-img"
+              />
+              {active.gallery.length > 1 && (
+                <>
+                  <button type="button" className="mdl-lb-nav mdl-lb-prev" onClick={() => move(-1)} aria-label="Previous shot">&#8249;</button>
+                  <button type="button" className="mdl-lb-nav mdl-lb-next" onClick={() => move(1)} aria-label="Next shot">&#8250;</button>
+                  <span className="mdl-lb-index">{slide + 1} / {active.gallery.length}</span>
+                </>
+              )}
+              {active.gallery.length > 1 && (
+                <div className="mdl-lb-thumbs" role="tablist" aria-label={`${active.name} shots`}>
+                  {active.gallery.map((g, gi) => (
+                    <button
+                      key={g}
+                      type="button"
+                      role="tab"
+                      aria-selected={gi === slide}
+                      className={`mdl-lb-thumb${gi === slide ? ' mdl-lb-thumb-active' : ''}`}
+                      onClick={() => setSlide(gi)}
+                      aria-label={`${active.name} shot ${gi + 1}`}
+                    >
+                      <img src={cdn(g, 160, 200)} alt="" loading="lazy" />
+                    </button>
+                  ))}
                 </div>
-                {active.gallery.length > 1 && (
-                  <div className="mdl-thumbs" role="tablist" aria-label={`${active.name} shots`}>
-                    {active.gallery.map((g, gi) => (
-                      <button
-                        key={g}
-                        type="button"
-                        role="tab"
-                        aria-selected={gi === slide}
-                        className={`mdl-thumb${gi === slide ? ' mdl-thumb-active' : ''}`}
-                        onClick={() => setSlide(gi)}
-                        aria-label={`${active.name} shot ${gi + 1}`}
-                      >
-                        <img src={cdn(g, 160, 200)} alt="" loading="lazy" />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              )}
+            </div>
 
-              {/* Info */}
-              <div className="mdl-modal-body">
-                <span className="mdl-eyebrow">{active.location} · LSMG Roster</span>
-                <h3 className="mdl-modal-name">{active.name}</h3>
-                <p className="mdl-modal-tagline">{active.tagline}</p>
-                <div className="mdl-modal-cats">
-                  {active.categories.map((c) => (
-                    <span key={c} className="mdl-chip">{c}</span>
-                  ))}
-                </div>
-                <div className="mdl-modal-stats">
-                  {active.stats.map((s, si) => (
-                    <div key={s.label} className="mdl-stat" style={{ animationDelay: `${0.1 + si * 0.05}s` }}>
-                      <span className="mdl-stat-label">{s.label}</span>
-                      <span className="mdl-stat-value">{s.value}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="mdl-modal-bio">{active.bio}</p>
-                <Link to="/contact" className="mdl-btn mdl-btn-primary mdl-modal-book">
-                  Book {active.name}
-                </Link>
+            {/* Info */}
+            <div className="mdl-lightbox-info">
+              <span className="mdl-eyebrow">LSMG Roster</span>
+              <h3 className="mdl-lightbox-name">{active.name}</h3>
+              <p className="mdl-lightbox-tagline">{active.tagline}</p>
+              <div className="mdl-lightbox-cats">
+                {active.categories.map((c) => (
+                  <span key={c} className="mdl-chip">{c}</span>
+                ))}
               </div>
+              <div className="mdl-lightbox-stats">
+                {active.stats.map((s, si) => (
+                  <div key={s.label} className="mdl-stat" style={{ animationDelay: `${0.1 + si * 0.05}s` }}>
+                    <span className="mdl-stat-label">{s.label}</span>
+                    <span className="mdl-stat-value">{s.value}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mdl-lightbox-bio">{active.bio}</p>
+              <Link to="/contact" className="mdl-btn mdl-btn-primary mdl-lightbox-book">
+                Book {active.name}
+              </Link>
             </div>
           </div>
         </div>

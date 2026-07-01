@@ -264,36 +264,54 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Bio Modal */}
+      {/* Bio Lightbox — full-screen: blurred, zoomed backdrop of the same
+          portrait with the sharp, uncropped image and bio floated on top. */}
       {active && (
-        <div className={`bio-modal-overlay${closing ? ' bio-modal-overlay--closing' : ''}`} onClick={closeBio} role="dialog" aria-modal="true" aria-label={`${active.name} biography`}>
-          <div className={`bio-modal${closing ? ' bio-modal--closing' : ''}`} onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="bio-modal-close" onClick={closeBio} aria-label="Close">
-              &times;
-            </button>
-            <div className="bio-modal-grid">
-              <div className="bio-modal-photo">
-                {active.image ? (
-                  <img src={active.image} alt={active.name} />
-                ) : (
-                  <div className="team-photo-placeholder" style={{ height: '100%' }}>
-                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>
-                      {active.name.charAt(0)}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="bio-modal-body">
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', textTransform: 'uppercase' }}>Leadership</span>
-                <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 64px)', lineHeight: '.9', margin: '8px 0 6px' }}>{active.name}</h3>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, color: 'var(--red)', textTransform: 'uppercase', marginBottom: 24 }}>{active.role}</p>
-                <div className="w-[60px] h-[3px] mb-6" style={{ background: 'var(--red)' }} />
-                <p style={{ fontSize: 16, color: '#cfcfcf', lineHeight: 1.8, marginBottom: 28 }}>{active.bio}</p>
-                <div className="flex flex-wrap gap-2">
-                  {active.tags.map((tag, i) => (
-                    <span key={tag} style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: i === active.tags.length - 1 ? 'var(--red)' : 'var(--mid)', border: `1px solid ${i === active.tags.length - 1 ? 'var(--red)' : '#222'}`, padding: '6px 14px' }}>{tag}</span>
-                  ))}
+        <div
+          className={`bio-lightbox${closing ? ' bio-lightbox--closing' : ''}`}
+          onClick={closeBio}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${active.name} biography`}
+        >
+          {active.image && (
+            <div
+              className="bio-lightbox-backdrop"
+              aria-hidden="true"
+              style={{ backgroundImage: `url(${active.image})` }}
+            />
+          )}
+          <div className="bio-lightbox-scrim" aria-hidden="true" />
+          <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close">
+            &times;
+          </button>
+          <div className="bio-lightbox-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="bio-lightbox-figure">
+              {active.image ? (
+                <img src={active.image} alt={active.name} className="bio-lightbox-img" />
+              ) : (
+                <div className="bio-lightbox-placeholder">
+                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>
+                    {active.name.charAt(0)}
+                  </span>
                 </div>
+              )}
+            </div>
+            <div className="bio-lightbox-info">
+              <span className="bio-lightbox-eyebrow">Leadership</span>
+              <h3 className="bio-lightbox-name">{active.name}</h3>
+              <p className="bio-lightbox-role">{active.role}</p>
+              <div className="bio-lightbox-rule" />
+              <p className="bio-lightbox-bio">{active.bio}</p>
+              <div className="bio-lightbox-tags">
+                {active.tags.map((tag, i) => (
+                  <span
+                    key={tag}
+                    className={`bio-lightbox-tag${i === active.tags.length - 1 ? ' bio-lightbox-tag--accent' : ''}`}
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
