@@ -138,7 +138,7 @@ function AboutPage() {
     window.setTimeout(() => {
       setActive(null)
       setClosing(false)
-    }, 420)
+    }, 250)
   }, [])
 
   const openBio = useCallback((member: Member) => {
@@ -274,14 +274,6 @@ function AboutPage() {
           aria-modal="true"
           aria-label={`${active.name} biography`}
         >
-          {active.image && (
-            <div
-              className="bio-lightbox-backdrop"
-              aria-hidden="true"
-              style={{ backgroundImage: `url(${active.image})` }}
-            />
-          )}
-          <div className="bio-lightbox-scrim" aria-hidden="true" />
           <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close">
             &times;
           </button>
