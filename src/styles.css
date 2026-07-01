@@ -1321,123 +1321,104 @@ img {
 }
 
 /* ── Team bio reveal modal ── */
-@keyframes bioOverlayIn {
+/* Unified simple modal animations */
+@keyframes modalOverlayIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes bioModalIn {
-  from { opacity: 0; transform: translateY(40px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes bioOverlayOut {
+@keyframes modalOverlayOut {
   from { opacity: 1; }
   to { opacity: 0; }
 }
-@keyframes bioModalOut {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to { opacity: 0; transform: translateY(28px) scale(0.985); }
+@keyframes modalPanelIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
+@keyframes modalPanelOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.96); }
+}
+
 /* ── Team bio lightbox ──
-   Full-viewport treatment: a zoomed, blurred copy of the same portrait fills
-   the screen as a backdrop, with the sharp, uncropped image + bio floated on
-   top. Opens/closes with a fade + scale, centered on every breakpoint. */
+   Simplified centered modal on a solid dark overlay with clean side-by-side or stacked layout. */
 .bio-lightbox {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   padding: clamp(16px, 4vw, 56px);
-  animation: bioOverlayIn 0.4s ease both;
+  background: rgba(0, 0, 0, 0.85); /* plain solid dark background overlay */
+  overflow-y: auto; /* allow scrolling of whole overlay on mobile */
+  animation: modalOverlayIn 250ms ease-out both;
 }
 .bio-lightbox--closing {
-  animation: bioOverlayOut 0.4s ease both;
-}
-.bio-lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(42px) brightness(0.42) saturate(1.1);
-  transform: scale(1.2);
-  animation: bioOverlayIn 0.6s ease both;
-}
-.bio-lightbox-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(circle at 50% 38%, rgba(6, 6, 6, 0.45), rgba(4, 4, 4, 0.9) 90%);
+  animation: modalOverlayOut 250ms ease-out both;
 }
 .bio-lightbox-panel {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: clamp(20px, 3vw, 44px);
   width: 100%;
-  max-width: 1120px;
-  max-height: 92vh;
-  overflow-y: auto;
-  animation: bioModalIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-  scrollbar-width: thin;
+  max-width: 960px;
+  background: #0d0d0d; /* solid dark background for panel */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+  animation: modalPanelIn 250ms ease-out both;
+  margin: auto;
 }
 .bio-lightbox--closing .bio-lightbox-panel {
-  animation: bioModalOut 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: modalPanelOut 250ms ease-out both;
 }
 @media (min-width: 900px) {
   .bio-lightbox-panel {
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    overflow-y: visible;
+    align-items: stretch;
   }
 }
 .bio-lightbox-figure {
-  flex: 0 0 auto;
+  flex: 1 1 50%;
+  background: #050505;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  max-width: 100%;
+  padding: 24px;
 }
 .bio-lightbox-img {
   display: block;
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 46vh;
+  max-height: 40vh;
   object-fit: contain;
-  border: 1px solid rgba(245, 242, 237, 0.16);
-  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.65);
 }
 .bio-lightbox-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(78vw, 360px);
+  width: 100%;
   aspect-ratio: 3 / 4;
   background: linear-gradient(135deg, #160006, #080808);
   border: 1px solid rgba(245, 242, 237, 0.16);
 }
 @media (min-width: 900px) {
-  .bio-lightbox-figure { max-width: 50%; }
-  .bio-lightbox-img { max-height: 84vh; }
+  .bio-lightbox-figure {
+    max-width: 50%;
+  }
+  .bio-lightbox-img {
+    max-height: 70vh;
+  }
 }
 .bio-lightbox-info {
-  flex: 1 1 340px;
+  flex: 1 1 50%;
   width: 100%;
-  max-width: 540px;
-  padding: clamp(22px, 3vw, 34px);
-  background: rgba(10, 10, 10, 0.55);
-  border: 1px solid rgba(245, 242, 237, 0.08);
-  backdrop-filter: blur(6px);
-}
-@media (min-width: 900px) {
-  .bio-lightbox-info { max-height: 84vh; overflow-y: auto; }
+  padding: clamp(24px, 4vw, 44px);
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .bio-lightbox-eyebrow {
   font-family: 'DM Mono', monospace;
@@ -1492,26 +1473,26 @@ img {
 }
 .bio-lightbox-close {
   position: fixed;
-  top: clamp(14px, 3vw, 28px);
-  right: clamp(14px, 3vw, 28px);
+  top: clamp(14px, 3vw, 24px);
+  right: clamp(14px, 3vw, 24px);
   z-index: 6;
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 28px;
   line-height: 1;
   color: var(--white);
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 .bio-lightbox-close:hover {
   background: var(--red);
   border-color: var(--red);
-  transform: rotate(90deg);
+  transform: scale(1.1);
 }
 
 /* ── Micro-interaction: subtle press feedback ── */
@@ -1992,95 +1973,78 @@ img {
 /* ── Profile lightbox ──
    Full-viewport: a zoomed, blurred copy of the active shot fills the screen,
    with the sharp, uncropped image (object-fit: contain) + details on top. */
+/* ── Profile lightbox ──
+   Simplified centered modal on a solid dark overlay with clean side-by-side or stacked layout. */
 .mdl-lightbox {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   padding: clamp(16px, 4vw, 56px);
-  animation: bioOverlayIn 0.4s ease both;
+  background: rgba(0, 0, 0, 0.85); /* plain solid dark background overlay */
+  overflow-y: auto; /* allow scrolling of whole overlay on mobile */
+  animation: modalOverlayIn 250ms ease-out both;
 }
-.mdl-lightbox--closing { animation: bioOverlayOut 0.4s ease both; }
-.mdl-lightbox-backdrop {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(44px) brightness(0.4) saturate(1.1);
-  transform: scale(1.2);
-  animation: bioOverlayIn 0.6s ease both;
-}
-.mdl-lightbox-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: radial-gradient(circle at 50% 40%, rgba(6, 6, 6, 0.45), rgba(4, 4, 4, 0.92) 92%);
-}
+.mdl-lightbox--closing { animation: modalOverlayOut 250ms ease-out both; }
+
 .mdl-lightbox-panel {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: clamp(18px, 3vw, 40px);
   width: 100%;
-  max-width: 1200px;
-  max-height: 92vh;
-  overflow-y: auto;
-  animation: bioModalIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
-  scrollbar-width: thin;
+  max-width: 1100px;
+  background: #0d0d0d; /* solid dark background for panel */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+  animation: modalPanelIn 250ms ease-out both;
+  margin: auto;
 }
 .mdl-lightbox--closing .mdl-lightbox-panel {
-  animation: bioModalOut 0.42s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: modalPanelOut 250ms ease-out both;
 }
 @media (min-width: 900px) {
   .mdl-lightbox-panel {
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    overflow-y: visible;
+    align-items: stretch;
   }
 }
 .mdl-lightbox-stage {
   position: relative;
-  flex: 0 1 auto;
+  flex: 1 1 55%;
+  background: #050505;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-width: 0;
-  max-width: 100%;
+  padding: 24px;
 }
 .mdl-lightbox-img {
   display: block;
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 48vh;
+  max-height: 40vh;
   object-fit: contain;
-  border: 1px solid rgba(245, 242, 237, 0.16);
-  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.65);
-  animation: mdlFade 0.5s ease both;
 }
 @media (min-width: 900px) {
-  .mdl-lightbox-stage { max-width: 58%; }
-  .mdl-lightbox-img { max-height: 84vh; }
+  .mdl-lightbox-stage { max-width: 55%; }
+  .mdl-lightbox-img { max-height: 70vh; }
 }
-@keyframes mdlFade { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: scale(1); } }
 .mdl-lb-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 46px; height: 46px;
+  width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px; line-height: 1;
+  font-size: 24px; line-height: 1;
   color: var(--white);
   background: rgba(8, 8, 8, 0.5);
   border: 1px solid rgba(245, 242, 237, 0.2);
   cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
   z-index: 3;
 }
 .mdl-lb-nav:hover { background: var(--red); border-color: var(--red); }
@@ -2128,31 +2092,32 @@ img {
 .mdl-lb-thumb-active { opacity: 1; border-color: var(--red); }
 .mdl-lightbox-close {
   position: fixed;
-  top: clamp(14px, 3vw, 28px);
-  right: clamp(14px, 3vw, 28px);
+  top: clamp(14px, 3vw, 24px);
+  right: clamp(14px, 3vw, 24px);
   z-index: 6;
-  width: 46px; height: 46px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 30px; line-height: 1;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  line-height: 1;
   color: var(--white);
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
-.mdl-lightbox-close:hover { background: var(--red); border-color: var(--red); transform: rotate(90deg); }
+.mdl-lightbox-close:hover { background: var(--red); border-color: var(--red); transform: scale(1.1); }
 
 .mdl-lightbox-info {
-  flex: 1 1 340px;
+  flex: 1 1 45%;
   width: 100%;
-  max-width: 520px;
-  padding: clamp(22px, 3vw, 34px);
-  background: rgba(10, 10, 10, 0.55);
-  border: 1px solid rgba(245, 242, 237, 0.08);
-  backdrop-filter: blur(6px);
-}
-@media (min-width: 900px) {
-  .mdl-lightbox-info { max-height: 84vh; overflow-y: auto; }
+  padding: clamp(24px, 4vw, 44px);
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .mdl-lightbox-name {
   font-family: 'Bebas Neue', sans-serif;
@@ -2188,7 +2153,6 @@ img {
 .mdl-stat {
   background: #0a0a0a;
   padding: 16px 14px;
-  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
 }
 .mdl-stat-label {
   display: block;

@@ -108,6 +108,7 @@ const MODELS: Model[] = [
     ],
     gallery: ['/models/nani-1.jpg', '/models/nani-2.jpg', '/models/nani-3.jpg'],
     tall: true,
+    featured: true,
   },
   {
     id: 'saanvi',
@@ -256,7 +257,7 @@ function ModelsPage() {
     window.setTimeout(() => {
       setActive(null)
       setClosing(false)
-    }, 420)
+    }, 250)
   }, [])
 
   const move = useCallback(
@@ -460,12 +461,6 @@ function ModelsPage() {
           aria-modal="true"
           aria-label={`${active.name} portfolio`}
         >
-          <div
-            className="mdl-lightbox-backdrop"
-            aria-hidden="true"
-            style={{ backgroundImage: `url(${cdn(active.gallery[slide], 900, undefined, 45)})` }}
-          />
-          <div className="mdl-lightbox-scrim" aria-hidden="true" />
           <button type="button" className="mdl-lightbox-close" onClick={closeProfile} aria-label="Close profile">
             &times;
           </button>
