@@ -180,6 +180,7 @@ function RootComponent() {
 const navLinks = [
   { to: '/' as const, label: 'Home' },
   { to: '/about' as const, label: 'About' },
+  { to: '/models' as const, label: 'Models' },
   { to: '/pr' as const, label: 'PR & Booking' },
   { to: '/media' as const, label: 'Media' },
   { to: '/watch' as const, label: 'Watch' },
@@ -313,6 +314,7 @@ function Footer() {
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR, Comms & Talent</Link></li>
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LSMG Booking</Link></li>
+              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
               <li><Link to="/media" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Media & Film</Link></li>
             </ul>
           </div>
@@ -322,6 +324,7 @@ function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/about" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">About</Link></li>
+              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Booking</Link></li>
               <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">The LSMG Ledger</Link></li>
               <li><Link to="/watch" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Watch</Link></li>
