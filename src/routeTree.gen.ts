@@ -13,6 +13,7 @@ import { Route as WatchRouteImport } from './routes/watch'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as PrRouteImport } from './routes/pr'
+import { Route as ModelsRouteImport } from './routes/models'
 import { Route as MemberPortalRouteImport } from './routes/member-portal'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as LoginRouteImport } from './routes/login'
@@ -45,6 +46,11 @@ const PressRoute = PressRouteImport.update({
 const PrRoute = PrRouteImport.update({
   id: '/pr',
   path: '/pr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MemberPortalRoute = MemberPortalRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
+  '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
+  '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/media': typeof MediaRoute
   '/member-portal': typeof MemberPortalRoute
+  '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/media'
     | '/member-portal'
+    | '/models'
     | '/pr'
     | '/press'
     | '/upload'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/media'
     | '/member-portal'
+    | '/models'
     | '/pr'
     | '/press'
     | '/upload'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/media'
     | '/member-portal'
+    | '/models'
     | '/pr'
     | '/press'
     | '/upload'
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MediaRoute: typeof MediaRoute
   MemberPortalRoute: typeof MemberPortalRoute
+  ModelsRoute: typeof ModelsRoute
   PrRoute: typeof PrRoute
   PressRoute: typeof PressRoute
   UploadRoute: typeof UploadRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/pr'
       fullPath: '/pr'
       preLoaderRoute: typeof PrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/member-portal': {
@@ -385,6 +405,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MediaRoute: MediaRoute,
   MemberPortalRoute: MemberPortalRoute,
+  ModelsRoute: ModelsRoute,
   PrRoute: PrRoute,
   PressRoute: PressRoute,
   UploadRoute: UploadRoute,
