@@ -14,9 +14,7 @@ import { Route as UploadRouteImport } from './routes/upload'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as PrRouteImport } from './routes/pr'
 import { Route as ModelsRouteImport } from './routes/models'
-import { Route as MemberPortalRouteImport } from './routes/member-portal'
 import { Route as MediaRouteImport } from './routes/media'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
@@ -53,19 +51,9 @@ const ModelsRoute = ModelsRouteImport.update({
   path: '/models',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MemberPortalRoute = MemberPortalRouteImport.update({
-  id: '/member-portal',
-  path: '/member-portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MediaRoute = MediaRouteImport.update({
   id: '/media',
   path: '/media',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -126,9 +114,7 @@ export interface FileRoutesByFullPath {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
-  '/member-portal': typeof MemberPortalRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
@@ -146,9 +132,7 @@ export interface FileRoutesByTo {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
-  '/member-portal': typeof MemberPortalRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
@@ -167,9 +151,7 @@ export interface FileRoutesById {
   '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
-  '/login': typeof LoginRoute
   '/media': typeof MediaRoute
-  '/member-portal': typeof MemberPortalRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
@@ -189,9 +171,7 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/login'
     | '/media'
-    | '/member-portal'
     | '/models'
     | '/pr'
     | '/press'
@@ -209,9 +189,7 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/login'
     | '/media'
-    | '/member-portal'
     | '/models'
     | '/pr'
     | '/press'
@@ -229,9 +207,7 @@ export interface FileRouteTypes {
     | '/admin-login'
     | '/booking'
     | '/contact'
-    | '/login'
     | '/media'
-    | '/member-portal'
     | '/models'
     | '/pr'
     | '/press'
@@ -250,9 +226,7 @@ export interface RootRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
-  LoginRoute: typeof LoginRoute
   MediaRoute: typeof MediaRoute
-  MemberPortalRoute: typeof MemberPortalRoute
   ModelsRoute: typeof ModelsRoute
   PrRoute: typeof PrRoute
   PressRoute: typeof PressRoute
@@ -302,25 +276,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModelsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/member-portal': {
-      id: '/member-portal'
-      path: '/member-portal'
-      fullPath: '/member-portal'
-      preLoaderRoute: typeof MemberPortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/media': {
       id: '/media'
       path: '/media'
       fullPath: '/media'
       preLoaderRoute: typeof MediaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -402,9 +362,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
-  LoginRoute: LoginRoute,
   MediaRoute: MediaRoute,
-  MemberPortalRoute: MemberPortalRoute,
   ModelsRoute: ModelsRoute,
   PrRoute: PrRoute,
   PressRoute: PressRoute,

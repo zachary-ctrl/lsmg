@@ -184,8 +184,7 @@ const navLinks = [
   { to: '/pr' as const, label: 'PR & Booking' },
   { to: '/media' as const, label: 'Media' },
   { to: '/watch' as const, label: 'Watch' },
-  { to: '/culture-ledger' as const, label: 'LSMG Ledger' },
-  { to: '/member-portal' as const, label: 'Member Portal' },
+  { to: '/culture-ledger' as const, label: 'LEDGERA' },
 ]
 
 function Header() {
@@ -229,7 +228,6 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
-          <Link to="/login" className="lsmg-btn lsmg-btn-ghost">LOGIN</Link>
           <Link to="/contact" className="lsmg-btn lsmg-btn-solid">CONTACT</Link>
         </nav>
 
@@ -259,14 +257,6 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
-          <Link
-            to="/login"
-            tabIndex={mobileOpen ? 0 : -1}
-            onClick={() => setMobileOpen(false)}
-            className="lsmg-mobile-link lsmg-mobile-link--login"
-          >
-            LOGIN
-          </Link>
           <Link
             to="/contact"
             tabIndex={mobileOpen ? 0 : -1}
@@ -314,11 +304,9 @@ function Footer() {
               <li><Link to="/about" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">About</Link></li>
               <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Booking</Link></li>
-              <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">The LSMG Ledger</Link></li>
+              <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LEDGERA</Link></li>
               <li><Link to="/watch" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Watch</Link></li>
               <li><Link to="/contact" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Contact</Link></li>
-              <li><Link to="/login" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Login</Link></li>
-              <li><Link to="/member-portal" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Member Portal</Link></li>
             </ul>
           </div>
           <div>

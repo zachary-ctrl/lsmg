@@ -231,33 +231,31 @@ function AboutPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Tap any portrait to read their full bio.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Tap any name or photo to read their full bio.</p>
           </div>
-          <div className="hm-team-grid">
+          <div className="hm-team-list">
             {TEAM.map((member, idx) => (
               <button
                 key={member.name}
                 type="button"
                 onClick={() => openBio(member)}
                 className="hm-member scroll-reveal"
-                style={{ transitionDelay: `${idx * 0.07}s` }}
+                style={{ transitionDelay: `${idx * 0.06}s` }}
                 aria-label={`View bio for ${member.name}, ${member.role}`}
               >
-                {member.image ? (
-                  <img src={member.image} alt={member.name} className="hm-member-photo" loading="lazy" />
-                ) : (
-                  <div className="hm-member-placeholder">
-                    <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 96, color: 'var(--red)', opacity: 0.5 }}>
-                      {member.name.charAt(0)}
-                    </span>
-                  </div>
-                )}
-                <div className="hm-member-overlay">
-                  <div className="hm-member-name">{member.name}</div>
-                  <div className="hm-member-bar" />
-                  <div className="hm-member-role">{member.role}</div>
-                  <div className="hm-member-cta">View Bio &rarr;</div>
-                </div>
+                <span className="hm-member-photo-wrap">
+                  {member.image ? (
+                    <img src={member.image} alt={member.name} className="hm-member-photo" loading="lazy" />
+                  ) : (
+                    <span className="hm-member-initial">{member.name.charAt(0)}</span>
+                  )}
+                </span>
+                <span className="hm-member-text">
+                  <span className="hm-member-name">{member.name}</span>
+                  <span className="hm-member-role">{member.role}</span>
+                  <span className="hm-member-desc">{member.desc}</span>
+                  <span className="hm-member-cta">View Bio &rarr;</span>
+                </span>
               </button>
             ))}
           </div>

@@ -11,12 +11,12 @@ export const Route = createFileRoute('/culture-ledger/')({
     meta: [
       {
         title:
-          'The LSMG Ledger — Culture, Music & Tribeca 2026 Coverage',
+          'LEDGERA — The Record of Culture | News, Beauty, Fashion & Entertainment',
       },
       {
         name: 'description',
         content:
-          "The LSMG Ledger is Last Shot Media Group's daily editorial publication — pop culture, music, entertainment, and complete on-the-ground Tribeca 2026 coverage. Independent press.",
+          "LEDGERA is Last Shot Media Group's daily editorial publication — news, beauty, fashion, entertainment, and complete on-the-ground Tribeca 2026 coverage. Independent press.",
       },
     ],
   }),
@@ -154,9 +154,9 @@ function CultureLedgerPage() {
       <div className="tc-topbar">
         <div className="tc-topbar-inner">
           <div className="tc-topbar-left">
-            <span>The LSMG Ledger</span>
+            <span>LEDGERA</span>
             <span className="tc-dot">&#9679;</span>
-            <span>Culture · Music · Entertainment</span>
+            <span>News · Beauty · Fashion · Entertainment</span>
             <span className="tc-dot">&#9679;</span>
             <span>Updated in Real Time</span>
           </div>
@@ -165,29 +165,16 @@ function CultureLedgerPage() {
       </div>
 
       {/* MASTHEAD */}
-      <header className="tc-masthead">
-        <div className="tc-masthead-inner">
-          <div className="tc-masthead-meta">
-            <div>Volume 1</div>
-            <div>The Daily Edition</div>
-          </div>
-          <div>
-            <h1 className="tc-masthead-title">
-              The LSMG
-              <br />
-              <em>Ledger</em>
-            </h1>
-          </div>
-          <div className="tc-masthead-meta tc-right">
-            <div>lastshotmediagroup.com</div>
-            <div>Dallas → New York</div>
-          </div>
-        </div>
-        <div className="tc-masthead-divider">
-          <hr />
-          <span>Culture, Music &amp; Media — with Special Tribeca 2026 Coverage</span>
-          <hr />
-          <hr />
+      <header className="lg-masthead">
+        <div className="lg-masthead-inner">
+          <img
+            src="/ledgera-logo-transparent.png"
+            alt="LEDGERA"
+            className="lg-masthead-logo"
+          />
+          <p className="lg-masthead-tagline">The Record of Culture.</p>
+          <p className="lg-masthead-sub">News • Beauty • Fashion • Entertainment</p>
+          <p className="lg-masthead-attr">A Last Shot Media Group Publication.</p>
         </div>
       </header>
 
@@ -225,7 +212,7 @@ function CultureLedgerPage() {
       {/* LEAD */}
       <section className="tc-lead">
         <div className="tc-lead-tag">
-          &#9679; The LSMG Ledger &#9679; Pop Culture, Music &amp; Media
+          &#9679; LEDGERA &#9679; News, Beauty, Fashion &amp; Entertainment
         </div>
         <h2 className="tc-lead-headline">
           The Culture, <em>As It Happens</em>
@@ -499,7 +486,7 @@ function CultureLedgerPage() {
           Tribeca at <em>25</em>
         </h2>
         <p className="tc-lead-deck">
-          The LSMG Ledger is credentialed press at the 2026 Tribeca Festival —
+          LEDGERA is credentialed press at the 2026 Tribeca Festival —
           five team members on the ground across twelve days, covering the films,
           the conversations, the games, and the culture that define this moment
           in independent cinema.
@@ -687,7 +674,7 @@ function CultureLedgerPage() {
           <div className="tc-footer-top">
             <div className="tc-footer-brand">
               <h2>
-                The LSMG <em>Ledger</em>
+                LEDGE<em>RA</em>
               </h2>
               <p>
                 The daily editorial publication of Last Shot Media Group.
@@ -737,7 +724,7 @@ function CultureLedgerPage() {
           </div>
           <div className="tc-footer-bottom">
             <span>
-              &copy; 2026 Last Shot Media Group Holdings. The LSMG Ledger. All
+              &copy; 2026 Last Shot Media Group Holdings. LEDGERA. All
               Rights Reserved.
             </span>
             <span>Independent Press — Daily Edition</span>

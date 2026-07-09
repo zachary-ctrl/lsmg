@@ -107,7 +107,7 @@ function ArticlePage() {
       <div className="flex flex-col items-center justify-center" style={{ minHeight: '60vh', padding: 40 }}>
         <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 64, marginBottom: 16 }}>Article Not Found</h1>
         <Link to="/culture-ledger" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, color: 'var(--red)' }}>
-          &larr; BACK TO THE CULTURE LEDGER
+          &larr; BACK TO LEDGERA
         </Link>
       </div>
     )
@@ -120,7 +120,7 @@ function ArticlePage() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
         <div className="relative z-10 max-w-[900px] mx-auto">
           <Link to="/culture-ledger" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: 'var(--red)', display: 'inline-block', marginBottom: 24 }} className="hover:opacity-75 transition-opacity">
-            &larr; THE LSMG LEDGER
+            &larr; LEDGERA
           </Link>
           <div className="flex items-center gap-3 mb-5">
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'var(--red)', border: '1px solid var(--red)', padding: '4px 10px' }}>{article.category.toUpperCase()}</span>
@@ -293,7 +293,7 @@ function ArticlePage() {
       <section className="text-center" style={{ padding: '80px 40px', background: 'var(--black)', borderTop: '1px solid #1a1a1a' }}>
         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Keep Reading</span>
         <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: '.92', margin: '12px 0' }}>
-          More From The <span style={{ color: 'var(--red)' }}>LSMG Ledger</span>
+          More From <span style={{ color: 'var(--red)' }}>LEDGERA</span>
         </h2>
         <Link
           to="/culture-ledger"

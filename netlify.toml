@@ -24,6 +24,19 @@
   to   = "/admin/index.html"
   status = 200
 
+# Retired Member Portal + public sign-in — send any old links to the homepage.
+[[redirects]]
+  from = "/member-portal"
+  to   = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/login"
+  to   = "/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

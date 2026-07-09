@@ -5,12 +5,12 @@ export const Route = createFileRoute('/tribeca/schedule')({
   head: () => ({
     meta: [
       {
-        title: 'Daily Schedule | Tribeca 2026 | The LSMG Ledger',
+        title: 'Daily Schedule | Tribeca 2026 | LEDGERA',
       },
       {
         name: 'description',
         content:
-          "The LSMG Ledger's day-by-day Tribeca 2026 coverage schedule — screenings, premieres, red carpets, interviews, and events across June 3–14 in New York City.",
+          "LEDGERA's day-by-day Tribeca 2026 coverage schedule — screenings, premieres, red carpets, interviews, and events across June 3–14 in New York City.",
       },
     ],
   }),
@@ -176,7 +176,7 @@ function TribecaSchedule() {
       <div className="tc-topbar">
         <div className="tc-topbar-inner">
           <div className="tc-topbar-left">
-            <span>The LSMG Ledger</span>
+            <span>LEDGERA</span>
             <span className="tc-dot">&#9679;</span>
             <span>Tribeca 2026 Schedule</span>
             <span className="tc-dot">&#9679;</span>
@@ -287,7 +287,7 @@ function TribecaSchedule() {
           </div>
           <div className="tc-footer-bottom">
             <span>
-              &copy; 2026 Last Shot Media Group Holdings. The LSMG Ledger.
+              &copy; 2026 Last Shot Media Group Holdings. LEDGERA.
             </span>
             <span>Tribeca Festival 2026 — Official Credentialed Press</span>
           </div>

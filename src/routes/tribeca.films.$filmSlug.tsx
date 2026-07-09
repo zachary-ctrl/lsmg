@@ -7,7 +7,7 @@ export const Route = createFileRoute('/tribeca/films/$filmSlug')({
     return {
       meta: film
         ? [
-            { title: `${film.title} | Tribeca 2026 | The LSMG Ledger` },
+            { title: `${film.title} | Tribeca 2026 | LEDGERA` },
             { name: 'description', content: film.deck },
           ]
         : [{ title: 'Film Not Found | Tribeca 2026' }],
@@ -48,7 +48,7 @@ function TribecaFilmDetail() {
       <div className="tc-topbar">
         <div className="tc-topbar-inner">
           <div className="tc-topbar-left">
-            <span>The LSMG Ledger</span>
+            <span>LEDGERA</span>
             <span className="tc-dot">&#9679;</span>
             <span>Tribeca 2026</span>
             <span className="tc-dot">&#9679;</span>

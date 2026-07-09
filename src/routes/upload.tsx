@@ -104,7 +104,7 @@ function UploadPage() {
             </h1>
             <p style={{ fontSize: 18, color: '#b3b3b3', marginTop: 24, marginBottom: 40, maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>You need to be logged in to upload media content.</p>
             <Link
-              to="/login"
+              to="/admin-login"
               className="inline-flex items-center hover:opacity-85 transition-opacity"
               style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}
             >

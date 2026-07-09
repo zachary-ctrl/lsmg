@@ -227,175 +227,125 @@ img {
   box-shadow: 0 0 24px 2px rgba(200,16,46,.15);
 }
 
-/* ════════════════════════════════════════════════════════
-   humaan.com-inspired team grid
-   Clean modern grid; on hover the portrait shifts from
-   grayscale to full colour (the photo "swap") while the
-   name + role overlay rises into view. GPU-only transforms
-   (transform/opacity) keep it smooth at high frame rates.
-   ════════════════════════════════════════════════════════ */
-.hm-team-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
+/* ── Leadership team — vertical stacked rows with circular portraits ──
+   Each member is a full-width row (photo beside name/title/bio) that opens
+   the fixed bio modal on click. Same on desktop and mobile. */
+.hm-team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 900px;
 }
-@media (min-width: 640px) {
-  .hm-team-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (min-width: 1024px) {
-  .hm-team-grid { grid-template-columns: repeat(4, 1fr); }
-}
-
 .hm-member {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 32px);
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: clamp(20px, 3vw, 30px) 4px;
   border: none;
+  border-top: 1px solid #1a1a1a;
   appearance: none;
-  background: #0a0a0a;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
+  background: transparent;
   cursor: pointer;
   color: inherit;
   font: inherit;
   text-align: left;
+  transition: background 0.35s ease;
 }
+.hm-member:last-child { border-bottom: 1px solid #1a1a1a; }
+.hm-member:hover { background: rgba(200, 16, 46, 0.04); }
 .hm-member:focus-visible {
   outline: 2px solid var(--red);
-  outline-offset: 3px;
+  outline-offset: -2px;
 }
 
-/* Top accent line that draws across on hover */
-.hm-member::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  height: 3px;
-  width: 100%;
-  background: var(--red);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 4;
+/* Circular / oval portrait — small, does not dominate the row */
+.hm-member-photo-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(76px, 11vw, 108px);
+  aspect-ratio: 4 / 5;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #160006, #080808);
+  border: 2px solid #232323;
+  transition: border-color 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.hm-member:hover::before,
-.hm-member:focus-visible::before { transform: scaleX(1); }
-
+.hm-member:hover .hm-member-photo-wrap,
+.hm-member:focus-visible .hm-member-photo-wrap {
+  border-color: var(--red);
+  transform: scale(1.04);
+}
 .hm-member-photo {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  filter: grayscale(100%) contrast(1.06) brightness(0.82);
-  transform: scale(1.001);
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
-  will-change: transform, filter;
+  filter: grayscale(100%) contrast(1.05) brightness(0.9);
+  transition: filter 0.5s ease;
 }
 .hm-member:hover .hm-member-photo,
-.hm-member:focus-visible .hm-member-photo {
-  filter: grayscale(0%) contrast(1.08) brightness(1);
-  transform: scale(1.07);
-}
-
-.hm-member-placeholder {
-  position: absolute;
-  inset: 0;
+.hm-member:focus-visible .hm-member-photo { filter: grayscale(0%) brightness(1); }
+.hm-member-initial {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #160006, #080808);
+  width: 100%;
+  height: 100%;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: var(--red);
+  opacity: 0.6;
 }
 
-/* Bottom scrim + sliding info panel */
-.hm-member-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
+.hm-member-text {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 22px 20px;
-  background: linear-gradient(to top, rgba(7,7,7,0.55) 0%, rgba(7,7,7,0.12) 42%, transparent 70%);
-  transition: background 0.5s ease;
+  gap: 6px;
+  min-width: 0;
 }
-.hm-member:hover .hm-member-overlay,
-.hm-member:focus-visible .hm-member-overlay {
-  background: linear-gradient(to top, rgba(7,7,7,0.94) 0%, rgba(120,8,20,0.35) 55%, transparent 92%);
-}
-
 .hm-member-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(22px, 2.4vw, 30px);
-  line-height: 0.96;
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 0.98;
   color: var(--white);
-  transform: translateY(10px);
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.5px;
 }
-.hm-member:hover .hm-member-name,
-.hm-member:focus-visible .hm-member-name { transform: translateY(0); }
-
-.hm-member-bar {
-  width: 34px;
-  height: 2px;
-  background: var(--red);
-  margin: 10px 0;
-  transform: scaleX(0);
-  transform-origin: left center;
-  opacity: 0;
-  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.05s, opacity 0.4s ease 0.05s;
-}
-.hm-member:hover .hm-member-bar,
-.hm-member:focus-visible .hm-member-bar { transform: scaleX(1); opacity: 1; }
-
 .hm-member-role {
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--light);
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(8px);
-  overflow: hidden;
-  transition: opacity 0.45s ease 0.08s, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, max-height 0.5s ease 0.08s;
+  color: var(--red);
 }
-.hm-member:hover .hm-member-role,
-.hm-member:focus-visible .hm-member-role {
-  opacity: 1;
-  transform: translateY(0);
-  max-height: 80px;
+.hm-member-desc {
+  font-size: 15px;
+  color: #9c9c9c;
+  line-height: 1.65;
+  max-width: 60ch;
 }
-
 .hm-member-cta {
   font-family: 'DM Mono', monospace;
   font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--red);
-  margin-top: 12px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.45s ease 0.14s, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
+  color: var(--mid);
+  margin-top: 4px;
+  transition: color 0.3s ease;
 }
 .hm-member:hover .hm-member-cta,
-.hm-member:focus-visible .hm-member-cta { opacity: 1; transform: translateY(0); }
+.hm-member:focus-visible .hm-member-cta { color: var(--red); }
 
+@media (max-width: 560px) {
+  .hm-member-desc { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
+  .hm-member,
+  .hm-member-photo-wrap,
   .hm-member-photo,
-  .hm-member-name,
-  .hm-member-bar,
-  .hm-member-role,
-  .hm-member-cta,
-  .hm-member::before {
-    transition: none;
-  }
-  .hm-member-photo { filter: grayscale(0%); }
-  .hm-member-role { max-height: 80px; opacity: 1; transform: none; }
-  .hm-member-bar { opacity: 1; transform: none; }
+  .hm-member-cta { transition: none; }
 }
 
 /* ── Page Loader (mescubook-inspired) ── */
@@ -650,6 +600,56 @@ img {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--tc-ink);
+}
+
+/* ── LEDGERA masthead ──
+   Dark editorial band carrying the LEDGERA wordmark (white + red lettering,
+   so it needs an ink background) above the tagline / section / attribution
+   stack. Scoped to its own class so the Tribeca mastheads stay untouched. */
+.tribeca-page .lg-masthead {
+  background: var(--tc-ink);
+  border-bottom: 4px solid var(--tc-red);
+  padding: clamp(2.25rem, 5vw, 3.75rem) 0 clamp(1.75rem, 4vw, 2.75rem);
+  text-align: center;
+}
+.tribeca-page .lg-masthead-inner {
+  max-width: var(--tc-max);
+  margin: 0 auto;
+  padding: 0 var(--tc-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+.tribeca-page .lg-masthead-logo {
+  display: block;
+  width: 100%;
+  max-width: clamp(280px, 60vw, 620px);
+  height: auto;
+}
+.tribeca-page .lg-masthead-tagline {
+  font-family: var(--tc-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+  color: var(--tc-cream);
+  margin: 0;
+}
+.tribeca-page .lg-masthead-sub {
+  font-family: var(--tc-mono);
+  font-size: clamp(10px, 1.4vw, 13px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--tc-red);
+  margin: 0;
+}
+.tribeca-page .lg-masthead-attr {
+  font-family: var(--tc-mono);
+  font-size: clamp(9px, 1.2vw, 11px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tc-gray-light);
+  margin: 0.15rem 0 0;
 }
 
 .tribeca-page .tc-nav {
@@ -1362,6 +1362,9 @@ img {
   flex-direction: column;
   width: 100%;
   max-width: 960px;
+  max-height: 90vh; /* keep the whole modal inside the viewport */
+  overflow-y: auto; /* long bios scroll inside the modal, not off-screen */
+  overscroll-behavior: contain;
   background: #0d0d0d; /* solid dark background for panel */
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
@@ -1577,32 +1580,6 @@ img {
   mix-blend-mode: screen;
   transition: opacity 0.4s ease;
 }
-.models-page .mdl-hero-floats {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  will-change: transform;
-}
-.models-page .mdl-float {
-  position: absolute;
-  object-fit: cover;
-  border: 1px solid rgba(245,242,237,0.12);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.55);
-  filter: grayscale(20%) contrast(1.05);
-  opacity: 0.9;
-}
-.models-page .mdl-float-a {
-  width: 200px; height: 250px;
-  right: 8%; top: 16%;
-  animation: float 5s ease-in-out infinite;
-}
-.models-page .mdl-float-b {
-  width: 160px; height: 200px;
-  right: 22%; bottom: 12%;
-  animation: float 6.5s ease-in-out infinite reverse;
-}
-@media (max-width: 900px) { .models-page .mdl-hero-floats { display: none; } }
 
 .models-page .mdl-hero-inner {
   position: relative;
@@ -1727,68 +1704,6 @@ img {
   line-height: 1.7;
 }
 
-/* ── Featured rail ── */
-.models-page .mdl-featured-rail {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 16px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-.models-page .mdl-featured-rail::-webkit-scrollbar { height: 4px; }
-.models-page .mdl-featured-rail::-webkit-scrollbar-thumb { background: var(--red); }
-.models-page .mdl-featured {
-  position: relative;
-  flex: 0 0 auto;
-  width: clamp(220px, 28vw, 320px);
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #0c0c0c;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  scroll-snap-align: start;
-  color: inherit;
-  font: inherit;
-}
-.models-page .mdl-featured:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
-.models-page .mdl-featured-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  filter: grayscale(40%) brightness(0.85);
-  transition: transform 0.8s cubic-bezier(0.16,1,0.3,1), filter 0.6s ease;
-}
-.models-page .mdl-featured:hover .mdl-featured-img {
-  transform: scale(1.08);
-  filter: grayscale(0%) brightness(1);
-}
-.models-page .mdl-featured-overlay {
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 22px 20px;
-  background: linear-gradient(to top, rgba(6,6,6,0.92), transparent);
-  text-align: left;
-}
-.models-page .mdl-featured-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 30px;
-  line-height: 1;
-  color: var(--white);
-}
-.models-page .mdl-featured-tags {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--red);
-}
-
 /* ── Filters ── */
 .models-page .mdl-filters {
   display: flex;
@@ -1823,14 +1738,16 @@ img {
 }
 
 /* ── Roster grid ──
-   Even rows: every card shares one aspect ratio so no column staggers. */
+   Every card shares one aspect ratio so rows never stagger.
+   2 columns on mobile, 3 on desktop, 4 on wide screens. */
 .models-page .mdl-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: clamp(12px, 1.6vw, 22px);
   align-items: start;
 }
-@media (min-width: 1024px) { .models-page .mdl-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .models-page .mdl-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1280px) { .models-page .mdl-grid { grid-template-columns: repeat(4, 1fr); } }
 .models-page .mdl-card {
   position: relative;
   display: block;
@@ -1865,20 +1782,6 @@ img {
   transform: scale(1.07);
   filter: grayscale(0%) contrast(1.08) brightness(1);
 }
-.models-page .mdl-card-count {
-  position: absolute;
-  top: 14px; right: 14px;
-  z-index: 3;
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--white);
-  background: rgba(8,8,8,0.55);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(245,242,237,0.15);
-  padding: 5px 9px;
-}
 .models-page .mdl-card-overlay {
   position: absolute;
   inset: 0;
@@ -1887,12 +1790,19 @@ img {
   flex-direction: column;
   justify-content: flex-end;
   gap: 4px;
-  padding: 24px 22px;
-  background: linear-gradient(to top, rgba(6,6,6,0.78) 0%, rgba(6,6,6,0.1) 45%, transparent 72%);
+  padding: clamp(16px, 1.8vw, 24px);
+  background: linear-gradient(to top, rgba(6,6,6,0.82) 0%, rgba(6,6,6,0.15) 42%, transparent 68%);
   transition: background 0.5s ease;
 }
 .models-page .mdl-card:hover .mdl-card-overlay {
-  background: linear-gradient(to top, rgba(6,6,6,0.95) 0%, rgba(120,8,20,0.32) 55%, transparent 92%);
+  background: linear-gradient(to top, rgba(6,6,6,0.92) 0%, rgba(120,8,20,0.28) 55%, transparent 88%);
+}
+.models-page .mdl-card-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 0.94;
+  letter-spacing: 0.5px;
+  color: var(--white);
 }
 .models-page .mdl-card-cats {
   font-family: 'DM Mono', monospace;
@@ -1900,48 +1810,7 @@ img {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--red);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
 }
-.models-page .mdl-card-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(30px, 3.4vw, 44px);
-  line-height: 0.92;
-  color: var(--white);
-  transform: translateY(8px);
-  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-}
-.models-page .mdl-card:hover .mdl-card-name { transform: translateY(0); }
-.models-page .mdl-card:hover .mdl-card-cats { opacity: 1; transform: translateY(0); }
-.models-page .mdl-card-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 8px;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.45s ease 0.05s;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--light);
-}
-.models-page .mdl-card-stats em { color: var(--mid); font-style: normal; text-transform: uppercase; margin-right: 4px; }
-.models-page .mdl-card:hover .mdl-card-stats { max-height: 60px; opacity: 1; }
-.models-page .mdl-card-view {
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-top: 12px;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.45s ease 0.12s, transform 0.45s cubic-bezier(0.16,1,0.3,1) 0.12s;
-}
-.models-page .mdl-card:hover .mdl-card-view { opacity: 1; transform: translateY(0); }
 
 /* ── Become-talent CTA band ── */
 .models-page .mdl-cta-band {
@@ -2180,20 +2049,15 @@ img {
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .models-page .mdl-hero-bg,
-  .models-page .mdl-float,
   .models-page .mdl-hero-scroll-line,
   .models-page .mdl-card,
   .models-page .mdl-card-img,
-  .models-page .mdl-featured-img,
   .mdl-lightbox, .mdl-lightbox-backdrop, .mdl-lightbox-panel, .mdl-lightbox-img, .mdl-stat,
   .mdl-lightbox--closing {
     animation: none !important;
     transition: none !important;
   }
-  .models-page .mdl-float { display: none; }
-  .models-page .mdl-card-cats,
-  .models-page .mdl-card-stats,
-  .models-page .mdl-card-view { opacity: 1; transform: none; max-height: none; }
+  .models-page .mdl-card-cats { opacity: 1; transform: none; }
 }
 
 /* ════════════════════════════════════════════════════════
