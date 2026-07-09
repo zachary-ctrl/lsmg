@@ -41,7 +41,7 @@ function AdminLoginPage() {
         await logout()
       } else {
         setSuccess('Welcome, Admin!')
-        navigate({ to: '/member-portal' })
+        navigate({ to: '/upload' })
       }
     } catch (err: any) {
       setError(err?.status === 401 ? 'Invalid email or password.' : (err?.message || 'Login failed.'))
@@ -70,7 +70,7 @@ function AdminLoginPage() {
   }
 
   if (user && user.roles?.includes('admin')) {
-    navigate({ to: '/member-portal' })
+    navigate({ to: '/upload' })
     return null
   }
 
@@ -87,7 +87,7 @@ function AdminLoginPage() {
               Admin <span style={{ color: 'var(--red)' }}>Login</span>
             </h1>
             <p style={{ fontSize: 16, color: '#b3b3b3', marginTop: 16 }}>
-              Restricted access. Please log in with your administrative credentials to access the Member Portal.
+              Restricted access. Please log in with your administrative credentials to manage LSMG content.
             </p>
           </div>
 

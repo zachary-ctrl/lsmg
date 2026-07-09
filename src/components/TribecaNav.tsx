@@ -3,7 +3,7 @@ import { featuredFilms } from '../data/tribeca-films'
 
 /**
  * Shared sub-navigation for the Tribeca 2026 coverage pages. "All Coverage"
- * now points at the unified LSMG Ledger, which absorbed the standalone
+ * now points at the unified LEDGERA, which absorbed the standalone
  * Tribeca tab.
  */
 export function TribecaNav({ current }: { current: 'coverage' | 'schedule' }) {

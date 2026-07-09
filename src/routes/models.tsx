@@ -199,7 +199,6 @@ function ModelsPage() {
     () => (filter === 'All' ? MODELS : MODELS.filter((m) => m.categories.includes(filter))),
     [filter],
   )
-  const featured = useMemo(() => MODELS.filter((m) => m.featured), [])
 
   /* Cursor-following glow + subtle mouse parallax on the hero. */
   useEffect(() => {
@@ -299,11 +298,6 @@ function ModelsPage() {
         <div className="mdl-hero-scrim" />
         <div className="mdl-hero-glow" ref={glowRef} aria-hidden="true" />
 
-        <div className="mdl-hero-floats" ref={parallaxRef} aria-hidden="true">
-          <img src={cdn('/models/amora-2.jpg', 480, 600)} alt="" className="mdl-float mdl-float-a" loading="eager" />
-          <img src={cdn('/models/saanvi-1.jpg', 480, 600)} alt="" className="mdl-float mdl-float-b" loading="lazy" />
-        </div>
-
         <div className="mdl-hero-inner">
           <span className="mdl-eyebrow" style={{ animation: 'fadeUp .7s ease both' }}>
             LSMG Talent Division
@@ -334,37 +328,6 @@ function ModelsPage() {
         <div className="mdl-hero-scroll" aria-hidden="true">
           <span>Scroll</span>
           <span className="mdl-hero-scroll-line" />
-        </div>
-      </section>
-
-      {/* ───────────── Featured highlights ───────────── */}
-      <section className="mdl-section" aria-label="Featured talent">
-        <div className="mdl-section-head scroll-reveal">
-          <span className="mdl-eyebrow">Highlights</span>
-          <h2 className="mdl-section-title">Featured <span className="mdl-accent">Faces</span></h2>
-        </div>
-        <div className="mdl-featured-rail">
-          {featured.map((m, i) => (
-            <button
-              key={m.id}
-              type="button"
-              className="mdl-featured scroll-reveal"
-              style={{ transitionDelay: `${i * 0.08}s` }}
-              onClick={() => openProfile(m)}
-              aria-label={`View ${m.name}'s portfolio`}
-            >
-              <img
-                src={cdn(m.gallery[0], 720, 960)}
-                alt={`${m.name} — LSMG ${m.categories.join(' and ')} model`}
-                className="mdl-featured-img"
-                loading="lazy"
-              />
-              <span className="mdl-featured-overlay">
-                <span className="mdl-featured-name">{m.name}</span>
-                <span className="mdl-featured-tags">{m.categories.join(' · ')}</span>
-              </span>
-            </button>
-          ))}
         </div>
       </section>
 
@@ -414,18 +377,9 @@ function ModelsPage() {
                 className="mdl-card-img"
                 loading="lazy"
               />
-              <span className="mdl-card-count">{m.gallery.length} shots</span>
               <span className="mdl-card-overlay">
-                <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
                 <span className="mdl-card-name">{m.name}</span>
-                <span className="mdl-card-stats">
-                  {m.stats.slice(0, 3).map((s) => (
-                    <span key={s.label}>
-                      <em>{s.label}</em> {s.value}
-                    </span>
-                  ))}
-                </span>
-                <span className="mdl-card-view">View Portfolio &rarr;</span>
+                <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
               </span>
             </button>
           ))}

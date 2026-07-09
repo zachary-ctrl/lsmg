@@ -114,7 +114,7 @@ export const featuredFilms: Array<{
     sectionLabel: 'World Premiere + Red Carpet',
     director: 'Director: Sheldon Candis · Andscape · Stars: André Holland, Wendell Pierce, Samira Wiley',
     title: 'THEY FIGHT',
-    deck: "Andscape’s new film directed by Sheldon Candis brings together André Holland, Wendell Pierce, and Samira Wiley. The red carpet will be among the most significant of the festival for Black press. The LSMG Ledger is on it.",
+    deck: "Andscape’s new film directed by Sheldon Candis brings together André Holland, Wendell Pierce, and Samira Wiley. The red carpet will be among the most significant of the festival for Black press. LEDGERA is on it.",
     tags: [
       { label: 'Red Carpet', variant: 'red' },
       { label: 'Andscape' },
@@ -326,7 +326,7 @@ export const secondaryFilms: TribecaFilmCard[] = [
     tag: 'White Belt — Tribeca Premiere',
     title: 'WHITE BELT',
     credits: 'Dir: Branislav Jankic · Subject: Monika “Jac” Jagaciak',
-    blurb: "Former supermodel Monika “Jac” Jagaciak’s transformation into a jiu-jitsu champion. Editorial interview + formal critical review both in progress at The Ledger.",
+    blurb: "Former supermodel Monika “Jac” Jagaciak’s transformation into a jiu-jitsu champion. Editorial interview + formal critical review both in progress at LEDGERA.",
     dates: 'Tribeca Premiere',
     poster: 'https://d13jj08vfqimqg.cloudfront.net/uploads/film/photo_1/6858/medium_WhiteBelt-clean-16x9-01.jpg',
     tribecaUrl: 'https://tribecafilm.com/films/white-belt-2026',
@@ -377,7 +377,7 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
     credits: 'Directed by Eddie Sánchez · Documentary Competition · World Premiere',
     reviewStatus: 'under-review',
     byline: [
-      { label: 'Coverage', value: 'The LSMG Ledger' },
+      { label: 'Coverage', value: 'LEDGERA' },
       { label: 'Festival', value: '2026 Tribeca Festival' },
       { label: 'Section', value: 'Documentary Competition' },
     ],
@@ -405,10 +405,10 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
 
 <p>What makes MEXICANAMERICAN remarkable is how much Sánchez trusts the footage. He shot, wrote, and edited the film himself, alongside his brother Eben. It is a family film in the most literal sense — a film made by a family, about a family, that asks what it means to be a family across a border that was never supposed to stay permanent.</p>
 
-<h2>Why This Film Matters to The LSMG Ledger</h2>
+<h2>Why This Film Matters to LEDGERA</h2>
 <p>Last Shot Media Group is a Dallas-based independent creative company. Dallas and Austin share more than geography — they share the same demographic truth: that the cities of Texas were built in significant part by Mexican and Mexican-American families whose stories are underrepresented in media. MEXICANAMERICAN is the kind of film we exist to cover.</p>
 
-<p>Eddie Sánchez is also the film’s own press contact, representing himself through Evelia Filmworks. That’s the kind of independent spirit The LSMG Ledger was built to amplify. A filmmaker who made his film himself and is representing it himself at Tribeca, in competition, with no studio infrastructure. That’s the story.</p>
+<p>Eddie Sánchez is also the film’s own press contact, representing himself through Evelia Filmworks. That’s the kind of independent spirit LEDGERA was built to amplify. A filmmaker who made his film himself and is representing it himself at Tribeca, in competition, with no studio infrastructure. That’s the story.</p>
 
 <h2>Screening Information</h2>
 <p>MEXICANAMERICAN screens three times at Tribeca 2026, all at Village East by Angelika in Manhattan. The world premiere is Tuesday June 9 at 5:00 PM. Additional screenings June 10 at 6:00 PM and June 14 at 6:00 PM. Tickets at tribecafilm.com.</p>`,
@@ -424,7 +424,7 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
     credits: 'Directed by Alejandro Hendricks · U.S. Narrative Competition · World Premiere',
     reviewStatus: 'under-review',
     byline: [
-      { label: 'Coverage', value: 'The LSMG Ledger' },
+      { label: 'Coverage', value: 'LEDGERA' },
       { label: 'Festival', value: '2026 Tribeca Festival' },
       { label: 'Section', value: 'U.S. Narrative Competition' },
     ],
@@ -444,7 +444,7 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
 
 <p>Centered on Black creative lives and filmed in luminous black-and-white with an original jazz sensibility, Alejandro Hendricks’ debut explores displacement, intimacy, ambition, and the changing identity of a city rarely depicted from this perspective onscreen.</p>
 
-<blockquote>A story of what gets lost when a city changes around the people who built it. Black-and-white. Jazz. East Austin. This is the kind of debut The LSMG Ledger covers.</blockquote>
+<blockquote>A story of what gets lost when a city changes around the people who built it. Black-and-white. Jazz. East Austin. This is the kind of debut LEDGERA covers.</blockquote>
 
 <p>As a Dallas-based media company covering Black culture and creative life, the Austin story resonates personally. Dallas and Austin share the same demographic truth about whose labor built these cities and whose culture is being priced out of them. AIRPORT BLVD is arriving at exactly the right cultural moment.</p>
 
@@ -477,8 +477,8 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
 
 <p>Sam Pollard is one of the great living documentarians — his films on MLK, on the history of slavery’s economic legacy, on the soul music of America have established him as among the most important archivists of Black American history working in cinema. THE LORRAINE is a documentary about what came before the trauma. About the Lorraine Hotel as a living institution. About the people who built and ran it and why it mattered.</p>
 
-<h2>Why The LSMG Ledger Covers This Film</h2>
-<p>The LSMG Ledger was founded to give independent Black press access to the spaces where cultural history is being made. Sam Pollard making a film about the Lorraine Hotel at the 25th Tribeca Festival is a convergence of exactly what we exist to cover. History, Black entrepreneurship, civil rights, and one of the finest documentary filmmakers alive. The Ledger will be at the world premiere.</p>`,
+<h2>Why LEDGERA Covers This Film</h2>
+<p>LEDGERA was founded to give independent Black press access to the spaces where cultural history is being made. Sam Pollard making a film about the Lorraine Hotel at the 25th Tribeca Festival is a convergence of exactly what we exist to cover. History, Black entrepreneurship, civil rights, and one of the finest documentary filmmakers alive. LEDGERA will be at the world premiere.</p>`,
     tags: ['#Tribeca2026', '#TheLorraine', '#SamPollard', '#TheLSMGLedger', '#CivilRights', '#BlackHistory'],
     gradient: 'linear-gradient(135deg, #1a0505 0%, #2d0808 40%, #0a0a00 100%)',
   },
@@ -487,7 +487,7 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
     title: 'THEY FIGHT',
     section: 'World Premiere + Red Carpet — Andscape',
     director: 'Sheldon Candis',
-    deck: "Sheldon Candis directs André Holland, Wendell Pierce, and Samira Wiley in Andscape’s Tribeca 2026 world premiere. The LSMG Ledger covers the red carpet.",
+    deck: "Sheldon Candis directs André Holland, Wendell Pierce, and Samira Wiley in Andscape’s Tribeca 2026 world premiere. LEDGERA covers the red carpet.",
     credits: 'Director: Sheldon Candis · André Holland, Wendell Pierce, Samira Wiley · Andscape',
     reviewStatus: 'coverage-coming',
     byline: [
@@ -495,9 +495,9 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
       { label: 'Dates', value: 'World Premiere + Red Carpet — Tribeca 2026' },
     ],
     meta: [],
-    body: `<p>The LSMG Ledger is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
+    body: `<p>LEDGERA is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
 
-<p>Follow The LSMG Ledger on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
+<p>Follow LEDGERA on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
     tags: ['#Tribeca2026', '#TheLSMGLedger', '#25YearsOfTribeca'],
     gradient: 'linear-gradient(135deg, #000a1a 0%, #001a2d 50%, #0a0510 100%)',
   },
@@ -514,9 +514,9 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
       { label: 'Dates', value: 'Saturday June 6 — World Premiere' },
     ],
     meta: [],
-    body: `<p>The LSMG Ledger is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
+    body: `<p>LEDGERA is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
 
-<p>Follow The LSMG Ledger on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
+<p>Follow LEDGERA on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
     tags: ['#Tribeca2026', '#TheLSMGLedger', '#25YearsOfTribeca'],
     gradient: 'linear-gradient(135deg, #0a1a0a 0%, #1a2d00 50%, #0a0a0a 100%)',
   },
@@ -533,9 +533,9 @@ export const filmDetails: Record<string, TribecaFilmDetail> = {
       { label: 'Dates', value: 'June 11 & June 14 — Tribeca 2026' },
     ],
     meta: [],
-    body: `<p>The LSMG Ledger is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
+    body: `<p>LEDGERA is credentialed press at Tribeca 2026 and is covering this film. Full editorial coverage, interviews, and review forthcoming.</p>
 
-<p>Follow The LSMG Ledger on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
+<p>Follow LEDGERA on Instagram at @thelsmgledger and on our podcast on Apple Podcasts and Spotify for the latest Tribeca 2026 coverage as it publishes.</p>`,
     tags: ['#Tribeca2026', '#TheLSMGLedger', '#25YearsOfTribeca'],
     gradient: 'linear-gradient(135deg, #0a0a1a 0%, #001a2d 50%, #0a100a 100%)',
   },
