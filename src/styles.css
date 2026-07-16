@@ -2222,7 +2222,7 @@ img {
 .ledgera-page {
   --lg-paper: #f1eee6;
   --lg-ink: #11100f;
-  --lg-red: #d7193f;
+  --lg-red: #c8102e;
   --lg-pink: #f3b7c5;
   --lg-lime: #d7f34a;
   --lg-rule: rgba(17, 16, 15, 0.24);
@@ -2257,11 +2257,21 @@ img {
 }
 .ledgera-topline span:last-child { text-align: right; }
 .ledgera-masthead { padding-top: clamp(28px, 5vw, 72px); }
-.ledgera-masthead > img {
-  display: block;
-  width: min(100%, 860px);
-  margin: 0 auto;
-  filter: invert(1);
+.ledgera-wordmark {
+  display: flex;
+  justify-content: center;
+  color: #000;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(5rem, 14.5vw, 13rem);
+  font-weight: 900;
+  letter-spacing: -0.09em;
+  line-height: 0.72;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.ledgera-wordmark strong {
+  color: var(--lg-red);
+  font: inherit;
 }
 .ledgera-masthead-rule {
   display: flex;
@@ -2353,7 +2363,6 @@ img {
 .ledgera-hero-image img,
 .ledgera-news-image img,
 .ledgera-tribeca-image img,
-.ledgera-model-card img,
 .ledgera-trend-image img {
   width: 100%;
   height: 100%;
@@ -2361,9 +2370,8 @@ img {
 }
 .ledgera-hero-image:hover img,
 .ledgera-news-image:hover img,
-.ledgera-model-card:hover img,
 .ledgera-tribeca-image:hover img { transform: scale(1.035); }
-.ledgera-hero-image > span {
+.ledgera-hero-badge {
   position: absolute;
   top: 16px;
   left: 16px;
@@ -2373,6 +2381,20 @@ img {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.ledgera-cover-credit {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  max-width: calc(100% - 32px);
+  padding: 6px 8px;
+  background: rgba(17, 16, 15, 0.82);
+  color: var(--lg-paper);
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-align: right;
   text-transform: uppercase;
 }
 .ledgera-story-copy { max-width: 920px; padding-top: clamp(24px, 3vw, 42px); }
@@ -2504,7 +2526,6 @@ img {
 .ledgera-credit a { color: var(--lg-red); text-decoration: underline; text-underline-offset: 3px; }
 .ledgera-empty { padding: 30px 0; color: #676159; font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; }
 .ledgera-desk,
-.ledgera-models,
 .ledgera-originals,
 .ledgera-tribeca-films,
 .ledgera-tribeca-notebook { margin-top: clamp(80px, 11vw, 150px); }
@@ -2541,42 +2562,6 @@ img {
   font-size: 0.98rem;
   line-height: 1.5;
 }
-.ledgera-models {
-  margin-inline: calc(clamp(18px, 4vw, 64px) * -1);
-  padding: clamp(38px, 6vw, 80px) clamp(18px, 4vw, 64px) clamp(48px, 7vw, 94px);
-  background: var(--lg-ink);
-  color: var(--lg-paper);
-}
-.ledgera-section-heading.inverted { border-color: var(--lg-paper); }
-.ledgera-section-heading.inverted span { color: var(--lg-lime); }
-.ledgera-model-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.8fr 1.2fr;
-  gap: 10px;
-  align-items: end;
-}
-.ledgera-model-card { position: relative; display: block; min-width: 0; }
-.ledgera-model-card img { display: block; aspect-ratio: 3 / 4; object-position: top; }
-.ledgera-model-card.model-2 img,
-.ledgera-model-card.model-3 img { aspect-ratio: 3 / 5; }
-.ledgera-model-card > span {
-  display: block;
-  margin-top: 14px;
-  color: var(--lg-lime);
-  font-family: 'DM Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.ledgera-model-card h3 {
-  margin: 2px 0 0;
-  font-family: 'Fraunces', serif;
-  font-size: clamp(1.8rem, 3vw, 3.7rem);
-  font-weight: 850;
-  letter-spacing: -0.06em;
-  line-height: 0.95;
-}
-.ledgera-model-card p { margin: 8px 0 0; color: #aaa49a; font-size: 0.82rem; line-height: 1.4; }
 .ledgera-original-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2630,9 +2615,6 @@ img {
   .ledgera-side-feed { margin-top: 20px; }
   .ledgera-trend-card { grid-template-columns: 150px minmax(0, 1fr); }
   .ledgera-news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ledgera-model-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 12px; }
-  .ledgera-model-card.model-2 img,
-  .ledgera-model-card.model-3 img { aspect-ratio: 3 / 4; }
   .ledgera-original-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ledgera-tribeca-notebook { grid-template-columns: 1fr; }
 }
@@ -2648,15 +2630,11 @@ img {
   .ledgera-story-copy h1 { font-size: clamp(2.8rem, 14vw, 4.8rem); }
   .ledgera-trend-card { grid-template-columns: 92px minmax(0, 1fr); }
   .ledgera-news-grid,
-  .ledgera-model-grid,
   .ledgera-original-grid,
   .ledgera-tribeca-grid { grid-template-columns: 1fr; }
   .ledgera-news-card.is-wide { grid-column: auto; }
   .ledgera-news-card.is-wide .ledgera-news-image { aspect-ratio: 4 / 3; }
   .ledgera-section-heading { align-items: flex-start; flex-direction: column; }
-  .ledgera-model-card img,
-  .ledgera-model-card.model-2 img,
-  .ledgera-model-card.model-3 img { aspect-ratio: 4 / 5; }
   .ledgera-tribeca-hero { min-height: 560px; padding: 34px 22px; }
   .ledgera-tribeca-hero h1 { font-size: clamp(4.4rem, 27vw, 7rem); }
 }
