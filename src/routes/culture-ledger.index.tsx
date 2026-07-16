@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { MODELS } from '../data/models'
 import { featuredFilms, outdoorScreenings, secondaryFilms } from '../data/tribeca-films'
 
 export const Route = createFileRoute('/culture-ledger/')({
@@ -12,7 +11,7 @@ export const Route = createFileRoute('/culture-ledger/')({
       {
         name: 'description',
         content:
-          "LEDGERA is Last Shot Media Group's editorial publication for fashion, beauty, entertainment, model portfolios, and special Tribeca coverage.",
+          "LEDGERA is Last Shot Media Group's editorial publication for fashion, beauty, entertainment, and special Tribeca coverage.",
       },
     ],
   }),
@@ -41,8 +40,35 @@ interface LiveArticle {
   publishedAt: string
 }
 
+interface CelebrityCover {
+  imageUrl: string
+  name: string
+}
+
+interface WikipediaSummary {
+  originalimage?: { source?: string }
+  thumbnail?: { source?: string }
+  title?: string
+}
+
 const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Entertainment'] as const
-const FALLBACK_IMAGE = '/models/hero-atmos.jpg'
+const FALLBACK_IMAGE = '/ledgera-cover-fallback.svg'
+const LAST_COVER_KEY = 'ledgera:last-cover-subject'
+const CELEBRITY_COVER_SUBJECTS = [
+  'Ariana Grande',
+  'Beyoncé',
+  'Billie Eilish',
+  'Doja Cat',
+  'Dua Lipa',
+  'Lady Gaga',
+  'Megan Thee Stallion',
+  'Rihanna',
+  'Sabrina Carpenter',
+  'SZA',
+  'Taylor Swift',
+  'Tyla',
+  'Zendaya',
+] as const
 
 function timeAgo(date: string) {
   const timestamp = Date.parse(date)
@@ -62,6 +88,24 @@ function imageFallback(event: React.SyntheticEvent<HTMLImageElement>) {
   }
 }
 
+function randomCoverStartIndex() {
+  const previousSubject = typeof window !== 'undefined' ? window.localStorage.getItem(LAST_COVER_KEY) : null
+  let startIndex: number
+
+  if (typeof window !== 'undefined' && window.crypto) {
+    const randomValue = new Uint32Array(1)
+    window.crypto.getRandomValues(randomValue)
+    startIndex = randomValue[0] % CELEBRITY_COVER_SUBJECTS.length
+  } else {
+    startIndex = Math.floor(Math.random() * CELEBRITY_COVER_SUBJECTS.length)
+  }
+
+  if (CELEBRITY_COVER_SUBJECTS[startIndex] === previousSubject) {
+    return (startIndex + 1) % CELEBRITY_COVER_SUBJECTS.length
+  }
+  return startIndex
+}
+
 function CultureLedgerPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [liveArticles, setLiveArticles] = useState<LiveArticle[]>([])
@@ -71,6 +115,7 @@ function CultureLedgerPage() {
   const [refreshing, setRefreshing] = useState(false)
   const [feedError, setFeedError] = useState('')
   const [fetchedAt, setFetchedAt] = useState('')
+  const [celebrityCover, setCelebrityCover] = useState<CelebrityCover | null>(null)
 
   useEffect(() => {
     let active = true
@@ -116,6 +161,38 @@ function CultureLedgerPage() {
   }, [fetchLiveFeed])
 
   useEffect(() => {
+    const controller = new AbortController()
+    const startIndex = randomCoverStartIndex()
+
+    const loadCelebrityCover = async () => {
+      for (let offset = 0; offset < CELEBRITY_COVER_SUBJECTS.length; offset += 1) {
+        const subject = CELEBRITY_COVER_SUBJECTS[(startIndex + offset) % CELEBRITY_COVER_SUBJECTS.length]
+
+        try {
+          const response = await fetch(
+            `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(subject)}`,
+            { signal: controller.signal },
+          )
+          if (!response.ok) continue
+
+          const summary = await response.json() as WikipediaSummary
+          const imageUrl = summary.originalimage?.source || summary.thumbnail?.source
+          if (!imageUrl) continue
+
+          setCelebrityCover({ imageUrl, name: summary.title || subject })
+          window.localStorage.setItem(LAST_COVER_KEY, subject)
+          return
+        } catch (error) {
+          if (error instanceof DOMException && error.name === 'AbortError') return
+        }
+      }
+    }
+
+    loadCelebrityCover()
+    return () => controller.abort()
+  }, [])
+
+  useEffect(() => {
     const syncEditionWithHash = () => {
       if (window.location.hash === '#tribeca-2026') setActiveEdition('tribeca')
     }
@@ -140,7 +217,6 @@ function CultureLedgerPage() {
 
   const hero = articles.find((article) => article.featured) || articles[0]
   const tickerArticles = liveArticles.slice(0, 6)
-  const modelFeatures = MODELS.filter((model) => model.featured).slice(0, 4)
 
   return (
     <main className="ledgera-page">
@@ -151,7 +227,9 @@ function CultureLedgerPage() {
       </div>
 
       <header className="ledgera-masthead">
-        <img src="/ledgera-logo-transparent.png" alt="LEDGERA" />
+        <div className="ledgera-wordmark" aria-label="LEDGERA">
+          <span>LEDGE</span><strong>RA</strong>
+        </div>
         <div className="ledgera-masthead-rule">
           <span>The Record of Culture</span>
           <span>A Last Shot Media Group Publication</span>
@@ -207,15 +285,22 @@ function CultureLedgerPage() {
                 params={{ articleSlug: hero?.slug || 'beyonce-cowboy-carter-reshapes-country-music' }}
                 className="ledgera-hero-image"
               >
-                <img src={hero?.imageUrl || FALLBACK_IMAGE} alt="" onError={imageFallback} />
-                <span>LEDGERA Original</span>
+                <img
+                  src={celebrityCover?.imageUrl || FALLBACK_IMAGE}
+                  alt={celebrityCover ? `${celebrityCover.name} editorial cover` : 'LEDGERA editorial cover'}
+                  onError={imageFallback}
+                />
+                <span className="ledgera-hero-badge">LEDGERA Original</span>
+                {celebrityCover && (
+                  <span className="ledgera-cover-credit">Cover rotation: {celebrityCover.name} · Wikimedia</span>
+                )}
               </Link>
               <div className="ledgera-story-copy">
                 <p className="ledgera-kicker">{hero?.category || 'Culture'} / Lead Story</p>
                 <h1 id="ledgera-lead-title">
                   {hero?.title || 'The culture is moving. LEDGERA keeps the record.'}
                 </h1>
-                <p>{hero?.excerpt || 'Original reporting, visual portfolios, and the stories shaping fashion and entertainment now.'}</p>
+                <p>{hero?.excerpt || 'Original reporting, visual essays, and the stories shaping fashion and entertainment now.'}</p>
                 {hero && (
                   <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: hero.slug }} className="ledgera-read-link">
                     Read the full story <span>↗</span>
@@ -288,30 +373,10 @@ function CultureLedgerPage() {
             </div>
           </section>
 
-          <section className="ledgera-models" aria-labelledby="model-spotlight-title">
-            <div className="ledgera-section-heading inverted">
-              <div>
-                <span>03</span>
-                <h2 id="model-spotlight-title">LEDGERA It Girls</h2>
-              </div>
-              <Link to="/models">View the full LSMG roster ↗</Link>
-            </div>
-            <div className="ledgera-model-grid">
-              {modelFeatures.map((model, index) => (
-                <Link key={model.id} to="/models" className={`ledgera-model-card model-${index + 1}`}>
-                  <img src={model.gallery[index % model.gallery.length]} alt={`${model.name} model portfolio`} loading="lazy" />
-                  <span>{model.location} / {model.categories[0]}</span>
-                  <h3>{model.name}</h3>
-                  <p>{model.tagline}</p>
-                </Link>
-              ))}
-            </div>
-          </section>
-
           <section className="ledgera-originals" aria-labelledby="originals-title">
             <div className="ledgera-section-heading">
               <div>
-                <span>04</span>
+                <span>03</span>
                 <h2 id="originals-title">From the LEDGERA Desk</h2>
               </div>
               <p>LSMG original reporting</p>
