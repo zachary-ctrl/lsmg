@@ -220,20 +220,18 @@ function CultureLedgerPage() {
 
   return (
     <main className="ledgera-page">
-      <div className="ledgera-topline">
-        <span>LEDGERA / Vol. 01</span>
-        <span>Fashion · Beauty · Entertainment</span>
-        <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
-      </div>
-
       <header className="ledgera-masthead">
         <div className="ledgera-wordmark" aria-label="LEDGERA">
           <span>LEDGE</span><strong>RA</strong>
         </div>
-        <div className="ledgera-masthead-rule">
-          <span>The Record of Culture</span>
-          <span>A Last Shot Media Group Publication</span>
-        </div>
+        <p className="ledgera-tagline">The Record of Culture.</p>
+        <nav className="ledgera-category-nav" aria-label="LEDGERA categories">
+          <span>News</span><i aria-hidden="true">•</i>
+          <span>Beauty</span><i aria-hidden="true">•</i>
+          <span>Fashion</span><i aria-hidden="true">•</i>
+          <span>Entertainment</span>
+        </nav>
+        <p className="ledgera-attribution">A Last Shot Media Group Publication.</p>
       </header>
 
       <nav className="ledgera-edition-nav" aria-label="LEDGERA editions">
