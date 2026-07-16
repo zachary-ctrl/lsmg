@@ -1,202 +1,248 @@
 import type { Config } from '@netlify/functions'
 
+type EditorialCategory = 'Fashion' | 'Beauty' | 'Entertainment'
+
 interface FeedArticle {
   title: string
   excerpt: string
-  category: string
+  category: EditorialCategory
   source: string
+  sourceUrl: string
   imageUrl: string
   url: string
   publishedAt: string
 }
 
-const RSS_FEEDS = [
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', source: 'NYT Home Page', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml', source: 'NYT World', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/US.xml', source: 'NYT U.S.', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', source: 'NYT Business', category: 'Business' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml', source: 'NYT Politics', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', source: 'NYT Technology', category: 'Tech & Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Health.xml', source: 'NYT Health', category: 'Business' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml', source: 'NYT Arts', category: 'Entertainment' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml', source: 'NYT Travel', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml', source: 'NYT Sports', category: 'Entertainment' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/Science.xml', source: 'NYT Science', category: 'Culture' },
-  { url: 'https://rss.nytimes.com/services/xml/rss/nyt/FashionandStyle.xml', source: 'NYT Fashion', category: 'Fashion' },
+interface PublisherFeed {
+  source: string
+  sourceUrl: string
+  defaultCategory: EditorialCategory
+  feeds: string[]
+}
+
+const googleNewsFeed = (domain: string) =>
+  `https://news.google.com/rss/search?q=site%3A${encodeURIComponent(domain)}%20(fashion%20OR%20beauty%20OR%20entertainment%20OR%20celebrity)&hl=en-US&gl=US&ceid=US%3Aen`
+
+const PUBLISHERS: PublisherFeed[] = [
+  {
+    source: 'Nylon',
+    sourceUrl: 'https://www.nylon.com',
+    defaultCategory: 'Fashion',
+    feeds: ['https://www.nylon.com/rss', googleNewsFeed('nylon.com')],
+  },
+  {
+    source: 'Paper Magazine',
+    sourceUrl: 'https://www.papermag.com',
+    defaultCategory: 'Fashion',
+    feeds: ['https://www.papermag.com/feeds/feed.rss', googleNewsFeed('papermag.com')],
+  },
+  {
+    source: 'People',
+    sourceUrl: 'https://people.com',
+    defaultCategory: 'Entertainment',
+    feeds: ['https://people.com/feed/', googleNewsFeed('people.com')],
+  },
+  {
+    source: 'E! News',
+    sourceUrl: 'https://www.eonline.com',
+    defaultCategory: 'Entertainment',
+    feeds: [
+      'https://www.eonline.com/syndication/feeds/rssfeeds/topstories.xml',
+      googleNewsFeed('eonline.com'),
+    ],
+  },
+  {
+    source: 'Access Hollywood',
+    sourceUrl: 'https://www.accessonline.com',
+    defaultCategory: 'Entertainment',
+    feeds: ['https://www.accessonline.com/feed', googleNewsFeed('accessonline.com')],
+  },
 ]
 
-const PLACEHOLDER_IMAGES: Record<string, string> = {
-  Music: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop',
-  Entertainment: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&h=400&fit=crop',
-  Fashion: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop',
-  Business: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop',
-  Sports: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&h=400&fit=crop',
-  'Tech & Culture': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop',
-  Celebrity: 'https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&h=400&fit=crop',
+const PLACEHOLDER_IMAGES: Record<EditorialCategory, string[]> = {
+  Fashion: [
+    'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80',
+  ],
+  Beauty: [
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80',
+  ],
+  Entertainment: [
+    'https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80',
+  ],
 }
 
-function extractFromXml(xml: string, tag: string): string {
-  // Use regex to handle namespaced tags more precisely
-  const pattern = new RegExp(`<${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}>`, 'i')
-  const match = xml.match(pattern)
+function decodeEntities(value: string) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
+function extractFromXml(xml: string, tag: string) {
+  const escapedTag = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const match = xml.match(new RegExp(`<${escapedTag}(?:\\s[^>]*)?>([\\s\\S]*?)</${escapedTag}>`, 'i'))
   if (!match) return ''
-  let content = match[1].trim()
-  // Handle CDATA
-  if (content.startsWith('<![CDATA[')) {
-    content = content.replace(/^<!\[CDATA\[/, '').replace(/\]\]>$/, '').trim()
-  }
-  return content
+  return decodeEntities(match[1].replace(/^<!\[CDATA\[/, '').replace(/\]\]>$/, '').trim())
 }
 
-function extractImage(itemXml: string): string {
-  // Try media:content/media:thumbnail
-  const mediaMatch = itemXml.match(/<(?:media:content|media:thumbnail)[^>]+url="(https?:\/\/[^"]+)"/i)
-  if (mediaMatch) return mediaMatch[1]
-  // Try enclosure
-  const encMatch = itemXml.match(/<enclosure[^>]+url="(https?:\/\/[^"]+)"/i)
-  if (encMatch) return encMatch[1]
-  // Try image in description
-  const imgMatch = itemXml.match(/<img[^>]+src="(https?:\/\/[^"]+)"/i)
-  if (imgMatch) return imgMatch[1]
-  return ''
+function stripHtml(value: string) {
+  return decodeEntities(value.replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim()
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').trim()
+function extractImage(itemXml: string) {
+  const mediaMatch = itemXml.match(/<(?:media:content|media:thumbnail)[^>]+url=["'](https?:\/\/[^"']+)/i)
+  if (mediaMatch) return decodeEntities(mediaMatch[1])
+  const enclosureMatch = itemXml.match(/<enclosure[^>]+url=["'](https?:\/\/[^"']+)/i)
+  if (enclosureMatch) return decodeEntities(enclosureMatch[1])
+  const imageMatch = itemXml.match(/<img[^>]+src=["'](https?:\/\/[^"']+)/i)
+  return imageMatch ? decodeEntities(imageMatch[1]) : ''
 }
 
-async function fetchFeed(feedConfig: typeof RSS_FEEDS[number]): Promise<FeedArticle[]> {
+function classifyArticle(text: string, fallback: EditorialCategory): EditorialCategory {
+  const normalized = text.toLowerCase()
+  if (/beauty|makeup|skin care|skincare|hair|fragrance|nails|cosmetic/.test(normalized)) return 'Beauty'
+  if (/fashion|style|runway|designer|dress|outfit|wardrobe|streetwear|couture/.test(normalized)) return 'Fashion'
+  if (/film|movie|music|album|television|tv|celebrity|actor|singer|award|premiere/.test(normalized)) return 'Entertainment'
+  return fallback
+}
+
+function cleanTitle(title: string, source: string) {
+  return title.replace(new RegExp(`\\s+-\\s+${source.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'), '').trim()
+}
+
+function fallbackImage(category: EditorialCategory, seed: string) {
+  const images = PLACEHOLDER_IMAGES[category]
+  const index = [...seed].reduce((total, character) => total + character.charCodeAt(0), 0) % images.length
+  return images[index]
+}
+
+function extractItems(xml: string) {
+  const rssItems = xml.split(/<item[\s>]/i).slice(1)
+  return rssItems.length > 0 ? rssItems : xml.split(/<entry[\s>]/i).slice(1)
+}
+
+async function fetchFeed(feedUrl: string, publisher: PublisherFeed): Promise<FeedArticle[]> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 8000)
+
   try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 8000)
-    const res = await fetch(feedConfig.url, {
+    const response = await fetch(feedUrl, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        Accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
+        'User-Agent': 'LSMG-LEDGERA/1.0 (+https://lastshotmediagroup.com/culture-ledger)',
       },
     })
-    clearTimeout(timeout)
-    if (!res.ok) return []
-    const xml = await res.text()
+    if (!response.ok) return []
 
+    const xml = await response.text()
     const articles: FeedArticle[] = []
-    // Split by <item> or <entry> tags
-    const items = xml.split(/<item[\s>]/).slice(1)
-    const entries = items.length > 0 ? items : xml.split(/<entry[\s>]/).slice(1)
 
-    for (const item of entries.slice(0, 5)) {
-      const title = stripHtml(extractFromXml(item, 'title'))
-      if (!title) continue
+    for (const item of extractItems(xml).slice(0, 8)) {
+      const rawTitle = stripHtml(extractFromXml(item, 'title'))
+      if (!rawTitle) continue
 
+      const title = cleanTitle(rawTitle, publisher.source)
       const description = stripHtml(
-        extractFromXml(item, 'description')
-        || extractFromXml(item, 'summary')
-        || extractFromXml(item, 'content:encoded')
-        || extractFromXml(item, 'content')
+        extractFromXml(item, 'description') ||
+          extractFromXml(item, 'summary') ||
+          extractFromXml(item, 'content:encoded') ||
+          extractFromXml(item, 'content'),
       )
-      const excerpt = description.length > 200 ? description.substring(0, 200) + '...' : description
-
+      const category = classifyArticle(`${title} ${description}`, publisher.defaultCategory)
       let link = extractFromXml(item, 'link')
-      // CNN RSS sometimes puts the link URL on a line by itself after <link/> — extract it
-      if (!link) {
-        const linkLineMatch = item.match(/<link\s*\/?>[\s\r\n]*(https?:\/\/[^\s<]+)/i)
-        if (linkLineMatch) link = linkLineMatch[1].trim()
-      }
-      if (!link) {
-        // Try href attribute on link tag (Atom format)
-        const linkMatch = item.match(/<link[^>]+href="([^"]+)"/)
-        if (linkMatch) link = linkMatch[1]
-      }
-      if (!link) {
-        // Fallback: try guid (common in RSS 2.0)
-        const guid = extractFromXml(item, 'guid')
-        if (guid && guid.startsWith('http')) link = guid
-      }
-      if (!link) continue
 
-      const pubDate = extractFromXml(item, 'pubDate') || extractFromXml(item, 'published') || extractFromXml(item, 'updated')
-      const imageUrl = extractImage(item) || PLACEHOLDER_IMAGES[feedConfig.category] || PLACEHOLDER_IMAGES['Entertainment']
-      const parsedDate = pubDate ? Date.parse(pubDate) : NaN
+      if (!link) link = item.match(/<link[^>]+href=["']([^"']+)/i)?.[1] || ''
+      if (!link) link = extractFromXml(item, 'guid')
+      if (!link.startsWith('http')) continue
+
+      const dateValue =
+        extractFromXml(item, 'pubDate') ||
+        extractFromXml(item, 'published') ||
+        extractFromXml(item, 'updated')
+      const timestamp = dateValue ? Date.parse(dateValue) : NaN
 
       articles.push({
         title,
-        excerpt: excerpt || 'Read more at the source.',
-        category: feedConfig.category,
-        source: feedConfig.source,
-        imageUrl,
-        url: link,
-        publishedAt: Number.isNaN(parsedDate) ? new Date().toISOString() : new Date(parsedDate).toISOString(),
+        excerpt: description ? `${description.slice(0, 190)}${description.length > 190 ? '…' : ''}` : `Read the latest from ${publisher.source}.`,
+        category,
+        source: publisher.source,
+        sourceUrl: publisher.sourceUrl,
+        imageUrl: extractImage(item) || fallbackImage(category, title),
+        url: decodeEntities(link),
+        publishedAt: Number.isNaN(timestamp) ? new Date().toISOString() : new Date(timestamp).toISOString(),
       })
     }
+
     return articles
   } catch {
     return []
+  } finally {
+    clearTimeout(timeout)
   }
 }
 
-// Simple in-memory cache (refreshes every minute on cold/warm starts)
+async function fetchPublisher(publisher: PublisherFeed) {
+  for (const feed of publisher.feeds) {
+    const articles = await fetchFeed(feed, publisher)
+    if (articles.length > 0) return articles
+  }
+  return []
+}
+
 let cachedArticles: FeedArticle[] = []
 let lastFetch = 0
-const CACHE_TTL = 60 * 1000
+const CACHE_TTL = 5 * 60 * 1000
 
-export default async (req: Request) => {
+export default async (request: Request) => {
+  const requestUrl = new URL(request.url)
+  const requestedCategory = requestUrl.searchParams.get('category')
+  const forceRefresh = requestUrl.searchParams.get('refresh') === '1'
   const now = Date.now()
-  const url = new URL(req.url)
-  const category = url.searchParams.get('category')
-  const forceRefresh = url.searchParams.get('refresh') === '1'
-  const page = parseInt(url.searchParams.get('page') || '0', 10)
-  const pageSize = parseInt(url.searchParams.get('pageSize') || '20', 10)
 
   if (forceRefresh || now - lastFetch > CACHE_TTL || cachedArticles.length === 0) {
-    // Fetch all feeds in parallel
-    const results = await Promise.allSettled(RSS_FEEDS.map(fetchFeed))
-    const allArticles: FeedArticle[] = []
-    let feedErrors = 0
-    for (const result of results) {
-      if (result.status === 'fulfilled') {
-        allArticles.push(...result.value)
-      } else {
-        feedErrors++
-      }
-    }
-    // Sort by date (newest first), deduplicate by title
+    const results = await Promise.allSettled(PUBLISHERS.map(fetchPublisher))
+    const fetchedArticles = results.flatMap((result) => (result.status === 'fulfilled' ? result.value : []))
     const seen = new Set<string>()
-    const latestArticles = allArticles
-      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-      .filter((a) => {
-        const key = `${a.title.toLowerCase().substring(0, 60)}|${a.url}`
+    const deduplicated = fetchedArticles
+      .sort((first, second) => Date.parse(second.publishedAt) - Date.parse(first.publishedAt))
+      .filter((article) => {
+        const key = `${article.source}:${article.title.toLowerCase()}`
         if (seen.has(key)) return false
         seen.add(key)
         return true
       })
 
-    if (latestArticles.length > 0 || cachedArticles.length === 0 || forceRefresh) {
-      cachedArticles = latestArticles
+    if (deduplicated.length > 0) {
+      cachedArticles = deduplicated
       lastFetch = now
     }
   }
 
-  let articles = cachedArticles
-  if (category && category !== 'All') {
-    articles = articles.filter((a) => a.category === category)
-  }
+  const articles = requestedCategory && requestedCategory !== 'All'
+    ? cachedArticles.filter((article) => article.category === requestedCategory)
+    : cachedArticles
 
-  const total = articles.length
-  const paged = articles.slice(page * pageSize, (page + 1) * pageSize)
-
-  return Response.json({
-    articles: paged,
-    total,
-    page,
-    pageSize,
-    fetchedAt: new Date(lastFetch).toISOString(),
-    ...(total === 0 && { error: 'No articles could be fetched from RSS feeds. They may be temporarily unavailable.' }),
-  }, {
-    headers: {
-      'Cache-Control': forceRefresh ? 'no-store' : 'public, max-age=60, stale-while-revalidate=30',
+  return Response.json(
+    {
+      articles,
+      total: articles.length,
+      fetchedAt: lastFetch ? new Date(lastFetch).toISOString() : '',
+      publishers: PUBLISHERS.map(({ source, sourceUrl }) => ({ source, sourceUrl })),
+      ...(articles.length === 0 && { error: 'Publisher feeds are temporarily unavailable.' }),
     },
-  })
+    {
+      headers: {
+        'Cache-Control': forceRefresh ? 'no-store' : 'public, max-age=300, stale-while-revalidate=900',
+      },
+    },
+  )
 }
 
 export const config: Config = {

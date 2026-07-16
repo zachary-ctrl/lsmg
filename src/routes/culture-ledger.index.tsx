@@ -1,22 +1,18 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect, useCallback } from 'react'
-import {
-  featuredFilms,
-  secondaryFilms,
-  outdoorScreenings,
-} from '../data/tribeca-films'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { MODELS } from '../data/models'
+import { featuredFilms, outdoorScreenings, secondaryFilms } from '../data/tribeca-films'
 
 export const Route = createFileRoute('/culture-ledger/')({
   head: () => ({
     meta: [
       {
-        title:
-          'LEDGERA — The Record of Culture | News, Beauty, Fashion & Entertainment',
+        title: 'LEDGERA — The Record of Culture | Fashion, Beauty & Entertainment',
       },
       {
         name: 'description',
         content:
-          "LEDGERA is Last Shot Media Group's daily editorial publication — news, beauty, fashion, entertainment, and complete on-the-ground Tribeca 2026 coverage. Independent press.",
+          "LEDGERA is Last Shot Media Group's editorial publication for fashion, beauty, entertainment, model portfolios, and special Tribeca coverage.",
       },
     ],
   }),
@@ -31,706 +27,364 @@ interface Article {
   author: string
   publishedAt: string
   imageUrl?: string
-  source?: string
-  sourceUrl?: string
   featured?: boolean
-  tags?: string[]
 }
 
 interface LiveArticle {
   title: string
   excerpt: string
-  category: string
+  category: 'Fashion' | 'Beauty' | 'Entertainment'
   source: string
+  sourceUrl: string
   imageUrl: string
   url: string
   publishedAt: string
 }
 
+const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Entertainment'] as const
+const FALLBACK_IMAGE = '/models/hero-atmos.jpg'
+
 function timeAgo(date: string) {
-  const now = new Date()
-  const then = new Date(date)
-  const diff = now.getTime() - then.getTime()
-  const minutes = Math.floor(diff / (1000 * 60))
-  if (minutes < 1) return 'Just now'
-  if (minutes < 60) return `${minutes}m ago`
-  const hours = Math.floor(minutes / 60)
+  const timestamp = Date.parse(date)
+  if (Number.isNaN(timestamp)) return 'Recently'
+  const elapsed = Math.max(0, Date.now() - timestamp)
+  const hours = Math.floor(elapsed / 3_600_000)
+  if (hours < 1) return 'Just now'
   if (hours < 24) return `${hours}h ago`
   const days = Math.floor(hours / 24)
-  if (days === 1) return 'Yesterday'
   if (days < 7) return `${days}d ago`
-  return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
+function imageFallback(event: React.SyntheticEvent<HTMLImageElement>) {
+  if (!event.currentTarget.src.endsWith(FALLBACK_IMAGE)) {
+    event.currentTarget.src = FALLBACK_IMAGE
+  }
 }
 
 function CultureLedgerPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [liveArticles, setLiveArticles] = useState<LiveArticle[]>([])
+  const [activeCategory, setActiveCategory] = useState<(typeof CATEGORIES)[number]>('All')
+  const [activeEdition, setActiveEdition] = useState<'daily' | 'tribeca'>('daily')
   const [loading, setLoading] = useState(true)
-  const [liveLoading, setLiveLoading] = useState(true)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [activeCategory, setActiveCategory] = useState('All')
-  const [activeTab, setActiveTab] = useState<'lsmg' | 'trending'>('lsmg')
-  const [liveFetchedAt, setLiveFetchedAt] = useState('')
-  const [liveError, setLiveError] = useState('')
+  const [refreshing, setRefreshing] = useState(false)
+  const [feedError, setFeedError] = useState('')
+  const [fetchedAt, setFetchedAt] = useState('')
 
-  // Fetch LSMG original articles
   useEffect(() => {
     let active = true
-
-    function fetchArticles() {
-      fetch('/api/culture-ledger')
-        .then((res) => res.json())
-        .then((data) => {
-          if (active) {
-            setArticles(data.articles || [])
-            setLoading(false)
-          }
-        })
-        .catch(() => {
-          if (active) setLoading(false)
-        })
-    }
-
-    fetchArticles()
-    const interval = setInterval(fetchArticles, 15000)
-
+    fetch('/api/culture-ledger')
+      .then((response) => response.json())
+      .then((data) => {
+        if (active) setArticles(data.articles || [])
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (active) setLoading(false)
+      })
     return () => {
       active = false
-      clearInterval(interval)
     }
   }, [])
 
-  // Fetch live RSS feed articles
-  const fetchLiveFeed = useCallback(
-    (forceRefresh = false) => {
-      if (forceRefresh) {
-        setIsRefreshing(true)
-      } else {
-        setLiveLoading(true)
-      }
-      setLiveError('')
-      const params = new URLSearchParams()
-      if (activeCategory !== 'All') params.set('category', activeCategory)
-      if (forceRefresh) params.set('refresh', '1')
-      params.set('_ts', Date.now().toString())
-      const query = params.toString()
-      fetch(`/api/live-feed${query ? `?${query}` : ''}`, { cache: 'no-store' })
-        .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`)
-          return res.json()
-        })
-        .then((data) => {
-          setLiveArticles(data.articles || [])
-          setLiveFetchedAt(data.fetchedAt || '')
-          if (data.error) {
-            setLiveError(data.error)
-          }
-        })
-        .catch(() => {
-          setLiveError('Failed to fetch live feed. Please try again.')
-        })
-        .finally(() => {
-          setLiveLoading(false)
-          setIsRefreshing(false)
-        })
-    },
-    [activeCategory],
-  )
+  const fetchLiveFeed = useCallback((forceRefresh = false) => {
+    setRefreshing(forceRefresh)
+    setFeedError('')
+    const params = new URLSearchParams()
+    if (forceRefresh) params.set('refresh', '1')
+    params.set('_ts', String(Date.now()))
+
+    fetch(`/api/live-feed?${params.toString()}`, { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) throw new Error('Feed unavailable')
+        return response.json()
+      })
+      .then((data) => {
+        setLiveArticles(data.articles || [])
+        setFetchedAt(data.fetchedAt || '')
+        if (data.error) setFeedError(data.error)
+      })
+      .catch(() => setFeedError('The publisher feed is temporarily unavailable.'))
+      .finally(() => setRefreshing(false))
+  }, [])
 
   useEffect(() => {
     fetchLiveFeed()
-    // Auto-refresh live feed every 30 seconds
-    const interval = setInterval(fetchLiveFeed, 30000)
-    return () => clearInterval(interval)
+    const interval = window.setInterval(() => fetchLiveFeed(), 5 * 60 * 1000)
+    return () => window.clearInterval(interval)
   }, [fetchLiveFeed])
 
-  const allCategories = ['All', 'Music', 'Entertainment', 'Fashion', 'Business', 'Sports', 'Tech & Culture', 'Celebrity', 'Culture']
-  const filtered = activeCategory === 'All' ? articles : articles.filter((a) => a.category === activeCategory)
+  useEffect(() => {
+    const syncEditionWithHash = () => {
+      if (window.location.hash === '#tribeca-2026') setActiveEdition('tribeca')
+    }
+    syncEditionWithHash()
+    window.addEventListener('hashchange', syncEditionWithHash)
+    return () => window.removeEventListener('hashchange', syncEditionWithHash)
+  }, [])
+
+  const filteredLiveArticles = useMemo(
+    () => activeCategory === 'All'
+      ? liveArticles
+      : liveArticles.filter((article) => article.category === activeCategory),
+    [activeCategory, liveArticles],
+  )
+
+  const switchEdition = (edition: 'daily' | 'tribeca') => {
+    setActiveEdition(edition)
+    const hash = edition === 'tribeca' ? '#tribeca-2026' : '#daily-edition'
+    window.history.replaceState(null, '', hash)
+    window.requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  }
+
+  const hero = articles.find((article) => article.featured) || articles[0]
   const tickerArticles = liveArticles.slice(0, 6)
+  const modelFeatures = MODELS.filter((model) => model.featured).slice(0, 4)
 
   return (
-    <div className="tribeca-page">
-      {/* TOP BAR */}
-      <div className="tc-topbar">
-        <div className="tc-topbar-inner">
-          <div className="tc-topbar-left">
-            <span>LEDGERA</span>
-            <span className="tc-dot">&#9679;</span>
-            <span>News · Beauty · Fashion · Entertainment</span>
-            <span className="tc-dot">&#9679;</span>
-            <span>Updated in Real Time</span>
-          </div>
-          <div>Independent Press — Daily Edition</div>
-        </div>
+    <main className="ledgera-page">
+      <div className="ledgera-topline">
+        <span>LEDGERA / Vol. 01</span>
+        <span>Fashion · Beauty · Entertainment</span>
+        <span>{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
       </div>
 
-      {/* MASTHEAD */}
-      <header className="lg-masthead">
-        <div className="lg-masthead-inner">
-          <img
-            src="/ledgera-logo-transparent.png"
-            alt="LEDGERA"
-            className="lg-masthead-logo"
-          />
-          <p className="lg-masthead-tagline">The Record of Culture.</p>
-          <p className="lg-masthead-sub">News • Beauty • Fashion • Entertainment</p>
-          <p className="lg-masthead-attr">A Last Shot Media Group Publication.</p>
+      <header className="ledgera-masthead">
+        <img src="/ledgera-logo-transparent.png" alt="LEDGERA" />
+        <div className="ledgera-masthead-rule">
+          <span>The Record of Culture</span>
+          <span>A Last Shot Media Group Publication</span>
         </div>
       </header>
 
-      {/* SUB-NAV */}
-      <nav className="tc-nav">
-        <div className="tc-nav-inner">
-          <a href="#daily" className="tc-current">
-            Daily Edition
-          </a>
-          <a href="#tribeca-coverage">Tribeca 2026</a>
-          <Link to="/tribeca/schedule">Festival Schedule</Link>
-          {featuredFilms.slice(0, 3).map((f) => (
-            <Link key={f.slug} to="/tribeca/films/$filmSlug" params={{ filmSlug: f.slug }}>
-              {f.title}
-            </Link>
-          ))}
-        </div>
+      <nav className="ledgera-edition-nav" aria-label="LEDGERA editions">
+        <button
+          type="button"
+          className={activeEdition === 'daily' ? 'is-active' : ''}
+          onClick={() => switchEdition('daily')}
+        >
+          Daily Edition
+        </button>
+        <button
+          type="button"
+          className={activeEdition === 'tribeca' ? 'is-active' : ''}
+          onClick={() => switchEdition('tribeca')}
+        >
+          Tribeca 2026 / Special Coverage
+        </button>
       </nav>
 
-      {/* BREAKING TICKER */}
-      {tickerArticles.length > 0 && (
-        <div style={{ background: 'var(--tc-ink)', padding: '10px 0', overflow: 'hidden', borderBottom: '4px solid var(--tc-red)' }}>
-          <div className="flex items-center gap-8" style={{ animation: 'ticker 30s linear infinite', whiteSpace: 'nowrap' }}>
-            {[...tickerArticles, ...tickerArticles].map((item, i) => (
-              <span key={i} className="flex items-center gap-3">
-                <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 10, letterSpacing: 2, color: 'var(--tc-red)' }}>TRENDING</span>
-                <span style={{ fontFamily: 'var(--tc-serif)', fontWeight: 900, fontSize: 16, color: 'var(--tc-cream)' }}>{item.title}</span>
-                <span style={{ width: 6, height: 6, background: 'var(--tc-red)', borderRadius: '50%', display: 'inline-block' }} />
-              </span>
+      {activeEdition === 'tribeca' && (
+        <nav className="ledgera-tribeca-subnav" aria-label="Tribeca 2026 coverage">
+          <Link to="/tribeca/schedule">Festival Schedule</Link>
+          {featuredFilms.map((film) => (
+            <Link key={film.slug} to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>
+              {film.title}
+            </Link>
+          ))}
+        </nav>
+      )}
+
+      {tickerArticles.length > 0 && activeEdition === 'daily' && (
+        <div className="ledgera-ticker" aria-label="Trending headlines">
+          <div>
+            {[...tickerArticles, ...tickerArticles].map((article, index) => (
+              <a key={`${article.title}-${index}`} href={article.url} target="_blank" rel="noreferrer">
+                <strong>Now</strong> {article.title} <span>✦</span>
+              </a>
             ))}
           </div>
         </div>
       )}
 
-      {/* LEAD */}
-      <section className="tc-lead">
-        <div className="tc-lead-tag">
-          &#9679; LEDGERA &#9679; News, Beauty, Fashion &amp; Entertainment
-        </div>
-        <h2 className="tc-lead-headline">
-          The Culture, <em>As It Happens</em>
-        </h2>
-        <p className="tc-lead-deck">
-          Last Shot Media Group's daily editorial publication — original
-          reporting on music, entertainment, fashion, and media, alongside
-          live-curated stories from across the web and complete on-the-ground
-          coverage of the 2026 Tribeca Festival.
-        </p>
-        <p className="tc-lead-byline">
-          <strong>The LSMG Editorial Desk</strong> &nbsp;—&nbsp; Independent
-          Press &nbsp;|&nbsp; Dallas, Orlando, New York &amp; Atlanta
-        </p>
-      </section>
-
-      {/* DAILY EDITION */}
-      <section id="daily" className="tc-section">
-        <div className="tc-section-header">
-          <span className="tc-section-num">▸</span>
-          <h2 className="tc-section-title">The Daily Ledger</h2>
-          <span className="tc-section-meta">Originals &amp; Live Feed</span>
-        </div>
-
-        {/* Tab + Category controls */}
-        <div className="lg-controls">
-          <div className="lg-tabs">
-            <button
-              type="button"
-              onClick={() => setActiveTab('lsmg')}
-              className={activeTab === 'lsmg' ? 'lg-tab lg-tab-active' : 'lg-tab'}
-            >
-              LSMG Originals
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('trending')}
-              className={activeTab === 'trending' ? 'lg-tab lg-tab-active' : 'lg-tab'}
-            >
-              Trending Now
-            </button>
-          </div>
-          <div className="lg-cats">
-            {allCategories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setActiveCategory(cat)}
-                className={activeCategory === cat ? 'lg-cat lg-cat-active' : 'lg-cat'}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* LSMG ORIGINALS */}
-      {activeTab === 'lsmg' && (
-        <div className="tc-films">
-          {loading ? (
-            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
-              Loading articles…
-            </p>
-          ) : filtered.length === 0 ? (
-            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
-              No articles yet
-            </p>
-          ) : (
-            <>
-              {/* Lead story */}
-              <article className="tc-film-feature">
-                <Link
-                  to="/culture-ledger/$articleSlug"
-                  params={{ articleSlug: filtered[0].slug }}
-                  className="tc-film-feature-thumb"
-                  data-num="01"
-                  data-section={filtered[0].category}
-                  style={{ display: 'block' }}
-                >
-                  <div className="tc-film-feature-thumb-bg" style={{ background: 'linear-gradient(135deg,#1a0a0a,#0a0a1a)' }} />
-                  {filtered[0].imageUrl && (
-                    <img
-                      className="tc-poster-img"
-                      src={filtered[0].imageUrl}
-                      alt={filtered[0].title}
-                      loading="lazy"
-                      onError={(e) => { e.currentTarget.style.display = 'none' }}
-                    />
-                  )}
-                </Link>
-                <div>
-                  <div className="tc-credits">
-                    {filtered[0].author} · {timeAgo(filtered[0].publishedAt)}
-                  </div>
-                  <h3>
-                    <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: filtered[0].slug }}>
-                      {filtered[0].title}
-                    </Link>
-                  </h3>
-                  <p className="tc-deck">{filtered[0].excerpt}</p>
-                  <div className="tc-tag-row">
-                    <span className="tc-tag tc-red-tag">{filtered[0].category}</span>
-                    <span className="tc-tag">Featured</span>
-                  </div>
-                  <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: filtered[0].slug }} className="tc-read">
-                    Read Article →
-                  </Link>
-                </div>
-              </article>
-
-              {/* Grid */}
-              <div className="tc-films-grid">
-                {filtered.slice(1).map((article) => (
-                  <article key={article.slug} className="tc-film-card">
-                    {article.imageUrl && (
-                      <Link
-                        to="/culture-ledger/$articleSlug"
-                        params={{ articleSlug: article.slug }}
-                        className="tc-film-card-poster"
-                      >
-                        <img
-                          src={article.imageUrl}
-                          alt={article.title}
-                          loading="lazy"
-                          onError={(e) => {
-                            const parent = e.currentTarget.parentElement
-                            if (parent) parent.style.display = 'none'
-                          }}
-                        />
-                      </Link>
-                    )}
-                    <div className="tc-film-card-tag">{article.category}</div>
-                    <h4>
-                      <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: article.slug }}>
-                        {article.title}
-                      </Link>
-                    </h4>
-                    <div className="tc-credits">{article.author}</div>
-                    <p className="tc-blurb">{article.excerpt.length > 120 ? article.excerpt.slice(0, 120) + '…' : article.excerpt}</p>
-                    <div className="tc-dates">
-                      <strong>{timeAgo(article.publishedAt)}</strong>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* TRENDING / LIVE FEED */}
-      {activeTab === 'trending' && (
-        <div className="tc-films">
-          <div className="flex items-center justify-between" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-            <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--tc-red)' }}>
-              ● Live Feed — Across the Web
-            </span>
-            <div className="flex items-center gap-3">
-              {liveFetchedAt && (
-                <span style={{ fontFamily: 'var(--tc-mono)', fontSize: 9, letterSpacing: 2, color: 'var(--tc-gray)', textTransform: 'uppercase' }}>
-                  Updated {timeAgo(liveFetchedAt)}
-                </span>
-              )}
-              <button
-                type="button"
-                onClick={() => fetchLiveFeed(true)}
-                disabled={isRefreshing}
-                style={{ fontFamily: 'var(--tc-mono)', fontSize: 9, letterSpacing: 2, padding: '6px 14px', color: 'var(--tc-red)', border: '1px solid var(--tc-red)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
-              >
-                {isRefreshing ? 'Refreshing…' : 'Refresh'}
-              </button>
-            </div>
-          </div>
-
-          {liveLoading && liveArticles.length === 0 ? (
-            <p style={{ textAlign: 'center', fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', padding: '60px 0', textTransform: 'uppercase' }}>
-              Loading live feed…
-            </p>
-          ) : liveArticles.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <p style={{ fontFamily: 'var(--tc-mono)', fontSize: 12, letterSpacing: 3, color: 'var(--tc-gray)', textTransform: 'uppercase' }}>
-                {liveError || 'No trending articles in this category'}
-              </p>
-              {liveError && (
-                <button
-                  type="button"
-                  onClick={() => fetchLiveFeed(true)}
-                  disabled={isRefreshing}
-                  style={{ marginTop: 16, fontFamily: 'var(--tc-mono)', fontSize: 10, letterSpacing: 2, padding: '8px 20px', color: 'var(--tc-red)', border: '1px solid var(--tc-red)', background: 'transparent', cursor: 'pointer', textTransform: 'uppercase' }}
-                >
-                  {isRefreshing ? 'Retrying…' : 'Try Again'}
-                </button>
-              )}
-            </div>
-          ) : (
-            <>
-              {/* Lead story */}
-              <article className="tc-film-feature">
-                <a
-                  href={liveArticles[0].url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="tc-film-feature-thumb"
-                  data-num=""
-                  data-section={liveArticles[0].source}
-                  style={{ display: 'block' }}
-                >
-                  <div className="tc-film-feature-thumb-bg" style={{ background: 'linear-gradient(135deg,#0a0a0a,#1a1a2e)' }} />
-                  <img className="tc-poster-img" src={liveArticles[0].imageUrl} alt={liveArticles[0].title} loading="lazy" />
-                </a>
-                <div>
-                  <div className="tc-credits">
-                    {liveArticles[0].source} · {timeAgo(liveArticles[0].publishedAt)}
-                  </div>
-                  <h3>
-                    <a href={liveArticles[0].url} target="_blank" rel="noopener noreferrer">
-                      {liveArticles[0].title}
-                    </a>
-                  </h3>
-                  <p className="tc-deck">{liveArticles[0].excerpt}</p>
-                  <div className="tc-tag-row">
-                    <span className="tc-tag tc-red-tag">{liveArticles[0].category}</span>
-                    <span className="tc-tag">External</span>
-                  </div>
-                  <a href={liveArticles[0].url} target="_blank" rel="noopener noreferrer" className="tc-read">
-                    Read at {liveArticles[0].source} →
-                  </a>
-                </div>
-              </article>
-
-              {/* Grid */}
-              <div className="tc-films-grid">
-                {liveArticles.slice(1).map((article, i) => (
-                  <article key={`${article.title.substring(0, 24)}-${i}`} className="tc-film-card">
-                    <a href={article.url} target="_blank" rel="noopener noreferrer" className="tc-film-card-poster">
-                      <img src={article.imageUrl} alt={article.title} loading="lazy" />
-                    </a>
-                    <div className="tc-film-card-tag">{article.category} · {article.source}</div>
-                    <h4>
-                      <a href={article.url} target="_blank" rel="noopener noreferrer">
-                        {article.title}
-                      </a>
-                    </h4>
-                    <p className="tc-blurb">{article.excerpt.length > 110 ? article.excerpt.slice(0, 110) + '…' : article.excerpt}</p>
-                    <div className="tc-dates">
-                      <strong>{timeAgo(article.publishedAt)}</strong>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
-      {/* TRIBECA 2026 SPECIAL COVERAGE */}
-      <section id="tribeca-coverage" className="tc-section">
-        <div className="tc-section-header">
-          <span className="tc-section-num">▸</span>
-          <h2 className="tc-section-title">Tribeca 2026 — Special Coverage</h2>
-          <span className="tc-section-meta">June 3–14, 2026 · New York City</span>
-        </div>
-      </section>
-
-      <section className="tc-lead" style={{ marginTop: '1rem' }}>
-        <div className="tc-lead-tag">
-          &#9679; Live From New York &#9679; June 3–14, 2026
-        </div>
-        <h2 className="tc-lead-headline">
-          Tribeca at <em>25</em>
-        </h2>
-        <p className="tc-lead-deck">
-          LEDGERA is credentialed press at the 2026 Tribeca Festival —
-          five team members on the ground across twelve days, covering the films,
-          the conversations, the games, and the culture that define this moment
-          in independent cinema.
-        </p>
-        <p className="tc-lead-byline">
-          <strong>Zachary Heneden</strong> &nbsp;—&nbsp; Editor in Chief
-          &nbsp;|&nbsp; Last Shot Media Group &nbsp;|&nbsp; Dallas → New York
-        </p>
-      </section>
-
-      {/* FEATURED FILMS */}
-      <main className="tc-films">
-        {featuredFilms.map((film) => (
-          <article key={film.slug} className="tc-film-feature">
-            <div
-              className="tc-film-feature-thumb"
-              data-num={film.num}
-              data-section={film.sectionLabel}
-            >
-              <div
-                className="tc-film-feature-thumb-bg"
-                style={{ background: film.gradient }}
-              />
-              {film.poster && (
-                <img
-                  className="tc-poster-img"
-                  src={film.poster}
-                  alt={`${film.title} — official Tribeca Festival still`}
-                  loading="lazy"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none'
-                  }}
-                />
-              )}
-            </div>
-            <div>
-              <div className="tc-credits">{film.director}</div>
-              <h3>
-                <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>
-                  {film.title}
-                </Link>
-              </h3>
-              <p className="tc-deck">{film.deck}</p>
-              <div className="tc-tag-row">
-                {film.tags.map((tag) => (
-                  <span
-                    key={tag.label}
-                    className={`tc-tag${tag.variant === 'red' ? ' tc-red-tag' : ''}`}
-                  >
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
-              <div className="tc-meta">
-                {film.screenings.map((s, i) => (
-                  <div key={i}>
-                    <strong>{s.date}</strong> {s.details}
-                  </div>
-                ))}
-              </div>
+      {activeEdition === 'daily' ? (
+        <div id="daily-edition" className="ledgera-edition-panel">
+          <section className="ledgera-lead-grid" aria-labelledby="ledgera-lead-title">
+            <article className="ledgera-hero-story">
               <Link
-                to="/tribeca/films/$filmSlug"
-                params={{ filmSlug: film.slug }}
-                className="tc-read"
+                to="/culture-ledger/$articleSlug"
+                params={{ articleSlug: hero?.slug || 'beyonce-cowboy-carter-reshapes-country-music' }}
+                className="ledgera-hero-image"
               >
-                Read Coverage →
+                <img src={hero?.imageUrl || FALLBACK_IMAGE} alt="" onError={imageFallback} />
+                <span>LEDGERA Original</span>
               </Link>
-              {film.spotify && (
-                <div className="tc-podcast">
-                  <div className="tc-podcast-label">
-                    ▶ The Last Shot Podcast — Tribeca 2026 Interview
-                  </div>
-                  <iframe
-                    className="tc-podcast-embed"
-                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
-                    width="100%"
-                    height="152"
-                    frameBorder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    title={film.spotify.title}
-                  />
-                </div>
-              )}
-            </div>
-          </article>
-        ))}
-      </main>
-
-      {/* SECONDARY GRID */}
-      <section className="tc-section">
-        <div className="tc-section-header">
-          <span className="tc-section-num">▸</span>
-          <h2 className="tc-section-title">Full Coverage — 30+ Films</h2>
-          <span className="tc-section-meta">June 3–14, 2026</span>
-        </div>
-      </section>
-
-      <div className="tc-films">
-        <div className="tc-films-grid">
-          {secondaryFilms.map((film, i) => (
-            <article key={i} className="tc-film-card">
-              {film.poster && (
-                <a
-                  className="tc-film-card-poster"
-                  href={film.tribecaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${film.title} on the Tribeca Festival site`}
-                >
-                  <img
-                    src={film.poster}
-                    alt={`${film.title} — official Tribeca Festival still`}
-                    loading="lazy"
-                    onError={(e) => {
-                      const parent = e.currentTarget.parentElement
-                      if (parent) parent.style.display = 'none'
-                    }}
-                  />
-                </a>
-              )}
-              <div className="tc-film-card-tag">{film.tag}</div>
-              <h4>
-                {film.slug ? (
-                  <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>
-                    {film.title}
+              <div className="ledgera-story-copy">
+                <p className="ledgera-kicker">{hero?.category || 'Culture'} / Lead Story</p>
+                <h1 id="ledgera-lead-title">
+                  {hero?.title || 'The culture is moving. LEDGERA keeps the record.'}
+                </h1>
+                <p>{hero?.excerpt || 'Original reporting, visual portfolios, and the stories shaping fashion and entertainment now.'}</p>
+                {hero && (
+                  <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: hero.slug }} className="ledgera-read-link">
+                    Read the full story <span>↗</span>
                   </Link>
-                ) : (
-                  film.title
                 )}
-              </h4>
-              <div className="tc-credits">{film.credits}</div>
-              <p className="tc-blurb">{film.blurb}</p>
-              <div className="tc-dates">
-                <strong>{film.dates}</strong>
               </div>
-              {film.spotify && (
-                <div className="tc-podcast tc-podcast-card">
-                  <div className="tc-podcast-label">
-                    ▶ The Last Shot Podcast Interview
-                  </div>
-                  <iframe
-                    className="tc-podcast-embed"
-                    src={`https://open.spotify.com/embed/episode/${film.spotify.episodeId}`}
-                    width="100%"
-                    height="152"
-                    frameBorder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy"
-                    title={film.spotify.title}
-                  />
+            </article>
+
+            <aside className="ledgera-side-feed">
+              <div className="ledgera-section-heading compact">
+                <div>
+                  <span>01</span>
+                  <h2>Trending Now</h2>
                 </div>
+                <button type="button" onClick={() => fetchLiveFeed(true)} disabled={refreshing}>
+                  {refreshing ? 'Refreshing' : 'Refresh'}
+                </button>
+              </div>
+              {filteredLiveArticles.slice(0, 4).map((article, index) => (
+                <article key={`${article.source}-${article.title}`} className="ledgera-trend-card">
+                  <a href={article.url} target="_blank" rel="noreferrer" className="ledgera-trend-image">
+                    <img src={article.imageUrl} alt="" onError={imageFallback} />
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                  </a>
+                  <div>
+                    <p className="ledgera-kicker">{article.category}</p>
+                    <h3><a href={article.url} target="_blank" rel="noreferrer">{article.title}</a></h3>
+                    <p className="ledgera-credit">Via <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.source}</a> · {timeAgo(article.publishedAt)}</p>
+                  </div>
+                </article>
+              ))}
+              {!loading && filteredLiveArticles.length === 0 && (
+                <p className="ledgera-empty">{feedError || 'No stories in this desk yet.'}</p>
               )}
-            </article>
-          ))}
-        </div>
-      </div>
+            </aside>
+          </section>
 
-      {/* 25TH ANNIVERSARY OUTDOOR */}
-      <section className="tc-section">
-        <div className="tc-section-header">
-          <span className="tc-section-num">▸</span>
-          <h2 className="tc-section-title">
-            25th Anniversary — Free Outdoor Screenings
-          </h2>
-          <span className="tc-section-meta">
-            Hudson Yards — Nightly 7 PM, Jun 4–14
-          </span>
-        </div>
-        <div className="tc-films-grid">
-          {outdoorScreenings.map((film, i) => (
-            <article key={i} className="tc-film-card">
-              <div className="tc-film-card-tag">{film.tag}</div>
-              <h4>{film.title}</h4>
-              <div className="tc-credits">{film.credits}</div>
-              <p className="tc-blurb">{film.blurb}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+          <section className="ledgera-desk" aria-labelledby="latest-desk-title">
+            <div className="ledgera-section-heading">
+              <div>
+                <span>02</span>
+                <h2 id="latest-desk-title">The Culture Desk</h2>
+              </div>
+              <p>{fetchedAt ? `Updated ${timeAgo(fetchedAt)}` : 'Live publisher feeds'}</p>
+            </div>
+            <div className="ledgera-category-tabs" role="group" aria-label="Filter culture stories">
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={activeCategory === category ? 'is-active' : ''}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+            <div className="ledgera-news-grid">
+              {filteredLiveArticles.slice(4, 12).map((article, index) => (
+                <article key={`${article.url}-${index}`} className={index === 0 ? 'ledgera-news-card is-wide' : 'ledgera-news-card'}>
+                  <a href={article.url} target="_blank" rel="noreferrer" className="ledgera-news-image">
+                    <img src={article.imageUrl} alt="" loading="lazy" onError={imageFallback} />
+                  </a>
+                  <p className="ledgera-kicker">{article.category}</p>
+                  <h3><a href={article.url} target="_blank" rel="noreferrer">{article.title}</a></h3>
+                  <p>{article.excerpt}</p>
+                  <p className="ledgera-credit">Original reporting: <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.source}</a></p>
+                </article>
+              ))}
+            </div>
+          </section>
 
-      {/* FOOTER */}
-      <footer className="tc-footer">
-        <div className="tc-footer-inner">
-          <div className="tc-footer-top">
-            <div className="tc-footer-brand">
-              <h2>
-                LEDGE<em>RA</em>
-              </h2>
-              <p>
-                The daily editorial publication of Last Shot Media Group.
-                Independent press — Dallas-based, internationally credentialed.
-                Covering the films, artists, and stories that deserve attention.
-              </p>
+          <section className="ledgera-models" aria-labelledby="model-spotlight-title">
+            <div className="ledgera-section-heading inverted">
+              <div>
+                <span>03</span>
+                <h2 id="model-spotlight-title">LEDGERA It Girls</h2>
+              </div>
+              <Link to="/models">View the full LSMG roster ↗</Link>
             </div>
-            <div className="tc-footer-col">
-              <h4>Tribeca 2026</h4>
-              <a href="#tribeca-coverage">All Coverage</a>
-              <Link to="/tribeca/schedule">Daily Schedule</Link>
-              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'mexicanamerican' }}>
-                MEXICANAMERICAN
-              </Link>
-              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'harvest' }}>
-                HARVEST
-              </Link>
-              <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: 'airport-blvd' }}>
-                AIRPORT BLVD
-              </Link>
+            <div className="ledgera-model-grid">
+              {modelFeatures.map((model, index) => (
+                <Link key={model.id} to="/models" className={`ledgera-model-card model-${index + 1}`}>
+                  <img src={model.gallery[index % model.gallery.length]} alt={`${model.name} model portfolio`} loading="lazy" />
+                  <span>{model.location} / {model.categories[0]}</span>
+                  <h3>{model.name}</h3>
+                  <p>{model.tagline}</p>
+                </Link>
+              ))}
             </div>
-            <div className="tc-footer-col">
-              <h4>Last Shot Media Group</h4>
-              <Link to="/">Website</Link>
-              <a
-                href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Apple Podcasts
-              </a>
-              <a
-                href="https://open.spotify.com/show/0RqHPKHBk4sHPuJTNqpLia"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Spotify
-              </a>
-              <a
-                href="https://www.instagram.com/lastshotmediagroup"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Instagram
-              </a>
+          </section>
+
+          <section className="ledgera-originals" aria-labelledby="originals-title">
+            <div className="ledgera-section-heading">
+              <div>
+                <span>04</span>
+                <h2 id="originals-title">From the LEDGERA Desk</h2>
+              </div>
+              <p>LSMG original reporting</p>
             </div>
-          </div>
-          <div className="tc-footer-bottom">
-            <span>
-              &copy; 2026 Last Shot Media Group Holdings. LEDGERA. All
-              Rights Reserved.
-            </span>
-            <span>Independent Press — Daily Edition</span>
-          </div>
+            <div className="ledgera-original-grid">
+              {articles.slice(hero ? 1 : 0, 7).map((article) => (
+                <article key={article.slug}>
+                  <p className="ledgera-kicker">{article.category}</p>
+                  <h3><Link to="/culture-ledger/$articleSlug" params={{ articleSlug: article.slug }}>{article.title}</Link></h3>
+                  <p>{article.excerpt}</p>
+                  <span>{article.author} · {timeAgo(article.publishedAt)}</span>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
-      </footer>
-    </div>
+      ) : (
+        <div id="tribeca-2026" className="ledgera-edition-panel ledgera-tribeca-panel">
+          <section className="ledgera-tribeca-hero">
+            <p className="ledgera-kicker">Special Coverage / Festival Archive</p>
+            <h1>Tribeca <em>2026</em></h1>
+            <p>LEDGERA’s dedicated festival desk: film profiles, reporting notes, screening information, and the complete LSMG coverage slate.</p>
+            <Link to="/tribeca/schedule" className="ledgera-read-link">Open Festival Schedule <span>↗</span></Link>
+          </section>
+
+          <section className="ledgera-tribeca-films" aria-labelledby="tribeca-priority-title">
+            <div className="ledgera-section-heading">
+              <div>
+                <span>01</span>
+                <h2 id="tribeca-priority-title">Priority Coverage</h2>
+              </div>
+              <p>Tribeca 2026</p>
+            </div>
+            <div className="ledgera-tribeca-grid">
+              {featuredFilms.map((film) => (
+                <article key={film.slug}>
+                  <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }} className="ledgera-tribeca-image">
+                    {film.poster && <img src={film.poster} alt="" loading="lazy" onError={imageFallback} />}
+                    <span>{film.num}</span>
+                  </Link>
+                  <p className="ledgera-kicker">{film.sectionLabel}</p>
+                  <h3><Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>{film.title}</Link></h3>
+                  <p>{film.deck}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="ledgera-tribeca-notebook">
+            <div>
+              <p className="ledgera-kicker">More from the slate</p>
+              <h2>Festival Notebook</h2>
+              {secondaryFilms.map((film) => (
+                <article key={film.title}>
+                  <span>{film.tag}</span>
+                  <h3>{film.title}</h3>
+                  <p>{film.blurb}</p>
+                </article>
+              ))}
+            </div>
+            <aside>
+              <p className="ledgera-kicker">Events & Outdoor Screenings</p>
+              {outdoorScreenings.map((event) => (
+                <article key={event.title}>
+                  <span>{event.tag}</span>
+                  <h3>{event.title}</h3>
+                  <p>{event.blurb}</p>
+                </article>
+              ))}
+            </aside>
+          </section>
+        </div>
+      )}
+    </main>
   )
 }
