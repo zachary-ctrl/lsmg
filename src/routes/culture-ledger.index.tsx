@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 import { featuredFilms, outdoorScreenings, secondaryFilms } from '../data/tribeca-films'
 
 export const Route = createFileRoute('/culture-ledger/')({
@@ -80,12 +81,6 @@ function timeAgo(date: string) {
   const days = Math.floor(hours / 24)
   if (days < 7) return `${days}d ago`
   return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
-
-function imageFallback(event: React.SyntheticEvent<HTMLImageElement>) {
-  if (!event.currentTarget.src.endsWith(FALLBACK_IMAGE)) {
-    event.currentTarget.src = FALLBACK_IMAGE
-  }
 }
 
 function randomCoverStartIndex() {
@@ -278,21 +273,17 @@ function CultureLedgerPage() {
         <div id="daily-edition" className="ledgera-edition-panel">
           <section className="ledgera-lead-grid" aria-labelledby="ledgera-lead-title">
             <article className="ledgera-hero-story">
-              <Link
-                to="/culture-ledger/$articleSlug"
-                params={{ articleSlug: hero?.slug || 'beyonce-cowboy-carter-reshapes-country-music' }}
-                className="ledgera-hero-image"
+              <FullResolutionImage
+                src={celebrityCover?.imageUrl || FALLBACK_IMAGE}
+                fallbackSrc={FALLBACK_IMAGE}
+                alt={celebrityCover ? `${celebrityCover.name} editorial cover` : 'LEDGERA editorial cover'}
+                linkClassName="ledgera-hero-image"
               >
-                <img
-                  src={celebrityCover?.imageUrl || FALLBACK_IMAGE}
-                  alt={celebrityCover ? `${celebrityCover.name} editorial cover` : 'LEDGERA editorial cover'}
-                  onError={imageFallback}
-                />
                 <span className="ledgera-hero-badge">LEDGERA Original</span>
                 {celebrityCover && (
                   <span className="ledgera-cover-credit">Cover rotation: {celebrityCover.name} · Wikimedia</span>
                 )}
-              </Link>
+              </FullResolutionImage>
               <div className="ledgera-story-copy">
                 <p className="ledgera-kicker">{hero?.category || 'Culture'} / Lead Story</p>
                 <h1 id="ledgera-lead-title">
@@ -319,10 +310,14 @@ function CultureLedgerPage() {
               </div>
               {filteredLiveArticles.slice(0, 4).map((article, index) => (
                 <article key={`${article.source}-${article.title}`} className="ledgera-trend-card">
-                  <a href={article.url} target="_blank" rel="noreferrer" className="ledgera-trend-image">
-                    <img src={article.imageUrl} alt="" onError={imageFallback} />
+                  <FullResolutionImage
+                    src={article.imageUrl}
+                    fallbackSrc={FALLBACK_IMAGE}
+                    alt={`${article.title} cover`}
+                    linkClassName="ledgera-trend-image"
+                  >
                     <span>{String(index + 1).padStart(2, '0')}</span>
-                  </a>
+                  </FullResolutionImage>
                   <div>
                     <p className="ledgera-kicker">{article.category}</p>
                     <h3><a href={article.url} target="_blank" rel="noreferrer">{article.title}</a></h3>
@@ -359,9 +354,13 @@ function CultureLedgerPage() {
             <div className="ledgera-news-grid">
               {filteredLiveArticles.slice(4, 12).map((article, index) => (
                 <article key={`${article.url}-${index}`} className={index === 0 ? 'ledgera-news-card is-wide' : 'ledgera-news-card'}>
-                  <a href={article.url} target="_blank" rel="noreferrer" className="ledgera-news-image">
-                    <img src={article.imageUrl} alt="" loading="lazy" onError={imageFallback} />
-                  </a>
+                  <FullResolutionImage
+                    src={article.imageUrl}
+                    fallbackSrc={FALLBACK_IMAGE}
+                    alt={`${article.title} cover`}
+                    linkClassName="ledgera-news-image"
+                    loading="lazy"
+                  />
                   <p className="ledgera-kicker">{article.category}</p>
                   <h3><a href={article.url} target="_blank" rel="noreferrer">{article.title}</a></h3>
                   <p>{article.excerpt}</p>
@@ -411,10 +410,16 @@ function CultureLedgerPage() {
             <div className="ledgera-tribeca-grid">
               {featuredFilms.map((film) => (
                 <article key={film.slug}>
-                  <Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }} className="ledgera-tribeca-image">
-                    {film.poster && <img src={film.poster} alt="" loading="lazy" onError={imageFallback} />}
+                  <FullResolutionImage
+                    src={film.poster || FALLBACK_IMAGE}
+                    fullResolutionSrc={film.poster?.replace('/medium_', '/')}
+                    fallbackSrc={FALLBACK_IMAGE}
+                    alt={`${film.title} poster`}
+                    linkClassName="ledgera-tribeca-image"
+                    loading="lazy"
+                  >
                     <span>{film.num}</span>
-                  </Link>
+                  </FullResolutionImage>
                   <p className="ledgera-kicker">{film.sectionLabel}</p>
                   <h3><Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>{film.title}</Link></h3>
                   <p>{film.deck}</p>

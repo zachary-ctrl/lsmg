@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 import { useIdentity } from '../lib/identity-context'
 
 export const Route = createFileRoute('/upload')({
@@ -184,9 +185,13 @@ function UploadPage() {
                         <video src={item.url} controls className="w-full h-full object-cover" />
                       </div>
                     ) : (
-                      <div className="overflow-hidden" style={{ aspectRatio: '16 / 9' }}>
-                        <img src={item.url} alt={item.key} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </div>
+                      <FullResolutionImage
+                        src={item.url}
+                        alt={item.key}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        linkClassName="block overflow-hidden"
+                        linkStyle={{ aspectRatio: '16 / 9' }}
+                      />
                     )}
                     <div className="flex items-center justify-between" style={{ padding: '12px 16px' }}>
                       <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: '#8f8f8f', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
