@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -231,32 +232,42 @@ function AboutPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Tap any name or photo to read their full bio.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a name to read the full bio, or a photo to open the original image.</p>
           </div>
           <div className="hm-team-list">
             {TEAM.map((member, idx) => (
-              <button
+              <div
                 key={member.name}
-                type="button"
-                onClick={() => openBio(member)}
                 className="hm-member scroll-reveal"
                 style={{ transitionDelay: `${idx * 0.06}s` }}
-                aria-label={`View bio for ${member.name}, ${member.role}`}
               >
-                <span className="hm-member-photo-wrap">
+                <span className="hm-member-photo-cell">
                   {member.image ? (
-                    <img src={member.image} alt={member.name} className="hm-member-photo" loading="lazy" />
+                    <FullResolutionImage
+                      src={member.image}
+                      alt={member.name}
+                      className="hm-member-photo"
+                      linkClassName="hm-member-photo-wrap"
+                      loading="lazy"
+                    />
                   ) : (
-                    <span className="hm-member-initial">{member.name.charAt(0)}</span>
+                    <span className="hm-member-photo-wrap">
+                      <span className="hm-member-initial">{member.name.charAt(0)}</span>
+                    </span>
                   )}
                 </span>
-                <span className="hm-member-text">
+                <button
+                  type="button"
+                  onClick={() => openBio(member)}
+                  className="hm-member-text"
+                  aria-label={`View bio for ${member.name}, ${member.role}`}
+                >
                   <span className="hm-member-name">{member.name}</span>
                   <span className="hm-member-role">{member.role}</span>
                   <span className="hm-member-desc">{member.desc}</span>
                   <span className="hm-member-cta">View Bio &rarr;</span>
-                </span>
-              </button>
+                </button>
+              </div>
             ))}
           </div>
         </div>
@@ -278,7 +289,12 @@ function AboutPage() {
           <div className="bio-lightbox-panel" onClick={(e) => e.stopPropagation()}>
             <div className="bio-lightbox-figure">
               {active.image ? (
-                <img src={active.image} alt={active.name} className="bio-lightbox-img" />
+                <FullResolutionImage
+                  src={active.image}
+                  alt={active.name}
+                  className="bio-lightbox-img"
+                  linkClassName="bio-lightbox-image-link"
+                />
               ) : (
                 <div className="bio-lightbox-placeholder">
                   <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>

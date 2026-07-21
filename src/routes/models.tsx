@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 import { MODELS, type Model } from '../data/models'
 
 export const Route = createFileRoute('/models')({
@@ -235,7 +236,7 @@ function ModelsPage() {
           <span className="mdl-eyebrow">Our Models</span>
           <h2 className="mdl-section-title">Talent <span className="mdl-accent">Roster</span></h2>
           <p className="mdl-section-deck">
-            Tap any portrait to open the full profile — paired editorials, measurements and booking.
+            Open any portrait at full resolution, or select the model name to view their profile.
           </p>
         </div>
 
@@ -261,25 +262,32 @@ function ModelsPage() {
 
         <div className="mdl-grid" key={filter}>
           {filtered.map((m, i) => (
-            <button
+            <article
               key={m.id}
-              type="button"
               className="mdl-card"
               style={{ animationDelay: `${i * 0.07}s` }}
-              onClick={() => openProfile(m)}
-              aria-label={`View ${m.name}'s portfolio — ${m.categories.join(', ')}`}
             >
-              <img
+              <FullResolutionImage
                 src={cdn(m.gallery[0], 720, 960)}
+                fullResolutionSrc={m.gallery[0]}
                 alt={`${m.name} — LSMG ${m.categories.join(' and ')} model`}
                 className="mdl-card-img"
+                linkClassName="mdl-card-image-link"
                 loading="lazy"
               />
               <span className="mdl-card-overlay">
-                <span className="mdl-card-name">{m.name}</span>
-                <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
+                <button
+                  type="button"
+                  className="mdl-card-profile"
+                  onClick={() => openProfile(m)}
+                  aria-label={`View ${m.name}'s portfolio — ${m.categories.join(', ')}`}
+                >
+                  <span className="mdl-card-name">{m.name}</span>
+                  <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
+                  <span className="mdl-card-profile-label">View Profile →</span>
+                </button>
               </span>
-            </button>
+            </article>
           ))}
         </div>
       </section>
@@ -319,11 +327,13 @@ function ModelsPage() {
           <div className="mdl-lightbox-panel" onClick={(e) => e.stopPropagation()}>
             {/* Sharp image + carousel controls */}
             <div className="mdl-lightbox-stage">
-              <img
+              <FullResolutionImage
                 key={slide}
                 src={cdn(active.gallery[slide], 1100, undefined, 82)}
+                fullResolutionSrc={active.gallery[slide]}
                 alt={`${active.name} — shot ${slide + 1} of ${active.gallery.length}`}
                 className="mdl-lightbox-img"
+                linkClassName="mdl-lightbox-image-link"
               />
               {active.gallery.length > 1 && (
                 <>
@@ -333,19 +343,16 @@ function ModelsPage() {
                 </>
               )}
               {active.gallery.length > 1 && (
-                <div className="mdl-lb-thumbs" role="tablist" aria-label={`${active.name} shots`}>
+                <div className="mdl-lb-thumbs" aria-label={`${active.name} full-resolution shots`}>
                   {active.gallery.map((g, gi) => (
-                    <button
+                    <FullResolutionImage
                       key={g}
-                      type="button"
-                      role="tab"
-                      aria-selected={gi === slide}
-                      className={`mdl-lb-thumb${gi === slide ? ' mdl-lb-thumb-active' : ''}`}
-                      onClick={() => setSlide(gi)}
-                      aria-label={`${active.name} shot ${gi + 1}`}
-                    >
-                      <img src={cdn(g, 160, 200)} alt="" loading="lazy" />
-                    </button>
+                      src={cdn(g, 160, 200)}
+                      fullResolutionSrc={g}
+                      alt={`${active.name} shot ${gi + 1}`}
+                      linkClassName={`mdl-lb-thumb${gi === slide ? ' mdl-lb-thumb-active' : ''}`}
+                      loading="lazy"
+                    />
                   ))}
                 </div>
               )}

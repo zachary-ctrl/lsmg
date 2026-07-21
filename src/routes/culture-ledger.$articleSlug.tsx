@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 import { useState, useEffect } from 'react'
 
 export const Route = createFileRoute('/culture-ledger/$articleSlug')({
@@ -137,8 +138,14 @@ function ArticlePage() {
       {/* Cover Image */}
       {article.imageUrl && (
         <div className="relative" style={{ maxHeight: 480, overflow: 'hidden' }}>
-          <img src={article.imageUrl} alt={article.title} className="w-full object-cover" style={{ maxHeight: 480 }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,8,8,1) 0%, transparent 40%)' }} />
+          <FullResolutionImage
+            src={article.imageUrl}
+            alt={article.title}
+            className="w-full object-cover"
+            linkClassName="block"
+            style={{ maxHeight: 480 }}
+          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(8,8,8,1) 0%, transparent 40%)' }} />
         </div>
       )}
 
