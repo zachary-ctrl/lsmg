@@ -2,7 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { getModelBySlug } from '../data/models'
 import { netlifyImage } from '../lib/netlify-image'
 
-export const Route = createFileRoute('/models/$slug')({
+export const Route = createFileRoute('/models_/$slug')({
   head: ({ params }) => {
     const model = getModelBySlug(params.slug)
 
