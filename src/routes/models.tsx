@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FullResolutionImage } from '../components/FullResolutionImage'
-import { MODELS, type Model } from '../data/models'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { MODELS } from '../data/models'
+import { netlifyImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/models')({
   component: ModelsPage,
@@ -23,48 +23,35 @@ export const Route = createFileRoute('/models')({
   }),
 })
 
-/* ──────────────────────────────────────────────────────────
-   Talent roster data
-   Each model has a set of paired shots (e.g. "Amora 1", "Amora 2")
-   shown together in the profile gallery. Stats are roster comp-card
-   placeholders — edit per talent as real measurements are confirmed.
-   ────────────────────────────────────────────────────────── */
-/* All specialty filters, derived from the roster. */
-const FILTERS = ['All', ...Array.from(new Set(MODELS.flatMap((m) => m.categories)))]
+const FILTERS = ['All', ...Array.from(new Set(MODELS.flatMap((model) => model.types)))]
+const FEATURED_MODELS = MODELS.filter((model) => model.featured)
 
-/* Netlify Image CDN helper — transforms + optimizes on the edge so the
-   large source photos ship as right-sized, format-negotiated images. */
-function cdn(src: string, w: number, h?: number, q = 72) {
-  const params = new URLSearchParams({ url: src, w: String(w), q: String(q) })
-  if (h) {
-    params.set('h', String(h))
-    params.set('fit', 'cover')
-    params.set('position', 'top')
-  }
-  return `/.netlify/images?${params.toString()}`
-}
-
-/* Staggered, word-by-word headline reveal (matches the About hero). */
 function StaggerText({ text, delay = 0.2 }: { text: string; delay?: number }) {
   const words = text.split(' ')
+
   return (
     <>
-      {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="word-stagger" style={{ animationDelay: `${delay + i * 0.06}s` }}>
+      {words.map((word, index) => (
+        <span
+          key={`${word}-${index}`}
+          className="word-stagger"
+          style={{ animationDelay: `${delay + index * 0.06}s` }}
+        >
           {word}
-          {i < words.length - 1 ? ' ' : ''}
+          {index < words.length - 1 ? ' ' : ''}
         </span>
       ))}
     </>
   )
 }
 
-/* Reveal children with the shared scroll-reveal observer. */
 function useScrollReveal() {
   const ref = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const element = ref.current
+    if (!element) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -73,127 +60,102 @@ function useScrollReveal() {
       },
       { threshold: 0.12 },
     )
-    const observe = () => el.querySelectorAll('.scroll-reveal:not(.revealed)').forEach((c) => observer.observe(c))
-    observe()
+
+    element
+      .querySelectorAll('.scroll-reveal:not(.revealed)')
+      .forEach((child) => observer.observe(child))
+
     return () => observer.disconnect()
   })
+
   return ref
+}
+
+function ModelCard({ model, index = 0, featured = false }: {
+  model: (typeof MODELS)[number]
+  index?: number
+  featured?: boolean
+}) {
+  return (
+    <Link
+      to="/models/$slug"
+      params={{ slug: model.slug }}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={featured ? 'mdl-feature-card' : 'mdl-card'}
+      style={{ animationDelay: `${index * 0.07}s` }}
+      aria-label={`View ${model.name}'s portfolio in a new tab`}
+    >
+      <img
+        src={netlifyImage(model.imagePaths[0], featured ? 900 : 720, featured ? 1080 : 960)}
+        alt={`${model.name} — LSMG ${model.types.join(' and ')} model`}
+        className={featured ? 'mdl-feature-img' : 'mdl-card-img'}
+        loading={featured ? 'eager' : 'lazy'}
+      />
+      <span className={featured ? 'mdl-feature-overlay' : 'mdl-card-overlay'}>
+        {featured && <span className="mdl-feature-city">{model.city}</span>}
+        <span className={featured ? 'mdl-feature-name' : 'mdl-card-name'}>{model.name}</span>
+        <span className={featured ? 'mdl-feature-cats' : 'mdl-card-cats'}>
+          {model.types.join(' · ')}
+        </span>
+        <span className={featured ? 'mdl-feature-link' : 'mdl-card-profile-label'}>
+          View Portfolio →
+        </span>
+      </span>
+    </Link>
+  )
 }
 
 function ModelsPage() {
   const revealRef = useScrollReveal()
   const [filter, setFilter] = useState('All')
-  const [active, setActive] = useState<Model | null>(null)
-  const [closing, setClosing] = useState(false)
-  const [slide, setSlide] = useState(0)
-
   const heroRef = useRef<HTMLDivElement>(null)
   const glowRef = useRef<HTMLDivElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
-
-  const prefersReduced =
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
   const filtered = useMemo(
-    () => (filter === 'All' ? MODELS : MODELS.filter((m) => m.categories.includes(filter))),
+    () => (filter === 'All' ? MODELS : MODELS.filter((model) => model.types.includes(filter))),
     [filter],
   )
 
-  /* Cursor-following glow + subtle mouse parallax on the hero. */
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (prefersReduced) return
+
     const hero = heroRef.current
     const glow = glowRef.current
     const layer = parallaxRef.current
     if (!hero) return
-    let raf = 0
-    const onMove = (e: MouseEvent) => {
+
+    let frame = 0
+    const onMove = (event: MouseEvent) => {
       const rect = hero.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      const cx = (x / rect.width - 0.5) * 2
-      const cy = (y / rect.height - 0.5) * 2
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      const offsetX = (x / rect.width - 0.5) * 2
+      const offsetY = (y / rect.height - 0.5) * 2
+
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
         if (glow) glow.style.transform = `translate(${x}px, ${y}px)`
-        if (layer) layer.style.transform = `translate(${cx * -14}px, ${cy * -14}px)`
+        if (layer) layer.style.transform = `translate(${offsetX * -14}px, ${offsetY * -14}px)`
       })
     }
+
     hero.addEventListener('mousemove', onMove)
     return () => {
       hero.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
+      cancelAnimationFrame(frame)
     }
-  }, [prefersReduced])
-
-  /* Gentle scroll parallax on the hero background. */
-  useEffect(() => {
-    if (prefersReduced) return
-    let raf = 0
-    const onScroll = () => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(() => {
-        const bg = heroRef.current?.querySelector('.mdl-hero-bg') as HTMLElement | null
-        if (bg) bg.style.transform = `translateY(${window.scrollY * 0.18}px) scale(1.08)`
-      })
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(raf)
-    }
-  }, [prefersReduced])
-
-  const openProfile = useCallback((m: Model) => {
-    setClosing(false)
-    setSlide(0)
-    setActive(m)
   }, [])
-
-  const closeProfile = useCallback(() => {
-    setClosing(true)
-    window.setTimeout(() => {
-      setActive(null)
-      setClosing(false)
-    }, 250)
-  }, [])
-
-  const move = useCallback(
-    (dir: number) => {
-      setActive((cur) => {
-        if (cur) setSlide((s) => (s + dir + cur.gallery.length) % cur.gallery.length)
-        return cur
-      })
-    },
-    [],
-  )
-
-  /* Lock scroll + keyboard controls while the profile is open. */
-  useEffect(() => {
-    if (!active) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeProfile()
-      if (e.key === 'ArrowRight') move(1)
-      if (e.key === 'ArrowLeft') move(-1)
-    }
-    document.addEventListener('keydown', onKey)
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    const prevOverflow = document.body.style.overflow
-    const prevPad = document.body.style.paddingRight
-    document.body.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
-      document.body.style.paddingRight = prevPad
-    }
-  }, [active, closeProfile, move])
 
   return (
     <div className="models-page" ref={revealRef}>
-      {/* ───────────── Hero ───────────── */}
       <section className="mdl-hero" ref={heroRef} aria-label="Models and talent introduction">
-        <div className="mdl-hero-bg" style={{ backgroundImage: `url(${cdn('/models/hero-atmos.jpg', 1600, undefined, 60)})` }} />
+        <div
+          className="mdl-hero-bg"
+          ref={parallaxRef}
+          style={{ backgroundImage: `url(${netlifyImage('/models/hero-atmos.jpg', 1600, undefined, 60)})` }}
+        />
         <div className="mdl-hero-scrim" />
         <div className="mdl-hero-glow" ref={glowRef} aria-hidden="true" />
 
@@ -202,9 +164,7 @@ function ModelsPage() {
             LSMG Talent Division
           </span>
           <h1 className="mdl-hero-title">
-            <span className="mdl-hero-line">
-              <StaggerText text="Models" delay={0.15} />
-            </span>
+            <span className="mdl-hero-line"><StaggerText text="Models" delay={0.15} /></span>
             <span className="mdl-hero-line mdl-hero-amp">
               <span className="word-stagger" style={{ animationDelay: '0.4s' }}>&amp;&nbsp;</span>
               <span className="word-stagger mdl-accent" style={{ animationDelay: '0.5s' }}>Talent</span>
@@ -215,7 +175,7 @@ function ModelsPage() {
             represented across Dallas, Orlando, New York and Atlanta.
           </p>
           <div className="mdl-hero-cta" style={{ animation: 'fadeUp .7s ease .7s both' }}>
-            <a href="#roster" className="mdl-btn mdl-btn-primary">Explore Roster</a>
+            <a href="#featured" className="mdl-btn mdl-btn-primary">Explore Roster</a>
             <Link to="/contact" className="mdl-btn mdl-btn-ghost">Book Talent</Link>
           </div>
           <div className="mdl-hero-meta" style={{ animation: 'fadeUp .7s ease .85s both' }}>
@@ -224,36 +184,42 @@ function ModelsPage() {
             <span><strong>{FILTERS.length - 1}</strong> Specialties</span>
           </div>
         </div>
-        <div className="mdl-hero-scroll" aria-hidden="true">
-          <span>Scroll</span>
-          <span className="mdl-hero-scroll-line" />
+      </section>
+
+      <section className="mdl-feature-section" id="featured" aria-label="Featured faces">
+        <div className="mdl-section-head scroll-reveal">
+          <span className="mdl-eyebrow">Meet the Roster</span>
+          <h2 className="mdl-section-title">Featured <span className="mdl-accent">Faces</span></h2>
+          <p className="mdl-section-deck">Tap any portrait to open the full profile in a new tab.</p>
+        </div>
+        <div className="mdl-feature-grid">
+          {FEATURED_MODELS.map((model, index) => (
+            <ModelCard key={model.slug} model={model} index={index} featured />
+          ))}
         </div>
       </section>
 
-      {/* ───────────── Roster + filters ───────────── */}
       <section className="mdl-section" id="roster" aria-label="Talent roster">
         <div className="mdl-section-head scroll-reveal">
           <span className="mdl-eyebrow">Our Models</span>
           <h2 className="mdl-section-title">Talent <span className="mdl-accent">Roster</span></h2>
-          <p className="mdl-section-deck">
-            Open any portrait at full resolution, or select the model name to view their profile.
-          </p>
+          <p className="mdl-section-deck">Every portrait, name, and portfolio prompt opens the model’s full profile.</p>
         </div>
 
         <div className="mdl-filters scroll-reveal" role="tablist" aria-label="Filter talent by specialty">
-          {FILTERS.map((f) => (
+          {FILTERS.map((specialty) => (
             <button
-              key={f}
+              key={specialty}
               type="button"
               role="tab"
-              aria-selected={filter === f}
-              className={`mdl-filter${filter === f ? ' mdl-filter-active' : ''}`}
-              onClick={() => setFilter(f)}
+              aria-selected={filter === specialty}
+              className={`mdl-filter${filter === specialty ? ' mdl-filter-active' : ''}`}
+              onClick={() => setFilter(specialty)}
             >
-              {f}
-              {f !== 'All' && (
+              {specialty}
+              {specialty !== 'All' && (
                 <span className="mdl-filter-count">
-                  {MODELS.filter((m) => m.categories.includes(f)).length}
+                  {MODELS.filter((model) => model.types.includes(specialty)).length}
                 </span>
               )}
             </button>
@@ -261,44 +227,16 @@ function ModelsPage() {
         </div>
 
         <div className="mdl-grid" key={filter}>
-          {filtered.map((m, i) => (
-            <article
-              key={m.id}
-              className="mdl-card"
-              style={{ animationDelay: `${i * 0.07}s` }}
-            >
-              <FullResolutionImage
-                src={cdn(m.gallery[0], 720, 960)}
-                fullResolutionSrc={m.gallery[0]}
-                alt={`${m.name} — LSMG ${m.categories.join(' and ')} model`}
-                className="mdl-card-img"
-                linkClassName="mdl-card-image-link"
-                loading="lazy"
-              />
-              <span className="mdl-card-overlay">
-                <button
-                  type="button"
-                  className="mdl-card-profile"
-                  onClick={() => openProfile(m)}
-                  aria-label={`View ${m.name}'s portfolio — ${m.categories.join(', ')}`}
-                >
-                  <span className="mdl-card-name">{m.name}</span>
-                  <span className="mdl-card-cats">{m.categories.join(' · ')}</span>
-                  <span className="mdl-card-profile-label">View Profile →</span>
-                </button>
-              </span>
-            </article>
+          {filtered.map((model, index) => (
+            <ModelCard key={model.slug} model={model} index={index} />
           ))}
         </div>
       </section>
 
-      {/* ───────────── Become talent CTA ───────────── */}
       <section className="mdl-cta-band scroll-reveal" aria-label="Become talent">
         <div className="mdl-cta-inner">
           <span className="mdl-eyebrow">Join the Roster</span>
-          <h2 className="mdl-cta-title">
-            Think you have <span className="mdl-accent">the look?</span>
-          </h2>
+          <h2 className="mdl-cta-title">Think you have <span className="mdl-accent">the look?</span></h2>
           <p className="mdl-cta-deck">
             LSMG is always scouting new faces across editorial, commercial, runway and beauty.
             Submit for representation or book existing talent for your next production.
@@ -309,81 +247,6 @@ function ModelsPage() {
           </div>
         </div>
       </section>
-
-      {/* ───────────── Profile lightbox ─────────────
-          Full-screen: the current shot is duplicated as a zoomed, blurred
-          backdrop, with the sharp, uncropped image + details floated on top. */}
-      {active && (
-        <div
-          className={`mdl-lightbox${closing ? ' mdl-lightbox--closing' : ''}`}
-          onClick={closeProfile}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${active.name} portfolio`}
-        >
-          <button type="button" className="mdl-lightbox-close" onClick={closeProfile} aria-label="Close profile">
-            &times;
-          </button>
-          <div className="mdl-lightbox-panel" onClick={(e) => e.stopPropagation()}>
-            {/* Sharp image + carousel controls */}
-            <div className="mdl-lightbox-stage">
-              <FullResolutionImage
-                key={slide}
-                src={cdn(active.gallery[slide], 1100, undefined, 82)}
-                fullResolutionSrc={active.gallery[slide]}
-                alt={`${active.name} — shot ${slide + 1} of ${active.gallery.length}`}
-                className="mdl-lightbox-img"
-                linkClassName="mdl-lightbox-image-link"
-              />
-              {active.gallery.length > 1 && (
-                <>
-                  <button type="button" className="mdl-lb-nav mdl-lb-prev" onClick={() => move(-1)} aria-label="Previous shot">&#8249;</button>
-                  <button type="button" className="mdl-lb-nav mdl-lb-next" onClick={() => move(1)} aria-label="Next shot">&#8250;</button>
-                  <span className="mdl-lb-index">{slide + 1} / {active.gallery.length}</span>
-                </>
-              )}
-              {active.gallery.length > 1 && (
-                <div className="mdl-lb-thumbs" aria-label={`${active.name} full-resolution shots`}>
-                  {active.gallery.map((g, gi) => (
-                    <FullResolutionImage
-                      key={g}
-                      src={cdn(g, 160, 200)}
-                      fullResolutionSrc={g}
-                      alt={`${active.name} shot ${gi + 1}`}
-                      linkClassName={`mdl-lb-thumb${gi === slide ? ' mdl-lb-thumb-active' : ''}`}
-                      loading="lazy"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="mdl-lightbox-info">
-              <span className="mdl-eyebrow">LSMG Roster</span>
-              <h3 className="mdl-lightbox-name">{active.name}</h3>
-              <p className="mdl-lightbox-tagline">{active.tagline}</p>
-              <div className="mdl-lightbox-cats">
-                {active.categories.map((c) => (
-                  <span key={c} className="mdl-chip">{c}</span>
-                ))}
-              </div>
-              <div className="mdl-lightbox-stats">
-                {active.stats.map((s, si) => (
-                  <div key={s.label} className="mdl-stat" style={{ animationDelay: `${0.1 + si * 0.05}s` }}>
-                    <span className="mdl-stat-label">{s.label}</span>
-                    <span className="mdl-stat-value">{s.value}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mdl-lightbox-bio">{active.bio}</p>
-              <Link to="/contact" className="mdl-btn mdl-btn-primary mdl-lightbox-book">
-                Book {active.name}
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

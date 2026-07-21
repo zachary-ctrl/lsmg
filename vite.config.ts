@@ -4,6 +4,7 @@ import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import netlify from '@netlify/vite-plugin-tanstack-start'
+import { MODELS } from './src/data/models'
 
 const config = defineConfig({
   plugins: [
@@ -12,7 +13,12 @@ const config = defineConfig({
     }),
     tailwindcss(),
     netlify(),
-    tanstackStart(),
+    tanstackStart({
+      pages: MODELS.map((model) => ({
+        path: `/models/${model.slug}`,
+        prerender: { enabled: true },
+      })),
+    }),
     viteReact(),
   ],
 })

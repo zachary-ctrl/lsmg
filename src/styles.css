@@ -1705,6 +1705,11 @@ img {
   margin: 0 auto;
   padding: 100px 40px;
 }
+.models-page .mdl-feature-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 40px 24px;
+}
 .models-page .mdl-section-head { margin-bottom: 44px; }
 .models-page .mdl-section-title {
   font-family: 'Bebas Neue', sans-serif;
@@ -1777,11 +1782,15 @@ img {
   color: inherit;
   font: inherit;
   text-align: left;
+  text-decoration: none;
+  cursor: pointer;
   animation: mdlCardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
-.models-page .mdl-card-image-link { display: block; cursor: zoom-in; }
-.models-page .mdl-card-image-link:focus-visible,
-.models-page .mdl-card-profile:focus-visible { outline: 2px solid var(--red); outline-offset: -3px; }
+.models-page .mdl-card:focus-visible,
+.models-page .mdl-feature-card:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 5px;
+}
 @keyframes mdlCardIn {
   from { opacity: 0; transform: translateY(34px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1853,6 +1862,221 @@ img {
   text-transform: uppercase;
   color: var(--white);
   opacity: 0.7;
+}
+
+/* ── Featured faces ── */
+.models-page .mdl-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vw, 24px);
+}
+.models-page .mdl-feature-card {
+  position: relative;
+  min-height: clamp(360px, 53vw, 700px);
+  overflow: hidden;
+  background: #0c0c0c;
+  color: inherit;
+  text-decoration: none;
+  animation: mdlCardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+.models-page .mdl-feature-img {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(30%) contrast(1.04) brightness(0.82);
+  transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), filter 0.6s ease;
+}
+.models-page .mdl-feature-card:hover .mdl-feature-img {
+  transform: scale(1.045);
+  filter: grayscale(0%) contrast(1.06) brightness(0.96);
+}
+.models-page .mdl-feature-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(20px, 3vw, 42px);
+  background: linear-gradient(to top, rgba(4,4,4,0.95), rgba(4,4,4,0.08) 62%, transparent);
+}
+.models-page .mdl-feature-city,
+.models-page .mdl-feature-cats,
+.models-page .mdl-feature-link {
+  font-family: 'DM Mono', monospace;
+  text-transform: uppercase;
+}
+.models-page .mdl-feature-city {
+  margin-bottom: 8px;
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+}
+.models-page .mdl-feature-name {
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--white);
+  font-size: clamp(42px, 7vw, 92px);
+  line-height: 0.88;
+}
+.models-page .mdl-feature-cats {
+  margin-top: 10px;
+  color: #d0d0d0;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+.models-page .mdl-feature-link {
+  margin-top: 20px;
+  color: var(--white);
+  font-size: 9px;
+  letter-spacing: 2px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.models-page .mdl-feature-card:hover .mdl-feature-link {
+  color: var(--red);
+  transform: translateX(5px);
+}
+
+/* ── Individual model profiles ── */
+.model-profile {
+  min-height: 100vh;
+  padding: clamp(48px, 7vw, 110px) clamp(20px, 4vw, 64px);
+  background:
+    radial-gradient(circle at 78% 18%, rgba(200,16,46,0.12), transparent 32%),
+    #080808;
+}
+.model-profile-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+  gap: clamp(42px, 7vw, 110px);
+  align-items: center;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+.model-profile-image-wrap {
+  position: relative;
+  min-height: 70vh;
+  overflow: hidden;
+  background: #111;
+}
+.model-profile-image {
+  width: 100%;
+  height: 100%;
+  min-height: 70vh;
+  max-height: 1050px;
+  object-fit: cover;
+  object-position: top center;
+}
+.model-profile-shot-count {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  padding: 9px 12px;
+  background: rgba(5,5,5,0.8);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+}
+.model-profile-info { max-width: 530px; }
+.model-profile-back {
+  display: inline-block;
+  margin-bottom: clamp(42px, 7vw, 86px);
+  color: #aaa;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.model-profile-back:hover { color: var(--red); transform: translateX(-4px); }
+.model-profile-info h1,
+.model-profile-missing h1,
+.model-profile-gallery-head h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--white);
+  line-height: 0.88;
+}
+.model-profile-info h1 {
+  margin: 14px 0 22px;
+  font-size: clamp(74px, 11vw, 154px);
+}
+.model-profile-types { display: flex; flex-wrap: wrap; gap: 8px; }
+.model-profile-types span {
+  padding: 8px 12px;
+  border: 1px solid rgba(200,16,46,0.55);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.model-profile-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 38px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.model-profile-specs div { padding: 20px 12px 20px 0; }
+.model-profile-specs dt {
+  color: #777;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.model-profile-specs dd {
+  margin-top: 8px;
+  color: var(--white);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 27px;
+}
+.model-profile-bio {
+  color: #b6b6b6;
+  font-size: 16px;
+  line-height: 1.85;
+}
+.model-profile-book { display: inline-block; margin-top: 32px; text-decoration: none; }
+.model-profile-gallery { max-width: 1320px; margin: 120px auto 0; }
+.model-profile-gallery-head h2 { margin-top: 10px; font-size: clamp(48px, 8vw, 94px); }
+.model-profile-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 28px);
+  margin-top: 34px;
+}
+.model-profile-gallery-grid img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top center;
+  background: #111;
+}
+.model-profile-missing { text-align: center; padding-top: 18vh; }
+.model-profile-missing h1 { margin: 18px 0; font-size: clamp(60px, 10vw, 120px); }
+.model-profile-missing p { margin-bottom: 32px; color: #aaa; }
+
+@media (max-width: 800px) {
+  .models-page .mdl-feature-section,
+  .models-page .mdl-section { padding-left: 20px; padding-right: 20px; }
+  .models-page .mdl-feature-grid { grid-template-columns: 1fr; }
+  .models-page .mdl-feature-card { min-height: 72vh; }
+  .model-profile-hero { grid-template-columns: 1fr; }
+  .model-profile-image-wrap,
+  .model-profile-image { min-height: 62vh; }
+  .model-profile-info { max-width: none; }
+  .model-profile-back { margin-bottom: 42px; }
+  .model-profile-gallery { margin-top: 80px; }
+}
+
+@media (max-width: 520px) {
+  .model-profile-specs { grid-template-columns: 1fr; }
+  .model-profile-specs div + div { border-top: 1px solid var(--border); }
+  .model-profile-gallery-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Become-talent CTA band ── */
