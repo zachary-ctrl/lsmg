@@ -13,6 +13,7 @@ import { Route as WatchRouteImport } from './routes/watch'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as PrRouteImport } from './routes/pr'
+import { Route as ModelsSlugRouteImport } from './routes/models.$slug'
 import { Route as ModelsRouteImport } from './routes/models'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -44,6 +45,11 @@ const PressRoute = PressRouteImport.update({
 const PrRoute = PrRouteImport.update({
   id: '/pr',
   path: '/pr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsSlugRoute = ModelsSlugRouteImport.update({
+  id: '/models/$slug',
+  path: '/models/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModelsRoute = ModelsRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
+  '/models/$slug': typeof ModelsSlugRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
   '/upload': typeof UploadRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/media'
     | '/models'
+    | '/models/$slug'
     | '/pr'
     | '/press'
     | '/upload'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/media'
     | '/models'
+    | '/models/$slug'
     | '/pr'
     | '/press'
     | '/upload'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/media'
     | '/models'
+    | '/models/$slug'
     | '/pr'
     | '/press'
     | '/upload'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   MediaRoute: typeof MediaRoute
   ModelsRoute: typeof ModelsRoute
+  ModelsSlugRoute: typeof ModelsSlugRoute
   PrRoute: typeof PrRoute
   PressRoute: typeof PressRoute
   UploadRoute: typeof UploadRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/models'
       fullPath: '/models'
       preLoaderRoute: typeof ModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models/$slug': {
+      id: '/models/$slug'
+      path: '/models/$slug'
+      fullPath: '/models/$slug'
+      preLoaderRoute: typeof ModelsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/media': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   MediaRoute: MediaRoute,
   ModelsRoute: ModelsRoute,
+  ModelsSlugRoute: ModelsSlugRoute,
   PrRoute: PrRoute,
   PressRoute: PressRoute,
   UploadRoute: UploadRoute,
