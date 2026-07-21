@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FullResolutionImage } from '../components/FullResolutionImage'
+import { netlifyImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -232,42 +233,40 @@ function AboutPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a name to read the full bio, or a photo to open the original image.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a portrait to read the full bio.</p>
           </div>
-          <div className="hm-team-list">
+          <div className="hm-team-grid">
             {TEAM.map((member, idx) => (
-              <div
+              <button
+                type="button"
                 key={member.name}
                 className="hm-member scroll-reveal"
                 style={{ transitionDelay: `${idx * 0.06}s` }}
+                onClick={() => openBio(member)}
+                aria-label={`View bio for ${member.name}, ${member.role}`}
               >
-                <span className="hm-member-photo-cell">
-                  {member.image ? (
-                    <FullResolutionImage
-                      src={member.image}
-                      alt={member.name}
-                      className="hm-member-photo"
-                      linkClassName="hm-member-photo-wrap"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span className="hm-member-photo-wrap">
-                      <span className="hm-member-initial">{member.name.charAt(0)}</span>
-                    </span>
-                  )}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => openBio(member)}
-                  className="hm-member-text"
-                  aria-label={`View bio for ${member.name}, ${member.role}`}
-                >
+                {member.image ? (
+                  <img
+                    src={netlifyImage(member.image, 720, 960)}
+                    alt={member.name}
+                    className="hm-member-photo"
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null
+                      event.currentTarget.src = member.image
+                    }}
+                  />
+                ) : (
+                  <span className="hm-member-placeholder" aria-hidden="true">
+                    {member.name.charAt(0)}
+                  </span>
+                )}
+                <span className="hm-member-overlay">
                   <span className="hm-member-name">{member.name}</span>
                   <span className="hm-member-role">{member.role}</span>
-                  <span className="hm-member-desc">{member.desc}</span>
                   <span className="hm-member-cta">View Bio &rarr;</span>
-                </button>
-              </div>
+                </span>
+              </button>
             ))}
           </div>
         </div>

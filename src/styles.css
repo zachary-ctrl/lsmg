@@ -227,97 +227,81 @@ img {
   box-shadow: 0 0 24px 2px rgba(200,16,46,.15);
 }
 
-/* ── Leadership team — vertical stacked rows with circular portraits ──
-   Each member is a full-width row (photo beside name/title/bio) that opens
-   the fixed bio modal on click. Same on desktop and mobile. */
-.hm-team-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: 900px;
+/* ── Leadership team — portrait roster matching the Models page ── */
+.hm-team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 22px);
+  align-items: start;
 }
+@media (min-width: 768px) { .hm-team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1280px) { .hm-team-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .hm-member {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: clamp(18px, 3vw, 32px);
-  width: 100%;
-  margin: 0;
-  padding: clamp(20px, 3vw, 30px) 4px;
-  border: none;
-  border-top: 1px solid #1a1a1a;
-  appearance: none;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  transition: background 0.35s ease;
-}
-.hm-member:last-child { border-bottom: 1px solid #1a1a1a; }
-.hm-member:hover { background: rgba(200, 16, 46, 0.04); }
-.hm-member-photo-cell { flex: 0 0 auto; }
-
-/* Circular / oval portrait — small, does not dominate the row */
-.hm-member-photo-wrap {
-  position: relative;
   display: block;
-  flex: 0 0 auto;
-  width: clamp(76px, 11vw, 108px);
-  aspect-ratio: 4 / 5;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(135deg, #160006, #080808);
-  border: 2px solid #232323;
-  transition: border-color 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hm-member:hover .hm-member-photo-wrap,
-.hm-member-photo-wrap:focus-visible {
-  border-color: var(--red);
-  transform: scale(1.04);
-}
-.hm-member-photo-wrap:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
-.hm-member-photo {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  filter: grayscale(100%) contrast(1.05) brightness(0.9);
-  transition: filter 0.5s ease;
-}
-.hm-member:hover .hm-member-photo,
-.hm-member-photo-wrap:focus-visible .hm-member-photo { filter: grayscale(0%) brightness(1); }
-.hm-member-initial {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 40px;
-  color: var(--red);
-  opacity: 0.6;
-}
-
-.hm-member-text {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-  min-width: 0;
   margin: 0;
   padding: 0;
-  border: 0;
-  background: transparent;
+  border: none;
+  appearance: none;
+  overflow: hidden;
+  background: #0c0c0c;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
+  animation: mdlCardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
-.hm-member-text:focus-visible { outline: 2px solid var(--red); outline-offset: 6px; }
+.hm-member:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 5px;
+}
+.hm-member-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(45%) contrast(1.05) brightness(0.86);
+  transition: transform 0.85s cubic-bezier(0.16,1,0.3,1), filter 0.6s ease;
+}
+.hm-member:hover .hm-member-photo,
+.hm-member:focus-visible .hm-member-photo {
+  transform: scale(1.07);
+  filter: grayscale(0%) contrast(1.08) brightness(1);
+}
+.hm-member-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(135deg, #160006, #080808);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 12vw, 160px);
+  color: var(--red);
+  opacity: 0.6;
+}
+.hm-member-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: clamp(16px, 1.8vw, 24px);
+  background: linear-gradient(to top, rgba(6,6,6,0.88) 0%, rgba(6,6,6,0.18) 45%, transparent 70%);
+  transition: background 0.5s ease;
+}
+.hm-member:hover .hm-member-overlay,
+.hm-member:focus-visible .hm-member-overlay {
+  background: linear-gradient(to top, rgba(6,6,6,0.94) 0%, rgba(120,8,20,0.3) 58%, transparent 88%);
+}
 .hm-member-name {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(26px, 3.4vw, 38px);
-  line-height: 0.98;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 0.94;
   color: var(--white);
   letter-spacing: 0.5px;
 }
@@ -328,31 +312,26 @@ img {
   text-transform: uppercase;
   color: var(--red);
 }
-.hm-member-desc {
-  font-size: 15px;
-  color: #9c9c9c;
-  line-height: 1.65;
-  max-width: 60ch;
-}
 .hm-member-cta {
   font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 3px;
+  font-size: 8px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--mid);
-  margin-top: 4px;
-  transition: color 0.3s ease;
+  color: var(--white);
+  margin-top: 5px;
+  opacity: 0.7;
+  transition: color 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
 }
 .hm-member:hover .hm-member-cta,
-.hm-member-text:focus-visible .hm-member-cta { color: var(--red); }
-
-@media (max-width: 560px) {
-  .hm-member-desc { display: none; }
+.hm-member:focus-visible .hm-member-cta {
+  color: var(--red);
+  opacity: 1;
+  transform: translateX(5px);
 }
 @media (prefers-reduced-motion: reduce) {
   .hm-member,
-  .hm-member-photo-wrap,
   .hm-member-photo,
+  .hm-member-overlay,
   .hm-member-cta { transition: none; }
 }
 
