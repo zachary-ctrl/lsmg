@@ -14,6 +14,47 @@
   path = "/admin/*"
   function = "admin-auth"
 
+# AI-friendly Markdown responses for public pages with meaningful written content.
+[[edge_functions]]
+  path = "/"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/about"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/contact"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/models"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/media"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/watch"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/culture-ledger"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/culture-ledger/*"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/tribeca/schedule"
+  function = "markdown"
+
+[[edge_functions]]
+  path = "/tribeca/films/*"
+  function = "markdown"
+
 [[redirects]]
   from = "/admin"
   to   = "/admin/index.html"
