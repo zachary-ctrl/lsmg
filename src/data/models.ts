@@ -71,6 +71,22 @@ export const MODELS: Model[] = [
     bio: 'Saanvi represents Orlando with poised runway lines and a striking beauty presence. She brings composure and precision to catwalk, cosmetics, and close-up work while keeping each frame fresh and expressive.',
     featured: true,
   },
+  {
+    slug: 'nicole',
+    name: 'Nicole',
+    city: 'TBD',
+    types: ['Editorial'],
+    specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
+    imagePaths: [
+      '/models/nicole-1.jpg',
+      '/models/nicole-2.jpg',
+      '/models/nicole-3.jpg',
+      '/models/nicole-4.jpg',
+      '/models/nicole-5.jpg',
+    ],
+    bio: 'Profile coming soon. Nicole joins the LSMG roster with a growing portfolio; her full bio, city, and specialties will be added shortly.',
+    featured: true,
+  },
 ]
 
 export function getModelBySlug(slug: string) {
