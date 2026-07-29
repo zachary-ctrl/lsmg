@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MODELS } from '../data/models'
 import { netlifyImage } from '../lib/netlify-image'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 
 export const Route = createFileRoute('/models')({
   component: ModelsPage,
@@ -25,6 +26,7 @@ export const Route = createFileRoute('/models')({
 
 const FILTERS = ['All', ...Array.from(new Set(MODELS.flatMap((model) => model.types)))]
 const FEATURED_MODELS = MODELS.filter((model) => model.featured)
+const TOTAL_SHOTS = MODELS.reduce((count, model) => count + model.imagePaths.length, 0)
 
 function StaggerText({ text, delay = 0.2 }: { text: string; delay?: number }) {
   const words = text.split(' ')
@@ -116,6 +118,17 @@ function ModelsPage() {
     () => (filter === 'All' ? MODELS : MODELS.filter((model) => model.types.includes(filter))),
     [filter],
   )
+  const galleryShots = useMemo(
+    () =>
+      filtered.flatMap((model) =>
+        model.imagePaths.map((imagePath, shotIndex) => ({
+          imagePath,
+          shotIndex,
+          model,
+        })),
+      ),
+    [filtered],
+  )
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -180,6 +193,7 @@ function ModelsPage() {
           </div>
           <div className="mdl-hero-meta" style={{ animation: 'fadeUp .7s ease .85s both' }}>
             <span><strong>{MODELS.length}</strong> Talent</span>
+            <span><strong>{TOTAL_SHOTS}</strong> Shots</span>
             <span><strong>4</strong> Cities</span>
             <span><strong>{FILTERS.length - 1}</strong> Specialties</span>
           </div>
@@ -229,6 +243,46 @@ function ModelsPage() {
         <div className="mdl-grid" key={filter}>
           {filtered.map((model, index) => (
             <ModelCard key={model.slug} model={model} index={index} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mdl-section mdl-portfolio-section" id="portfolio" aria-label="Full talent portfolio gallery">
+        <div className="mdl-section-head scroll-reveal">
+          <span className="mdl-eyebrow">The Full Library</span>
+          <h2 className="mdl-section-title">Every <span className="mdl-accent">Shot</span></h2>
+          <p className="mdl-section-deck">
+            All {TOTAL_SHOTS} portfolio images across the roster, in one place. Click any frame for
+            the full-resolution file, or open the model’s profile for specs and booking.
+          </p>
+        </div>
+
+        <div className="mdl-portfolio-grid" key={`portfolio-${filter}`}>
+          {galleryShots.map(({ imagePath, shotIndex, model }) => (
+            <figure className="mdl-portfolio-item" key={imagePath}>
+              <FullResolutionImage
+                src={netlifyImage(imagePath, 640, 854)}
+                fullResolutionSrc={imagePath}
+                alt={`${model.name} — LSMG portfolio image ${shotIndex + 1}`}
+                loading="lazy"
+                linkClassName="mdl-portfolio-link"
+              />
+              <figcaption className="mdl-portfolio-caption">
+                <Link
+                  to="/models/$slug"
+                  params={{ slug: model.slug }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mdl-portfolio-name"
+                >
+                  {model.name}
+                </Link>
+                <span className="mdl-portfolio-meta">
+                  {model.city} · {shotIndex + 1}/{model.imagePaths.length}
+                  {model.videoPath ? ' · Reel' : ''}
+                </span>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </section>
