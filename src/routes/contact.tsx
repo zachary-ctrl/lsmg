@@ -88,7 +88,7 @@ function ContactPage() {
               <form name="contact" method="POST" action="/__forms.html" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleFormSubmit(setStatus)} style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: '4px solid var(--red)', padding: 48 }}>
                 <input type="hidden" name="form-name" value="contact" />
                 <input type="hidden" name="recipient-email" value="info@lastshotmediagroup.com" />
-                <p style={{ display: 'none' }}><label>Don't fill this out: <input name="bot-field" /></label></p>
+                <div className="sr-only" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabIndex={-1} autoComplete="off" /></label></div>
                 <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 40, marginBottom: 32 }}>Send A Message</h3>
                 {status === 'success' && <p style={{ color: 'var(--red)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 2, marginBottom: 24 }}>MESSAGE SENT SUCCESSFULLY.</p>}
                 {status === 'error' && <p style={{ color: '#ff4444', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 2, marginBottom: 24 }}>SOMETHING WENT WRONG. PLEASE TRY AGAIN.</p>}

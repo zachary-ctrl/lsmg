@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { getModelBySlug } from '../data/models'
 import { netlifyImage } from '../lib/netlify-image'
+import { FullResolutionImage } from '../components/FullResolutionImage'
 
 export const Route = createFileRoute('/models_/$slug')({
   head: ({ params }) => {
@@ -52,10 +53,12 @@ function ModelProfilePage() {
     <article className="models-page model-profile">
       <div className="model-profile-hero">
         <div className="model-profile-image-wrap">
-          <img
+          <FullResolutionImage
             src={netlifyImage(model.imagePaths[0], 1100, 1500)}
+            fullResolutionSrc={model.imagePaths[0]}
             alt={`${model.name}, ${model.types.join(' and ')} model represented by LSMG`}
             className="model-profile-image"
+            linkClassName="model-profile-image-link"
           />
           <span className="model-profile-shot-count">{model.imagePaths.length} shots</span>
         </div>
@@ -94,11 +97,13 @@ function ModelProfilePage() {
           </div>
           <div className="model-profile-gallery-grid">
             {model.imagePaths.slice(1).map((imagePath, index) => (
-              <img
+              <FullResolutionImage
                 key={imagePath}
                 src={netlifyImage(imagePath, 720, 960)}
+                fullResolutionSrc={imagePath}
                 alt={`${model.name} portfolio image ${index + 2}`}
                 loading="lazy"
+                linkClassName="model-profile-gallery-link"
               />
             ))}
           </div>

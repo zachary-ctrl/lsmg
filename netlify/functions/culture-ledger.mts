@@ -1,8 +1,7 @@
 import type { Config } from '@netlify/functions'
 import { db } from '../../db/index.js'
 import { articles, comments } from '../../db/schema.js'
-import { eq, desc, sql } from 'drizzle-orm'
-import { getUser } from '@netlify/identity'
+import { eq, desc } from 'drizzle-orm'
 
 const SEED_ARTICLES = [
   {
@@ -169,75 +168,6 @@ export default async (req: Request) => {
         .values({ articleSlug: slug, name, text })
         .returning()
       return Response.json({ comment })
-    }
-
-    if (action === 'create-article') {
-      const { title, excerpt, body: articleBody, category, author, imageUrl, source, sourceUrl, tags, featured } = body
-      if (!title || !articleBody) {
-        return Response.json({ error: 'Title and body are required' }, { status: 400 })
-      }
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-
-      const [article] = await db
-        .insert(articles)
-        .values({
-          slug,
-          title,
-          excerpt: excerpt || articleBody.substring(0, 200) + '...',
-          body: articleBody,
-          category: category || 'Culture',
-          author: author || 'LSMG Editorial',
-          imageUrl: imageUrl || null,
-          source: source || null,
-          sourceUrl: sourceUrl || null,
-          tags: tags || [],
-          featured: featured || false,
-        })
-        .returning()
-      return Response.json({ article })
-    }
-
-    if (action === 'update-article') {
-      const { slug, title, excerpt, body: articleBody, category, author, imageUrl, source, sourceUrl, tags, featured } = body
-      if (!slug) {
-        return Response.json({ error: 'Slug is required' }, { status: 400 })
-      }
-      const [existing] = await db.select().from(articles).where(eq(articles.slug, slug)).limit(1)
-      if (!existing) {
-        return Response.json({ error: 'Article not found' }, { status: 404 })
-      }
-
-      const updates: Record<string, unknown> = { updatedAt: new Date() }
-      if (title !== undefined) updates.title = title
-      if (excerpt !== undefined) updates.excerpt = excerpt
-      if (articleBody !== undefined) updates.body = articleBody
-      if (category !== undefined) updates.category = category
-      if (author !== undefined) updates.author = author
-      if (imageUrl !== undefined) updates.imageUrl = imageUrl || null
-      if (source !== undefined) updates.source = source || null
-      if (sourceUrl !== undefined) updates.sourceUrl = sourceUrl || null
-      if (tags !== undefined) updates.tags = tags
-      if (featured !== undefined) updates.featured = featured
-
-      const [article] = await db
-        .update(articles)
-        .set(updates)
-        .where(eq(articles.slug, slug))
-        .returning()
-      return Response.json({ article })
-    }
-
-    if (action === 'delete-article') {
-      const { slug } = body
-      if (!slug) {
-        return Response.json({ error: 'Slug is required' }, { status: 400 })
-      }
-      await db.delete(comments).where(eq(comments.articleSlug, slug))
-      await db.delete(articles).where(eq(articles.slug, slug))
-      return Response.json({ success: true })
     }
 
     return Response.json({ error: 'Unknown action' }, { status: 400 })

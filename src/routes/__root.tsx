@@ -7,8 +7,6 @@ import {
   useMatches,
 } from '@tanstack/react-router'
 import { useState, useEffect, useRef } from 'react'
-import { IdentityProvider } from '../lib/identity-context'
-import { CallbackHandler } from '../components/CallbackHandler'
 import '../styles.css'
 
 export const Route = createRootRoute({
@@ -68,13 +66,7 @@ export const Route = createRootRoute({
 })
 
 function RootWrap() {
-  return (
-    <IdentityProvider>
-      <CallbackHandler>
-        <RootComponent />
-      </CallbackHandler>
-    </IdentityProvider>
-  )
+  return <RootComponent />
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -118,7 +110,6 @@ function PageLoader() {
         <span style={{ color: 'var(--white)' }}>LS</span>
         <span style={{ color: 'var(--red)' }}>MG</span>
       </div>
-      <div className="loader-sub">Dallas, Orlando, New York and Atlanta</div>
     </div>
   )
 }
@@ -181,10 +172,11 @@ const navLinks = [
   { to: '/' as const, label: 'Home' },
   { to: '/about' as const, label: 'About' },
   { to: '/models' as const, label: 'Models' },
-  { to: '/pr' as const, label: 'PR & Booking' },
+  { to: '/pr' as const, label: 'PR' },
   { to: '/media' as const, label: 'Media' },
   { to: '/watch' as const, label: 'Watch' },
   { to: '/culture-ledger' as const, label: 'LEDGERA' },
+  { to: '/contact' as const, label: 'Contact' },
 ]
 
 function Header() {
@@ -228,7 +220,6 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
-          <Link to="/contact" className="lsmg-btn lsmg-btn-solid">CONTACT</Link>
         </nav>
 
         <button
@@ -257,14 +248,6 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
-          <Link
-            to="/contact"
-            tabIndex={mobileOpen ? 0 : -1}
-            onClick={() => setMobileOpen(false)}
-            className="lsmg-mobile-link lsmg-mobile-link--contact"
-          >
-            CONTACT
-          </Link>
         </div>
       </nav>
     </header>

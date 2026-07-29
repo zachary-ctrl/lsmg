@@ -29,6 +29,9 @@ function WatchPage() {
             </h2>
             <div className="w-[60px] h-[3px] my-5" style={{ background: 'var(--red)' }} />
             <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, maxWidth: 700 }}>Tune into The Last Shot Podcast — raw conversations about music, culture, media, and the business behind it all. Available on Spotify, Apple Podcasts, and YouTube.</p>
+            <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: 'the-last-shot-podcast-listening-guide' }} style={{ display: 'inline-block', marginTop: 18, fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: 'var(--red)', textTransform: 'uppercase' }}>
+              Read the LEDGERA podcast guide &rarr;
+            </Link>
           </div>
 
           {/* Podcast Video Embeds */}
@@ -118,7 +121,9 @@ function WatchPage() {
 
           {/* Podcast Episodes - Spotify + Apple */}
           <div className="mt-16">
-            <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, marginBottom: 20 }}>Recent Episodes</h3>
+            <h3 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, marginBottom: 20 }}>
+              <Link to="/culture-ledger/$articleSlug" params={{ articleSlug: 'the-last-shot-podcast-listening-guide' }}>Recent Episodes</Link>
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', padding: 16, borderTop: '4px solid #1DB954' }}>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 3, color: '#1DB954', marginBottom: 8 }}>SPOTIFY</p>
