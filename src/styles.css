@@ -1851,7 +1851,7 @@ img {
 }
 .models-page .mdl-feature-card {
   position: relative;
-  min-height: clamp(360px, 53vw, 700px);
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: #0c0c0c;
   color: inherit;
@@ -1861,7 +1861,7 @@ img {
 .models-page .mdl-feature-img {
   width: 100%;
   height: 100%;
-  min-height: inherit;
+  display: block;
   object-fit: cover;
   object-position: top center;
   filter: grayscale(30%) contrast(1.04) brightness(0.82);
@@ -1946,6 +1946,11 @@ img {
   object-fit: cover;
   object-position: top center;
 }
+.model-profile-image-link {
+  display: block;
+  height: 100%;
+  cursor: zoom-in;
+}
 .model-profile-shot-count {
   position: absolute;
   right: 18px;
@@ -2028,8 +2033,16 @@ img {
   gap: clamp(12px, 2vw, 28px);
   margin-top: 34px;
 }
+.model-profile-gallery-link {
+  display: block;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #111;
+  cursor: zoom-in;
+}
 .model-profile-gallery-grid img {
   width: 100%;
+  height: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   object-position: top center;
@@ -2457,7 +2470,6 @@ img {
   transition: color 0.3s ease, padding-left 0.3s ease;
 }
 .lsmg-mobile-link:hover { color: var(--white); padding-left: 10px; }
-.lsmg-mobile-link--login { color: var(--white); }
 .lsmg-mobile-link--contact { color: var(--red); border-bottom: none; }
 .lsmg-mobile-link--contact:hover { color: var(--white); }
 

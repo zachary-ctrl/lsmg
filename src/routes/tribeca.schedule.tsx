@@ -194,9 +194,7 @@ function TribecaSchedule() {
           </div>
           <div>
             <h1 className="tc-masthead-title">
-              The LSMG
-              <br />
-              <em>Ledger</em>
+              LEDGE<em>RA</em>
             </h1>
           </div>
           <div className="tc-masthead-meta tc-right">
@@ -251,7 +249,7 @@ function TribecaSchedule() {
           <div className="tc-footer-top">
             <div className="tc-footer-brand">
               <h2>
-                The LSMG <em>Ledger</em>
+                LEDGE<em>RA</em>
               </h2>
               <p>
                 Independent press. Dallas-based, internationally credentialed.

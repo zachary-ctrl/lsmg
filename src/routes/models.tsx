@@ -87,7 +87,7 @@ function ModelCard({ model, index = 0, featured = false }: {
       aria-label={`View ${model.name}'s portfolio in a new tab`}
     >
       <img
-        src={netlifyImage(model.imagePaths[0], featured ? 900 : 720, featured ? 1080 : 960)}
+        src={netlifyImage(model.imagePaths[0], 720, 960)}
         alt={`${model.name} — LSMG ${model.types.join(' and ')} model`}
         className={featured ? 'mdl-feature-img' : 'mdl-card-img'}
         loading={featured ? 'eager' : 'lazy'}

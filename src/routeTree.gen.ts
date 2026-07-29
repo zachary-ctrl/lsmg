@@ -10,14 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WatchRouteImport } from './routes/watch'
-import { Route as UploadRouteImport } from './routes/upload'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as PrRouteImport } from './routes/pr'
 import { Route as ModelsRouteImport } from './routes/models'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
-import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TribecaIndexRouteImport } from './routes/tribeca.index'
@@ -30,11 +28,6 @@ import { Route as TribecaFilmsFilmSlugRouteImport } from './routes/tribeca.films
 const WatchRoute = WatchRouteImport.update({
   id: '/watch',
   path: '/watch',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UploadRoute = UploadRouteImport.update({
-  id: '/upload',
-  path: '/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PressRoute = PressRouteImport.update({
@@ -65,11 +58,6 @@ const ContactRoute = ContactRouteImport.update({
 const BookingRoute = BookingRouteImport.update({
   id: '/booking',
   path: '/booking',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin-login',
-  path: '/admin-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -117,14 +105,12 @@ const TribecaFilmsFilmSlugRoute = TribecaFilmsFilmSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
-  '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
   '/models/$slug': typeof ModelsSlugRoute
@@ -136,14 +122,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
-  '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
   '/models/$slug': typeof ModelsSlugRoute
@@ -156,14 +140,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin-login': typeof AdminLoginRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
   '/models': typeof ModelsRoute
   '/pr': typeof PrRoute
   '/press': typeof PressRoute
-  '/upload': typeof UploadRoute
   '/watch': typeof WatchRoute
   '/culture-ledger/$articleSlug': typeof CultureLedgerArticleSlugRoute
   '/models_/$slug': typeof ModelsSlugRoute
@@ -177,14 +159,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/admin-login'
     | '/booking'
     | '/contact'
     | '/media'
     | '/models'
     | '/pr'
     | '/press'
-    | '/upload'
     | '/watch'
     | '/culture-ledger/$articleSlug'
     | '/models/$slug'
@@ -196,14 +176,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/admin-login'
     | '/booking'
     | '/contact'
     | '/media'
     | '/models'
     | '/pr'
     | '/press'
-    | '/upload'
     | '/watch'
     | '/culture-ledger/$articleSlug'
     | '/models/$slug'
@@ -215,14 +193,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/admin-login'
     | '/booking'
     | '/contact'
     | '/media'
     | '/models'
     | '/pr'
     | '/press'
-    | '/upload'
     | '/watch'
     | '/culture-ledger/$articleSlug'
     | '/models_/$slug'
@@ -235,14 +211,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminLoginRoute: typeof AdminLoginRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
   MediaRoute: typeof MediaRoute
   ModelsRoute: typeof ModelsRoute
   PrRoute: typeof PrRoute
   PressRoute: typeof PressRoute
-  UploadRoute: typeof UploadRoute
   WatchRoute: typeof WatchRoute
   CultureLedgerArticleSlugRoute: typeof CultureLedgerArticleSlugRoute
   ModelsSlugRoute: typeof ModelsSlugRoute
@@ -259,13 +233,6 @@ declare module '@tanstack/react-router' {
       path: '/watch'
       fullPath: '/watch'
       preLoaderRoute: typeof WatchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/upload': {
-      id: '/upload'
-      path: '/upload'
-      fullPath: '/upload'
-      preLoaderRoute: typeof UploadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/press': {
@@ -308,13 +275,6 @@ declare module '@tanstack/react-router' {
       path: '/booking'
       fullPath: '/booking'
       preLoaderRoute: typeof BookingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin-login': {
-      id: '/admin-login'
-      path: '/admin-login'
-      fullPath: '/admin-login'
-      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -379,14 +339,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminLoginRoute: AdminLoginRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
   MediaRoute: MediaRoute,
   ModelsRoute: ModelsRoute,
   PrRoute: PrRoute,
   PressRoute: PressRoute,
-  UploadRoute: UploadRoute,
   WatchRoute: WatchRoute,
   CultureLedgerArticleSlugRoute: CultureLedgerArticleSlugRoute,
   ModelsSlugRoute: ModelsSlugRoute,
