@@ -2038,69 +2038,6 @@ img {
 .model-profile-missing { text-align: center; padding-top: 18vh; }
 .model-profile-missing h1 { margin: 18px 0; font-size: clamp(60px, 10vw, 120px); }
 .model-profile-missing p { margin-bottom: 32px; color: #aaa; }
-.model-profile-reel { max-width: 1320px; margin: 120px auto 0; }
-.model-profile-reel .model-profile-gallery-head h2 { margin-top: 10px; font-size: clamp(48px, 8vw, 94px); }
-.model-profile-reel-frame {
-  margin-top: 34px;
-  border: 1px solid var(--border);
-  background: #0a0a0a;
-  overflow: hidden;
-}
-.model-profile-reel-video {
-  display: block;
-  width: 100%;
-  max-height: 82vh;
-  background: #000;
-  object-fit: contain;
-}
-
-/* Full portfolio library — every roster image on one page. */
-.models-page .mdl-portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: clamp(10px, 1.4vw, 20px);
-  margin-top: 38px;
-}
-.models-page .mdl-portfolio-item { margin: 0; }
-.models-page .mdl-portfolio-link {
-  display: block;
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: #111;
-  cursor: zoom-in;
-}
-.models-page .mdl-portfolio-link img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  filter: grayscale(22%) contrast(1.03) brightness(0.9);
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
-}
-.models-page .mdl-portfolio-link:hover img { transform: scale(1.05); filter: none; }
-.models-page .mdl-portfolio-caption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 10px 2px 0;
-}
-.models-page .mdl-portfolio-name {
-  color: var(--white);
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 19px;
-  letter-spacing: 0.5px;
-  text-decoration: none;
-  transition: color 0.25s ease;
-}
-.models-page .mdl-portfolio-name:hover { color: var(--red); }
-.models-page .mdl-portfolio-meta {
-  color: #7d7d7d;
-  font-family: 'DM Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
 
 @media (max-width: 800px) {
   .models-page .mdl-feature-section,
@@ -2113,14 +2050,12 @@ img {
   .model-profile-info { max-width: none; }
   .model-profile-back { margin-bottom: 42px; }
   .model-profile-gallery { margin-top: 80px; }
-  .model-profile-reel { margin-top: 80px; }
 }
 
 @media (max-width: 520px) {
   .model-profile-specs { grid-template-columns: 1fr; }
   .model-profile-specs div + div { border-top: 1px solid var(--border); }
   .model-profile-gallery-grid { grid-template-columns: 1fr; }
-  .models-page .mdl-portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ── Become-talent CTA band ── */
