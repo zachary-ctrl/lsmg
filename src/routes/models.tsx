@@ -167,7 +167,7 @@ function ModelsPage() {
         <div
           className="mdl-hero-bg"
           ref={parallaxRef}
-          style={{ backgroundImage: `url(${netlifyImage('/models/hero-atmos.jpg', 1600, undefined, 60)})` }}
+          style={{ backgroundImage: `url(${netlifyImage('/models/hero-jada.jpg', 1600, undefined, 60)})` }}
         />
         <div className="mdl-hero-scrim" />
         <div className="mdl-hero-glow" ref={glowRef} aria-hidden="true" />
