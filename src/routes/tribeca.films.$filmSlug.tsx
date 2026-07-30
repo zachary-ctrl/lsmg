@@ -66,7 +66,9 @@ function TribecaFilmDetail() {
           </div>
           <div>
             <h1 className="tc-masthead-title">
-              LEDGE<em>RA</em>
+              The LSMG
+              <br />
+              <em>Ledger</em>
             </h1>
           </div>
           <div className="tc-masthead-meta tc-right">
@@ -99,7 +101,6 @@ function TribecaFilmDetail() {
         <div className="tc-article-section">{film.section}</div>
         <h1 className="tc-article-title">{film.title}</h1>
         <p className="tc-article-deck">{film.deck}</p>
-        <p className="ledgera-credit">A LEDGERA Dispatch</p>
         <div className="tc-article-byline">
           {film.byline.map((b, i) => (
             <div key={i}>
@@ -150,7 +151,7 @@ function TribecaFilmDetail() {
           <div className="tc-footer-top">
             <div className="tc-footer-brand">
               <h2>
-                LEDGE<em>RA</em>
+                The LSMG <em>Ledger</em>
               </h2>
               <p>
                 Independent press. Dallas-based, internationally credentialed.

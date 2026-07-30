@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LSMG Admin Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #080808; color: #F5F2ED; font-family: 'DM Mono', monospace; min-height: 100vh; }
+
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 60px;
+      background: #0a0a0a; border-bottom: 1px solid #1a1a1a;
+    }
+    .admin-header .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; }
+    .admin-header .logo .ls { color: #F5F2ED; }
+    .admin-header .logo .mg { color: #C8102E; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .header-email { font-size: 11px; color: #8f8f8f; letter-spacing: 1px; }
+    .header-btn {
+      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 2px;
+      padding: 8px 16px; cursor: pointer; text-decoration: none;
+      background: transparent; color: #8f8f8f; border: 1px solid #222;
+      transition: all 0.3s; text-transform: uppercase;
+    }
+    .header-btn:hover { color: #F5F2ED; border-color: #555; }
+    .header-btn.signout { color: #C8102E; border-color: rgba(200,16,46,.3); }
+    .header-btn.signout:hover { background: rgba(200,16,46,.1); }
+
+    .tabs {
+      display: flex; gap: 0; border-bottom: 1px solid #1a1a1a;
+      padding: 0 24px; background: #0a0a0a;
+    }
+    .tab-btn {
+      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 3px;
+      padding: 16px 24px; background: transparent; color: #8f8f8f;
+      border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; text-transform: uppercase; transition: all 0.3s;
+    }
+    .tab-btn.active { color: #F5F2ED; border-bottom-color: #C8102E; }
+    .tab-btn:hover { color: #F5F2ED; }
+
+    .tab-content { display: none; padding: 32px 24px; max-width: 1200px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .stat-card {
+      background: #0a0a0a; border: 1px solid #1a1a1a; padding: 24px;
+    }
+    .stat-label { font-size: 10px; letter-spacing: 3px; color: #8f8f8f; text-transform: uppercase; margin-bottom: 8px; }
+    .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #F5F2ED; }
+    .stat-value.live { color: #4ade80; }
+
+    .upload-zone {
+      border: 2px dashed #222; padding: 60px 24px; text-align: center;
+      cursor: pointer; transition: border-color 0.3s; margin-bottom: 24px;
+    }
+    .upload-zone:hover, .upload-zone.dragover { border-color: #C8102E; }
+    .upload-zone-text { font-size: 12px; color: #8f8f8f; letter-spacing: 2px; text-transform: uppercase; }
+    .upload-zone-sub { font-size: 10px; color: #555; margin-top: 8px; }
+    .staged-files { list-style: none; }
+    .staged-files li {
+      display: flex; justify-content: space-between; padding: 12px 16px;
+      border-bottom: 1px solid #111; font-size: 12px; color: #b3b3b3;
+    }
+    .staged-files li .size { color: #555; }
+
+    .press-form { max-width: 600px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 10px; letter-spacing: 3px;
+      color: #8f8f8f; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 12px 14px; background: #111;
+      border: 1px solid #222; color: #F5F2ED;
+      font-family: 'DM Mono', monospace; font-size: 13px;
+      outline: none; transition: border-color 0.3s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #C8102E; }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select { appearance: none; }
+    .btn-red {
+      font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 3px;
+      padding: 14px 28px; background: #C8102E; color: #F5F2ED;
+      border: none; cursor: pointer; text-transform: uppercase;
+      transition: opacity 0.3s;
+    }
+    .btn-red:hover { opacity: 0.85; }
+    .press-list { margin-top: 32px; }
+    .press-item {
+      padding: 16px; border-bottom: 1px solid #111;
+    }
+    .press-item h4 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; margin-bottom: 4px; }
+    .press-item .meta { font-size: 10px; color: #555; letter-spacing: 2px; }
+
+    .page-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .page-card {
+      background: #0a0a0a; border: 1px solid #1a1a1a; padding: 28px 20px;
+      text-align: center; cursor: pointer; transition: border-color 0.3s;
+    }
+    .page-card:hover { border-color: #C8102E; }
+    .page-card h4 { font-family: 'Bebas Neue', sans-serif; font-size: 24px; margin-bottom: 4px; }
+    .page-card span { font-size: 10px; color: #555; letter-spacing: 2px; }
+
+    .page-edit-msg {
+      display: none; padding: 24px; background: #0a0a0a;
+      border: 1px solid #1a1a1a; margin-top: 16px; font-size: 13px; color: #b3b3b3;
+    }
+    .page-edit-msg a { color: #C8102E; }
+    .page-edit-msg.visible { display: block; }
+
+    .link-btn {
+      display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px;
+      letter-spacing: 3px; padding: 14px 28px; background: transparent;
+      color: #C8102E; border: 1px solid rgba(200,16,46,.3);
+      text-decoration: none; text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .link-btn:hover { background: rgba(200,16,46,.1); }
+  </style>
+</head>
+<body>
+
+  <div class="admin-header">
+    <div class="logo"><span class="ls">LS</span><span class="mg">MG</span></div>
+    <div class="header-right">
+      <span class="header-email" id="user-email"></span>
+      <button class="header-btn signout" onclick="signOut()">Sign Out</button>
+      <a href="/" class="header-btn">View Site</a>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-btn" data-tab="upload">Upload Media</button>
+    <button class="tab-btn" data-tab="press">Press &amp; News</button>
+    <button class="tab-btn" data-tab="pages">Edit Pages</button>
+    <button class="tab-btn" data-tab="forms">Form Submissions</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="tab-content active" id="tab-dashboard">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Site Status</div>
+        <div class="stat-value live">Live</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Form Submissions</div>
+        <div class="stat-value">&mdash;</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Site Pages</div>
+        <div class="stat-value">10</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Plan</div>
+        <div class="stat-value">Pro</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Media -->
+  <div class="tab-content" id="tab-upload">
+    <div class="upload-zone" id="upload-zone">
+      <div class="upload-zone-text">Drag &amp; drop files here or click to browse</div>
+      <div class="upload-zone-sub">Accepts image, video, and PDF files</div>
+      <input type="file" id="file-input" multiple accept="image/*,video/*,.pdf" style="display:none">
+    </div>
+    <ul class="staged-files" id="staged-files"></ul>
+  </div>
+
+  <!-- Press & News -->
+  <div class="tab-content" id="tab-press">
+    <div class="press-form">
+      <div class="form-group">
+        <label>Headline</label>
+        <input type="text" class="form-input" id="press-headline" placeholder="Press release headline">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select class="form-select" id="press-category">
+          <option value="Music">Music</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Business">Business</option>
+          <option value="Media">Media</option>
+          <option value="PR">PR</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Body</label>
+        <textarea class="form-textarea" id="press-body" placeholder="Write the press release body..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Publish Date</label>
+        <input type="date" class="form-input" id="press-date">
+      </div>
+      <div class="form-group">
+        <label>Author</label>
+        <input type="text" class="form-input" id="press-author" placeholder="Author name">
+      </div>
+      <button class="btn-red" onclick="savePress()">Save Press Release</button>
+    </div>
+    <div class="press-list" id="press-list"></div>
+  </div>
+
+  <!-- Edit Pages -->
+  <div class="tab-content" id="tab-pages">
+    <div class="page-grid" id="page-grid"></div>
+    <div class="page-edit-msg" id="page-edit-msg"></div>
+  </div>
+
+  <!-- Form Submissions -->
+  <div class="tab-content" id="tab-forms">
+    <p style="color:#8f8f8f; margin-bottom:20px; font-size:13px;">View and manage form submissions on the Netlify dashboard.</p>
+    <a href="https://app.netlify.com/projects/lsmg/forms" target="_blank" rel="noopener noreferrer" class="link-btn">Open Form Submissions</a>
+  </div>
+
+  <script>
+    // Auth check
+    (function() {
+      const cookies = document.cookie.split(';').reduce((acc, c) => {
+        const [k, v] = c.trim().split('=');
+        acc[k] = v;
+        return acc;
+      }, {});
+      const token = cookies['lsmg_admin_token'];
+      if (!token) { window.location.href = '/admin/login.html'; return; }
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+        if (!payload.email || payload.exp < Math.floor(Date.now()/1000)) {
+          window.location.href = '/admin/login.html'; return;
+        }
+        document.getElementById('user-email').textContent = payload.email;
+      } catch(e) {
+        window.location.href = '/admin/login.html';
+      }
+    })();
+
+    // Sign out
+    async function signOut() {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/admin/login.html';
+    }
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Upload Media
+    const uploadZone = document.getElementById('upload-zone');
+    const fileInput = document.getElementById('file-input');
+    const stagedFiles = document.getElementById('staged-files');
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+    uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      addFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', () => addFiles(fileInput.files));
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    function addFiles(files) {
+      for (const file of files) {
+        const li = document.createElement('li');
+        li.innerHTML = '<span>' + file.name + '</span><span class="size">' + formatSize(file.size) + '</span>';
+        stagedFiles.appendChild(li);
+      }
+    }
+
+    // Press & News
+    const pressItems = [];
+    function savePress() {
+      const headline = document.getElementById('press-headline').value.trim();
+      const category = document.getElementById('press-category').value;
+      const body = document.getElementById('press-body').value.trim();
+      const date = document.getElementById('press-date').value;
+      const author = document.getElementById('press-author').value.trim();
+      if (!headline) return;
+
+      pressItems.unshift({ headline, category, body, date, author });
+      renderPressItems();
+
+      document.getElementById('press-headline').value = '';
+      document.getElementById('press-body').value = '';
+      document.getElementById('press-date').value = '';
+      document.getElementById('press-author').value = '';
+    }
+
+    function renderPressItems() {
+      const list = document.getElementById('press-list');
+      list.innerHTML = pressItems.map(item =>
+        '<div class="press-item">' +
+          '<h4>' + item.headline + '</h4>' +
+          '<div class="meta">' + item.category + ' &bull; ' + (item.date || 'No date') + ' &bull; ' + (item.author || 'Unknown') + '</div>' +
+        '</div>'
+      ).join('');
+    }
+
+    // Edit Pages
+    const pages = ['Home', 'About', 'PR', 'Media', 'Talent', 'Booking'];
+    const pageGrid = document.getElementById('page-grid');
+    const pageEditMsg = document.getElementById('page-edit-msg');
+
+    pages.forEach(page => {
+      const card = document.createElement('div');
+      card.className = 'page-card';
+      card.innerHTML = '<h4>' + page + '</h4><span>Edit Page</span>';
+      card.addEventListener('click', () => {
+        pageEditMsg.innerHTML = 'To edit the <strong>' + page + '</strong> page, visit the <a href="https://app.netlify.com/projects/lsmg" target="_blank" rel="noopener noreferrer">Netlify Dashboard</a> and make changes there.';
+        pageEditMsg.classList.add('visible');
+      });
+      pageGrid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
