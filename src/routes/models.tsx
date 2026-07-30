@@ -296,7 +296,7 @@ function ModelsPage() {
             Submit for representation or book existing talent for your next production.
           </p>
           <div className="mdl-hero-cta">
-            <Link to="/contact" className="mdl-btn mdl-btn-primary">Become a Talent</Link>
+            <Link to="/apply" className="mdl-btn mdl-btn-primary">Become a Talent</Link>
             <Link to="/pr" className="mdl-btn mdl-btn-ghost">Booking &amp; PR</Link>
           </div>
         </div>

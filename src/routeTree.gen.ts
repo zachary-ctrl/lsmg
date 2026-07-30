@@ -17,6 +17,7 @@ import { Route as ModelsRouteImport } from './routes/models'
 import { Route as MediaRouteImport } from './routes/media'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BookingRouteImport } from './routes/booking'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -65,6 +66,11 @@ const ContactRoute = ContactRouteImport.update({
 const BookingRoute = BookingRouteImport.update({
   id: '/booking',
   path: '/booking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
+  '/apply': typeof ApplyRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
+  '/apply': typeof ApplyRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
+  '/apply': typeof ApplyRoute
   '/booking': typeof BookingRoute
   '/contact': typeof ContactRoute
   '/media': typeof MediaRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin-login'
+    | '/apply'
     | '/booking'
     | '/contact'
     | '/media'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin-login'
+    | '/apply'
     | '/booking'
     | '/contact'
     | '/media'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin-login'
+    | '/apply'
     | '/booking'
     | '/contact'
     | '/media'
@@ -236,6 +248,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  ApplyRoute: typeof ApplyRoute
   BookingRoute: typeof BookingRoute
   ContactRoute: typeof ContactRoute
   MediaRoute: typeof MediaRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BookingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin-login': {
       id: '/admin-login'
       path: '/admin-login'
@@ -380,6 +400,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminLoginRoute: AdminLoginRoute,
+  ApplyRoute: ApplyRoute,
   BookingRoute: BookingRoute,
   ContactRoute: ContactRoute,
   MediaRoute: MediaRoute,
