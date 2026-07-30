@@ -1,6 +1,6 @@
 // ============================================================
-// LEDGERA - LIVE RSS FEED
-// Add this script to your LEDGERA page (before </body>)
+// LSMG LEDGER - LIVE RSS FEED
+// Add this script to your Culture Ledger page (before </body>)
 // ============================================================
 
 async function loadLedgerFeed(category = 'All') {

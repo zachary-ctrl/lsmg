@@ -2,10 +2,8 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FullResolutionImage } from '../components/FullResolutionImage'
 import { featuredFilms, outdoorScreenings, secondaryFilms } from '../data/tribeca-films'
-import { getLedgeraArticles } from '../server/ledgera.functions'
 
 export const Route = createFileRoute('/culture-ledger/')({
-  loader: () => getLedgeraArticles(),
   head: () => ({
     meta: [
       {
@@ -27,12 +25,9 @@ interface Article {
   excerpt: string
   category: string
   author: string
-  source?: string
-  sourceUrl?: string
   publishedAt: string
   imageUrl?: string
   featured?: boolean
-  tags?: string[]
 }
 
 interface LiveArticle {
@@ -57,7 +52,7 @@ interface WikipediaSummary {
   title?: string
 }
 
-const CATEGORIES = ['Latest', 'Fashion', 'Beauty', 'Entertainment', 'Tribeca 2026'] as const
+const CATEGORIES = ['All', 'Fashion', 'Beauty', 'Entertainment'] as const
 const FALLBACK_IMAGE = '/ledgera-cover-fallback.svg'
 const LAST_COVER_KEY = 'ledgera:last-cover-subject'
 const CELEBRITY_COVER_SUBJECTS = [
@@ -75,26 +70,6 @@ const CELEBRITY_COVER_SUBJECTS = [
   'Tyla',
   'Zendaya',
 ] as const
-
-const FALLBACK_LIVE_ARTICLES: LiveArticle[] = [
-  ['Fashion coverage continues at Vogue', 'Fashion', 'Vogue', 'https://www.vogue.com', 'https://www.vogue.com/fashion'],
-  ['Beauty reporting and product news from Allure', 'Beauty', 'Allure', 'https://www.allure.com', 'https://www.allure.com/beauty'],
-  ['Entertainment reporting from Variety', 'Entertainment', 'Variety', 'https://variety.com', 'https://variety.com'],
-  ['Runway and designer coverage from Harper’s Bazaar', 'Fashion', 'Harper’s Bazaar', 'https://www.harpersbazaar.com', 'https://www.harpersbazaar.com/fashion/'],
-  ['Beauty industry coverage from WWD', 'Beauty', 'WWD', 'https://wwd.com', 'https://wwd.com/beauty-industry-news/'],
-  ['Film and television reporting from The Hollywood Reporter', 'Entertainment', 'The Hollywood Reporter', 'https://www.hollywoodreporter.com', 'https://www.hollywoodreporter.com'],
-  ['Fashion business reporting from WWD', 'Fashion', 'WWD', 'https://wwd.com', 'https://wwd.com/fashion-news/'],
-  ['Entertainment coverage from Entertainment Weekly', 'Entertainment', 'Entertainment Weekly', 'https://ew.com', 'https://ew.com'],
-].map(([title, category, source, sourceUrl, url], index) => ({
-  title,
-  excerpt: `Visit ${source} for its latest ${category.toLowerCase()} reporting and analysis.`,
-  category: category as LiveArticle['category'],
-  source,
-  sourceUrl,
-  imageUrl: FALLBACK_IMAGE,
-  url,
-  publishedAt: new Date(Date.UTC(2026, 6, 29, 12 - index)).toISOString(),
-}))
 
 function timeAgo(date: string) {
   const timestamp = Date.parse(date)
@@ -127,14 +102,31 @@ function randomCoverStartIndex() {
 }
 
 function CultureLedgerPage() {
-  const articles = Route.useLoaderData() as Article[]
+  const [articles, setArticles] = useState<Article[]>([])
   const [liveArticles, setLiveArticles] = useState<LiveArticle[]>([])
-  const [activeCategory, setActiveCategory] = useState<(typeof CATEGORIES)[number]>('Latest')
+  const [activeCategory, setActiveCategory] = useState<(typeof CATEGORIES)[number]>('All')
   const [activeEdition, setActiveEdition] = useState<'daily' | 'tribeca'>('daily')
+  const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [feedError, setFeedError] = useState('')
   const [fetchedAt, setFetchedAt] = useState('')
   const [celebrityCover, setCelebrityCover] = useState<CelebrityCover | null>(null)
+
+  useEffect(() => {
+    let active = true
+    fetch('/api/culture-ledger')
+      .then((response) => response.json())
+      .then((data) => {
+        if (active) setArticles(data.articles || [])
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   const fetchLiveFeed = useCallback((forceRefresh = false) => {
     setRefreshing(forceRefresh)
@@ -197,10 +189,7 @@ function CultureLedgerPage() {
 
   useEffect(() => {
     const syncEditionWithHash = () => {
-      if (window.location.hash === '#tribeca-2026') {
-        setActiveEdition('tribeca')
-        setActiveCategory('Tribeca 2026')
-      }
+      if (window.location.hash === '#tribeca-2026') setActiveEdition('tribeca')
     }
     syncEditionWithHash()
     window.addEventListener('hashchange', syncEditionWithHash)
@@ -208,22 +197,10 @@ function CultureLedgerPage() {
   }, [])
 
   const filteredLiveArticles = useMemo(
-    () => activeCategory === 'Latest'
+    () => activeCategory === 'All'
       ? liveArticles
       : liveArticles.filter((article) => article.category === activeCategory),
     [activeCategory, liveArticles],
-  )
-
-  const filteredFallbackArticles = useMemo(
-    () => activeCategory === 'Latest'
-      ? FALLBACK_LIVE_ARTICLES
-      : FALLBACK_LIVE_ARTICLES.filter((article) => article.category === activeCategory),
-    [activeCategory],
-  )
-
-  const displayLiveArticles = filteredLiveArticles.length > 0 ? filteredLiveArticles : filteredFallbackArticles
-  const tribecaArticles = articles.filter((article) =>
-    article.category.toLowerCase().includes('film') || article.tags?.some((tag) => tag.toLowerCase().includes('tribeca')),
   )
 
   const switchEdition = (edition: 'daily' | 'tribeca') => {
@@ -233,13 +210,8 @@ function CultureLedgerPage() {
     window.requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
   }
 
-  const switchTopLevel = (category: (typeof CATEGORIES)[number]) => {
-    setActiveCategory(category)
-    switchEdition(category === 'Tribeca 2026' ? 'tribeca' : 'daily')
-  }
-
   const hero = articles.find((article) => article.featured) || articles[0]
-  const tickerArticles = (liveArticles.length > 0 ? liveArticles : FALLBACK_LIVE_ARTICLES).slice(0, 6)
+  const tickerArticles = liveArticles.slice(0, 6)
 
   return (
     <main className="ledgera-page">
@@ -258,16 +230,20 @@ function CultureLedgerPage() {
       </header>
 
       <nav className="ledgera-edition-nav" aria-label="LEDGERA editions">
-        {CATEGORIES.map((category) => (
-          <button
-            key={category}
-            type="button"
-            className={activeCategory === category ? 'is-active' : ''}
-            onClick={() => switchTopLevel(category)}
-          >
-            {category}
-          </button>
-        ))}
+        <button
+          type="button"
+          className={activeEdition === 'daily' ? 'is-active' : ''}
+          onClick={() => switchEdition('daily')}
+        >
+          Daily Edition
+        </button>
+        <button
+          type="button"
+          className={activeEdition === 'tribeca' ? 'is-active' : ''}
+          onClick={() => switchEdition('tribeca')}
+        >
+          Tribeca 2026 / Special Coverage
+        </button>
       </nav>
 
       {activeEdition === 'tribeca' && (
@@ -303,13 +279,13 @@ function CultureLedgerPage() {
                 alt={celebrityCover ? `${celebrityCover.name} editorial cover` : 'LEDGERA editorial cover'}
                 linkClassName="ledgera-hero-image"
               >
-                <span className="ledgera-hero-badge">A LEDGERA Dispatch</span>
+                <span className="ledgera-hero-badge">LEDGERA Original</span>
                 {celebrityCover && (
                   <span className="ledgera-cover-credit">Cover rotation: {celebrityCover.name} · Wikimedia</span>
                 )}
               </FullResolutionImage>
               <div className="ledgera-story-copy">
-                <p className="ledgera-kicker">{hero?.category || 'Culture'} / A LEDGERA Dispatch</p>
+                <p className="ledgera-kicker">{hero?.category || 'Culture'} / Lead Story</p>
                 <h1 id="ledgera-lead-title">
                   {hero?.title || 'The culture is moving. LEDGERA keeps the record.'}
                 </h1>
@@ -332,7 +308,7 @@ function CultureLedgerPage() {
                   {refreshing ? 'Refreshing' : 'Refresh'}
                 </button>
               </div>
-              {displayLiveArticles.slice(0, 4).map((article, index) => (
+              {filteredLiveArticles.slice(0, 4).map((article, index) => (
                 <article key={`${article.source}-${article.title}`} className="ledgera-trend-card">
                   <FullResolutionImage
                     src={article.imageUrl}
@@ -349,7 +325,7 @@ function CultureLedgerPage() {
                   </div>
                 </article>
               ))}
-              {displayLiveArticles.length === 0 && (
+              {!loading && filteredLiveArticles.length === 0 && (
                 <p className="ledgera-empty">{feedError || 'No stories in this desk yet.'}</p>
               )}
             </aside>
@@ -363,8 +339,20 @@ function CultureLedgerPage() {
               </div>
               <p>{fetchedAt ? `Updated ${timeAgo(fetchedAt)}` : 'Live publisher feeds'}</p>
             </div>
+            <div className="ledgera-category-tabs" role="group" aria-label="Filter culture stories">
+              {CATEGORIES.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={activeCategory === category ? 'is-active' : ''}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
             <div className="ledgera-news-grid">
-              {displayLiveArticles.slice(4, 12).map((article, index) => (
+              {filteredLiveArticles.slice(4, 12).map((article, index) => (
                 <article key={`${article.url}-${index}`} className={index === 0 ? 'ledgera-news-card is-wide' : 'ledgera-news-card'}>
                   <FullResolutionImage
                     src={article.imageUrl}
@@ -376,7 +364,7 @@ function CultureLedgerPage() {
                   <p className="ledgera-kicker">{article.category}</p>
                   <h3><a href={article.url} target="_blank" rel="noreferrer">{article.title}</a></h3>
                   <p>{article.excerpt}</p>
-                  <p className="ledgera-credit">Published by <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.source}</a></p>
+                  <p className="ledgera-credit">Original reporting: <a href={article.sourceUrl} target="_blank" rel="noreferrer">{article.source}</a></p>
                 </article>
               ))}
             </div>
@@ -396,7 +384,7 @@ function CultureLedgerPage() {
                   <p className="ledgera-kicker">{article.category}</p>
                   <h3><Link to="/culture-ledger/$articleSlug" params={{ articleSlug: article.slug }}>{article.title}</Link></h3>
                   <p>{article.excerpt}</p>
-                  <span>{article.source || 'A LEDGERA Dispatch'} · {timeAgo(article.publishedAt)}</span>
+                  <span>{article.author} · {timeAgo(article.publishedAt)}</span>
                 </article>
               ))}
             </div>
@@ -435,33 +423,10 @@ function CultureLedgerPage() {
                   <p className="ledgera-kicker">{film.sectionLabel}</p>
                   <h3><Link to="/tribeca/films/$filmSlug" params={{ filmSlug: film.slug }}>{film.title}</Link></h3>
                   <p>{film.deck}</p>
-                  <p className="ledgera-credit">A LEDGERA Dispatch</p>
                 </article>
               ))}
             </div>
           </section>
-
-          {tribecaArticles.length > 0 && (
-            <section className="ledgera-originals" aria-labelledby="tribeca-dispatches-title">
-              <div className="ledgera-section-heading">
-                <div>
-                  <span>02</span>
-                  <h2 id="tribeca-dispatches-title">Tribeca Dispatches</h2>
-                </div>
-                <p>Red carpets, interviews, and festival features</p>
-              </div>
-              <div className="ledgera-original-grid">
-                {tribecaArticles.map((article) => (
-                  <article key={article.slug}>
-                    <p className="ledgera-kicker">{article.category}</p>
-                    <h3><Link to="/culture-ledger/$articleSlug" params={{ articleSlug: article.slug }}>{article.title}</Link></h3>
-                    <p>{article.excerpt}</p>
-                    <span>A LEDGERA Dispatch · {timeAgo(article.publishedAt)}</span>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
 
           <section className="ledgera-tribeca-notebook">
             <div>

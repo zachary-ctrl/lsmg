@@ -1,35 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FullResolutionImage } from '../components/FullResolutionImage'
-import { useState } from 'react'
-import { getLedgeraArticle } from '../server/ledgera.functions'
+import { useState, useEffect } from 'react'
 
 export const Route = createFileRoute('/culture-ledger/$articleSlug')({
-  loader: ({ params }) => getLedgeraArticle({ data: { slug: params.articleSlug } }),
-  head: ({ loaderData, params }) => {
-    const article = loaderData?.article
-    const title = article ? `${article.title} | LEDGERA` : 'Article Not Found | LEDGERA'
-    const description = article?.excerpt || 'Read the latest reporting and cultural coverage from LEDGERA.'
-    const image = article?.imageUrl || `/ledgera-cover-fallback.svg?article=${encodeURIComponent(params.articleSlug)}`
-
-    return {
-      meta: [
-        { title },
-        { name: 'description', content: description },
-        { property: 'og:title', content: title },
-        { property: 'og:description', content: description },
-        { property: 'og:image', content: image },
-        { property: 'og:type', content: 'article' },
-        { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:title', content: title },
-        { name: 'twitter:description', content: description },
-        { name: 'twitter:image', content: image },
-        { name: 'article:published_time', content: article?.publishedAt ? new Date(article.publishedAt).toISOString() : '' },
-        { name: 'article:section', content: article?.category || '' },
-        { name: 'robots', content: article ? 'index, follow' : 'noindex, follow' },
-        { name: 'ledgera:slug', content: params.articleSlug },
-      ],
-    }
-  },
   component: ArticlePage,
 })
 
@@ -56,13 +29,40 @@ interface Comment {
 
 function ArticlePage() {
   const { articleSlug } = Route.useParams()
-  const loaderData = Route.useLoaderData()
-  const article = loaderData.article as Article | null
-  const [comments, setComments] = useState<Comment[]>(loaderData.comments as Comment[])
+  const [article, setArticle] = useState<Article | null>(null)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [loading, setLoading] = useState(true)
   const [commentName, setCommentName] = useState('')
   const [commentText, setCommentText] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [commentSuccess, setCommentSuccess] = useState(false)
+
+  useEffect(() => {
+    let active = true
+
+    function fetchArticle() {
+      fetch(`/api/culture-ledger?slug=${articleSlug}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (active) {
+            setArticle(data.article || null)
+            setComments(data.comments || [])
+            setLoading(false)
+          }
+        })
+        .catch(() => {
+          if (active) setLoading(false)
+        })
+    }
+
+    fetchArticle()
+    const interval = setInterval(fetchArticle, 15000)
+
+    return () => {
+      active = false
+      clearInterval(interval)
+    }
+  }, [articleSlug])
 
   const handleComment = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,6 +95,14 @@ function ArticlePage() {
     setSubmitting(false)
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center" style={{ minHeight: '60vh' }}>
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 3, color: '#8f8f8f' }}>LOADING...</span>
+      </div>
+    )
+  }
+
   if (!article) {
     return (
       <div className="flex flex-col items-center justify-center" style={{ minHeight: '60vh', padding: 40 }}>
@@ -120,7 +128,7 @@ function ArticlePage() {
           </div>
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(40px, 6vw, 80px)', lineHeight: '.92' }}>{article.title}</h1>
           <div className="flex items-center gap-4 mt-6">
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, color: '#b3b3b3' }}>{article.source || 'A LEDGERA Dispatch'}</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, color: '#b3b3b3' }}>{article.author}</span>
             <span style={{ width: 4, height: 4, background: 'var(--red)', borderRadius: '50%', display: 'inline-block' }} />
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 2, color: '#8f8f8f' }}>{new Date(article.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
           </div>

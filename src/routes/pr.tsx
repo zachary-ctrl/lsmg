@@ -180,7 +180,7 @@ function PRPage() {
           <form name="booking-inquiry" method="POST" action="/__forms.html" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleBookingSubmit} style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: '4px solid var(--red)', padding: 48 }}>
             <input type="hidden" name="form-name" value="booking-inquiry" />
             <input type="hidden" name="recipient-email" value="info@lastshotmediagroup.com" />
-            <div className="sr-only" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabIndex={-1} autoComplete="off" /></label></div>
+            <p style={{ display: 'none' }}><label>Don't fill this out: <input name="bot-field" /></label></p>
             {bookingStatus === 'success' && <p style={{ color: 'var(--red)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 2, marginBottom: 24 }}>BOOKING INQUIRY SUBMITTED SUCCESSFULLY.</p>}
             {bookingStatus === 'error' && <p style={{ color: '#ff4444', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: 2, marginBottom: 24 }}>SOMETHING WENT WRONG. PLEASE TRY AGAIN.</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
@@ -294,18 +294,18 @@ function PRPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 2, background: 'var(--red)' }}>
             {[
-              { title: 'Rolling Loud', slug: 'lsmg-rolling-loud-press-coverage', desc: 'Press coverage of Rolling Loud — one of the largest hip-hop music festivals in the world.', tag: 'Music Festival · Press Credential' },
-              { title: 'Texas Rangers', slug: 'lsmg-texas-rangers-press-coverage', desc: 'Sports media coverage of the Texas Rangers — World Series champions.', tag: 'Sports Media · Press Credential' },
-              { title: 'Dallas Cowboys', slug: 'lsmg-dallas-cowboys-press-coverage', desc: 'Media coverage of the Dallas Cowboys. On-site editorial access.', tag: 'Sports Media · Press Credential' },
-              { title: 'Comic Con', slug: 'lsmg-comic-con-press-coverage', desc: 'Entertainment press coverage of Comic Con — entertainment editorial, panel coverage.', tag: 'Entertainment · Press Credential' },
-              { title: 'WWE', slug: 'lsmg-wwe-press-coverage', desc: 'Professional wrestling media coverage including event access and talent feature coverage.', tag: 'Entertainment · Press Credential' },
-              { title: 'Morehouse Gala', slug: 'lsmg-morehouse-gala-press-coverage', desc: 'Coverage of the Morehouse College annual gala — the HBCU community\'s premier fundraising event.', tag: 'Cultural Event · Press Coverage' },
+              { title: 'Rolling Loud', desc: 'Press coverage of Rolling Loud — one of the largest hip-hop music festivals in the world.', tag: 'Music Festival · Press Credential' },
+              { title: 'Texas Rangers', desc: 'Sports media coverage of the Texas Rangers — World Series champions.', tag: 'Sports Media · Press Credential' },
+              { title: 'Dallas Cowboys', desc: 'Media coverage of the Dallas Cowboys. On-site editorial access.', tag: 'Sports Media · Press Credential' },
+              { title: 'Comic Con', desc: 'Entertainment press coverage of Comic Con — entertainment editorial, panel coverage.', tag: 'Entertainment · Press Credential' },
+              { title: 'WWE', desc: 'Professional wrestling media coverage including event access and talent feature coverage.', tag: 'Entertainment · Press Credential' },
+              { title: 'Morehouse Gala', desc: 'Coverage of the Morehouse College annual gala — the HBCU community\'s premier fundraising event.', tag: 'Cultural Event · Press Coverage' },
             ].map((item) => (
-              <Link key={item.title} to="/culture-ledger/$articleSlug" params={{ articleSlug: item.slug }} className="hover:bg-[#0d0002] transition-colors" style={{ background: 'var(--black)', padding: '40px 36px', display: 'block' }}>
+              <div key={item.title} className="hover:bg-[#0d0002] transition-colors" style={{ background: 'var(--black)', padding: '40px 36px' }}>
                 <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: 'var(--white)', marginBottom: 12 }}>{item.title}</div>
                 <p style={{ fontSize: 15, color: '#b3b3b3', lineHeight: 1.7 }}>{item.desc}</p>
                 <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, letterSpacing: 3, color: 'var(--red)', marginTop: 20, display: 'block' }}>{item.tag}</span>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
