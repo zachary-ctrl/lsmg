@@ -93,7 +93,6 @@ function ModelCard({ model, index = 0, featured = false }: {
         loading={featured ? 'eager' : 'lazy'}
       />
       <span className={featured ? 'mdl-feature-overlay' : 'mdl-card-overlay'}>
-        {featured && <span className="mdl-feature-city">{model.city}</span>}
         <span className={featured ? 'mdl-feature-name' : 'mdl-card-name'}>{model.name}</span>
         <span className={featured ? 'mdl-feature-cats' : 'mdl-card-cats'}>
           {model.types.join(' · ')}

@@ -1,13 +1,7 @@
 export type Model = {
   slug: string
   name: string
-  city: string
   types: string[]
-  specs: {
-    height: string
-    bust: string
-    waist: string
-  }
   imagePaths: string[]
   bio: string
   featured: boolean
@@ -17,9 +11,7 @@ export const MODELS: Model[] = [
   {
     slug: 'amora',
     name: 'Amora',
-    city: 'Atlanta',
     types: ['Editorial', 'Runway'],
-    specs: { height: "5'9\"", bust: '32"', waist: '24"' },
     imagePaths: [
       '/models/amora-1.jpg',
       '/models/amora-2.jpg',
@@ -34,9 +26,7 @@ export const MODELS: Model[] = [
   {
     slug: 'halie',
     name: 'Halie',
-    city: 'New York',
     types: ['Editorial', 'Commercial'],
-    specs: { height: "5'10\"", bust: '33"', waist: '25"' },
     imagePaths: [
       '/models/halie-1.jpg',
       '/models/halie-2.jpg',
@@ -50,13 +40,14 @@ export const MODELS: Model[] = [
   {
     slug: 'nani',
     name: 'Nani',
-    city: 'Dallas',
     types: ['Commercial', 'Print'],
-    specs: { height: "5'8\"", bust: '34"', waist: '26"' },
     imagePaths: [
       '/models/nani-1.jpg',
       '/models/nani-2.jpg',
       '/models/nani-3.jpg',
+      '/models/nani-4.jpg',
+      '/models/nani-5.jpg',
+      '/models/nani-6.jpg',
     ],
     bio: 'Dallas-based Nani brings warmth, clarity, and an easy connection to commercial and print assignments. Her camera-ready range is a natural fit for lifestyle campaigns, catalogs, and polished brand storytelling.',
     featured: true,
@@ -64,9 +55,7 @@ export const MODELS: Model[] = [
   {
     slug: 'saanvi',
     name: 'Saanvi',
-    city: 'Orlando',
     types: ['Runway', 'Beauty'],
-    specs: { height: "5'11\"", bust: '32"', waist: '24"' },
     imagePaths: ['/models/saanvi-1.jpg', '/models/saanvi-2.jpg'],
     bio: 'Saanvi represents Orlando with poised runway lines and a striking beauty presence. She brings composure and precision to catwalk, cosmetics, and close-up work while keeping each frame fresh and expressive.',
     featured: true,
@@ -74,9 +63,7 @@ export const MODELS: Model[] = [
   {
     slug: 'nicole',
     name: 'Nicole',
-    city: 'TBD',
     types: ['Editorial'],
-    specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
     imagePaths: [
       '/models/nicole-1.jpg',
       '/models/nicole-2.jpg',
@@ -85,6 +72,32 @@ export const MODELS: Model[] = [
       '/models/nicole-5.jpg',
     ],
     bio: 'Profile coming soon. Nicole joins the LSMG roster with a growing portfolio; her full bio, city, and specialties will be added shortly.',
+    featured: true,
+  },
+  {
+    slug: 'jada',
+    name: 'Jada',
+    types: ['Editorial'],
+    imagePaths: [
+      '/models/jada-1.jpg',
+      '/models/jada-2.jpg',
+      '/models/jada-3.jpg',
+      '/models/jada-4.jpg',
+      '/models/jada-5.jpg',
+    ],
+    bio: 'Profile coming soon. Jada joins the LSMG roster with a growing portfolio; her full bio and specialties will be added shortly.',
+    featured: true,
+  },
+  {
+    slug: 'lailah',
+    name: 'Lailah',
+    types: ['Editorial'],
+    imagePaths: [
+      '/models/lailah-1.jpg',
+      '/models/lailah-2.jpg',
+      '/models/lailah-3.jpg',
+    ],
+    bio: 'Profile coming soon. Lailah joins the LSMG roster with a growing portfolio; her full bio and specialties will be added shortly.',
     featured: true,
   },
 ]
