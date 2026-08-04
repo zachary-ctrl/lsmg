@@ -5,6 +5,12 @@ export type Model = {
   imagePaths: string[]
   bio: string
   featured: boolean
+  tagline?: string
+  measurements?: {
+    bust: string
+    waist: string
+    hips: string
+  }
 }
 
 export const MODELS: Model[] = [
@@ -98,6 +104,16 @@ export const MODELS: Model[] = [
       '/models/lailah-3.jpg',
     ],
     bio: 'Profile coming soon. Lailah joins the LSMG roster with a growing portfolio; her full bio and specialties will be added shortly.',
+    featured: true,
+  },
+  {
+    slug: 'wovie',
+    name: 'WOVIE',
+    types: ['Editorial', 'Beauty', 'Artist'],
+    imagePaths: ['/models/wovie-1.jpg', '/models/wovie-2.jpg', '/models/wovie-3.jpg'],
+    tagline: 'A face for the frame, a voice for the record.',
+    measurements: { bust: '33"', waist: '24"', hips: '36"' },
+    bio: 'WOVIE moves between two studios — one with a camera in it and one with a microphone. As a model she brings a swim, beauty, and lifestyle range built on presence and control of the frame; as a recording artist she brings the instincts that come with performing her own material. That combination makes her a natural fit for campaigns that need a face and a personality attached to it: brand storytelling, music-adjacent editorial, and covers.',
     featured: true,
   },
 ]

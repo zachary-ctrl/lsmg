@@ -10,7 +10,9 @@ export const Route = createFileRoute('/models_/$slug')({
       return { meta: [{ title: 'Model Not Found | Last Shot Media Group' }] }
     }
 
-    const description = `${model.name} is a ${model.types.join(' and ')} model represented by Last Shot Media Group.`
+    const description = model.tagline
+      ? `${model.tagline} ${model.name} — ${model.types.join(', ')} talent represented by Last Shot Media Group.`
+      : `${model.name} is a ${model.types.join(' and ')} model represented by Last Shot Media Group.`
 
     return {
       meta: [
@@ -60,11 +62,28 @@ function ModelProfilePage() {
           </Link>
           <span className="mdl-eyebrow">LSMG Talent</span>
           <h1>{model.name}</h1>
+          {model.tagline && <p className="model-profile-tagline">{model.tagline}</p>}
           <div className="model-profile-types">
             {model.types.map((type) => (
               <span key={type}>{type}</span>
             ))}
           </div>
+          {model.measurements && (
+            <dl className="model-profile-specs">
+              <div>
+                <dt>Bust</dt>
+                <dd>{model.measurements.bust}</dd>
+              </div>
+              <div>
+                <dt>Waist</dt>
+                <dd>{model.measurements.waist}</dd>
+              </div>
+              <div>
+                <dt>Hips</dt>
+                <dd>{model.measurements.hips}</dd>
+              </div>
+            </dl>
+          )}
           <p className="model-profile-bio">{model.bio}</p>
           <Link to="/contact" className="mdl-btn mdl-btn-primary model-profile-book">
             Book {model.name}
