@@ -1983,6 +1983,17 @@ img {
   margin: 14px 0 22px;
   font-size: clamp(74px, 11vw, 154px);
 }
+.model-profile-tagline {
+  margin: -8px 0 26px;
+  max-width: 30ch;
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  letter-spacing: 1px;
+  border-left: 2px solid var(--red);
+  padding-left: 14px;
+}
 .model-profile-types { display: flex; flex-wrap: wrap; gap: 8px; }
 .model-profile-types span {
   padding: 8px 12px;
