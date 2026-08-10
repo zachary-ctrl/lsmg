@@ -180,11 +180,9 @@ function RootComponent() {
 const navLinks = [
   { to: '/' as const, label: 'Home' },
   { to: '/about' as const, label: 'About' },
-  { to: '/models' as const, label: 'Models' },
+  { to: '/models' as const, label: 'Talent' },
   { to: '/pr' as const, label: 'PR & Booking' },
   { to: '/media' as const, label: 'Media' },
-  { to: '/watch' as const, label: 'Watch' },
-  { to: '/culture-ledger' as const, label: 'LEDGERA' },
 ]
 
 function Header() {
@@ -228,6 +226,7 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
+          <a href="https://ledgeramagazine.com" className="lsmg-nav-link" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
           <Link to="/contact" className="lsmg-btn lsmg-btn-solid">CONTACT</Link>
         </nav>
 
@@ -257,6 +256,7 @@ function Header() {
               {link.label.toUpperCase()}
             </Link>
           ))}
+          <a href="https://ledgeramagazine.com" className="lsmg-mobile-link" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
           <Link
             to="/contact"
             tabIndex={mobileOpen ? 0 : -1}
@@ -292,7 +292,7 @@ function Footer() {
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR, Comms & Talent</Link></li>
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LSMG Booking</Link></li>
-              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
+              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Talent</Link></li>
               <li><Link to="/media" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Media & Film</Link></li>
             </ul>
           </div>
@@ -302,10 +302,9 @@ function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5">
               <li><Link to="/about" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">About</Link></li>
-              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
+              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Talent</Link></li>
               <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Booking</Link></li>
-              <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LEDGERA</Link></li>
-              <li><Link to="/watch" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Watch</Link></li>
+              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LEDGERA ↗</a></li>
               <li><Link to="/contact" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Contact</Link></li>
             </ul>
           </div>

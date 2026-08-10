@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { getModelBySlug } from '../data/models'
-import { netlifyImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/models_/$slug')({
   head: ({ params }) => {
@@ -16,11 +15,10 @@ export const Route = createFileRoute('/models_/$slug')({
 
     return {
       meta: [
-        { title: `${model.name} | LSMG Models & Talent` },
+        { title: `${model.name} | LSMG Talent` },
         { name: 'description', content: description },
-        { property: 'og:title', content: `${model.name} | LSMG Models & Talent` },
+        { property: 'og:title', content: `${model.name} | LSMG Talent` },
         { property: 'og:description', content: description },
-        { property: 'og:image', content: model.imagePaths[0] },
       ],
     }
   },
@@ -38,7 +36,7 @@ function ModelProfilePage() {
         <h1>Profile Not Found</h1>
         <p>This model is not currently listed on the LSMG roster.</p>
         <Link to="/models" className="mdl-btn mdl-btn-primary">
-          Back to Models
+          Back to Talent
         </Link>
       </section>
     )
@@ -47,15 +45,6 @@ function ModelProfilePage() {
   return (
     <article className="models-page model-profile">
       <div className="model-profile-hero">
-        <div className="model-profile-image-wrap">
-          <img
-            src={netlifyImage(model.imagePaths[0], 1100, 1500)}
-            alt={`${model.name}, ${model.types.join(' and ')} model represented by LSMG`}
-            className="model-profile-image"
-          />
-          <span className="model-profile-shot-count">{model.imagePaths.length} shots</span>
-        </div>
-
         <div className="model-profile-info">
           <Link to="/models" className="model-profile-back">
             ← Back to roster
@@ -91,24 +80,6 @@ function ModelProfilePage() {
         </div>
       </div>
 
-      {model.imagePaths.length > 1 && (
-        <section className="model-profile-gallery" aria-label={`${model.name} portfolio gallery`}>
-          <div className="model-profile-gallery-head">
-            <span className="mdl-eyebrow">Portfolio</span>
-            <h2>Selected Work</h2>
-          </div>
-          <div className="model-profile-gallery-grid">
-            {model.imagePaths.slice(1).map((imagePath, index) => (
-              <img
-                key={imagePath}
-                src={netlifyImage(imagePath, 720, 960)}
-                alt={`${model.name} portfolio image ${index + 2}`}
-                loading="lazy"
-              />
-            ))}
-          </div>
-        </section>
-      )}
     </article>
   )
 }
