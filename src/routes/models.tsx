@@ -1,19 +1,18 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { MODELS } from '../data/models'
-import { netlifyImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/models')({
   component: ModelsPage,
   head: () => ({
     meta: [
-      { title: 'Models & Talent | Last Shot Media Group — LSMG Talent Roster' },
+      { title: 'Talent | Last Shot Media Group — LSMG Talent Roster' },
       {
         name: 'description',
         content:
           'The LSMG talent roster — editorial, commercial, runway and beauty models represented by Last Shot Media Group across Dallas, Orlando, New York and Atlanta. Explore the roster and book talent.',
       },
-      { property: 'og:title', content: 'Models & Talent | LSMG Talent Roster' },
+      { property: 'og:title', content: 'Talent | LSMG Talent Roster' },
       {
         property: 'og:description',
         content:
@@ -84,21 +83,18 @@ function ModelCard({ model, index = 0, featured = false }: {
       rel="noopener noreferrer"
       className={featured ? 'mdl-feature-card' : 'mdl-card'}
       style={{ animationDelay: `${index * 0.07}s` }}
-      aria-label={`View ${model.name}'s portfolio in a new tab`}
+      aria-label={`View ${model.name}'s talent profile in a new tab`}
     >
-      <img
-        src={netlifyImage(model.imagePaths[0], featured ? 900 : 720, featured ? 1080 : 960)}
-        alt={`${model.name} — LSMG ${model.types.join(' and ')} model`}
-        className={featured ? 'mdl-feature-img' : 'mdl-card-img'}
-        loading={featured ? 'eager' : 'lazy'}
-      />
+      <span className={featured ? 'mdl-feature-img mdl-talent-placeholder' : 'mdl-card-img mdl-talent-placeholder'} aria-hidden="true">
+        {model.name.slice(0, 1)}
+      </span>
       <span className={featured ? 'mdl-feature-overlay' : 'mdl-card-overlay'}>
         <span className={featured ? 'mdl-feature-name' : 'mdl-card-name'}>{model.name}</span>
         <span className={featured ? 'mdl-feature-cats' : 'mdl-card-cats'}>
           {model.types.join(' · ')}
         </span>
         <span className={featured ? 'mdl-feature-link' : 'mdl-card-profile-label'}>
-          View Portfolio →
+          View Profile →
         </span>
       </span>
     </Link>
@@ -153,7 +149,7 @@ function ModelsPage() {
         <div
           className="mdl-hero-bg"
           ref={parallaxRef}
-          style={{ backgroundImage: `url(${netlifyImage('/models/hero-atmos.jpg', 1600, undefined, 60)})` }}
+          aria-hidden="true"
         />
         <div className="mdl-hero-scrim" />
         <div className="mdl-hero-glow" ref={glowRef} aria-hidden="true" />
@@ -163,7 +159,7 @@ function ModelsPage() {
             LSMG Talent Division
           </span>
           <h1 className="mdl-hero-title">
-            <span className="mdl-hero-line"><StaggerText text="Models" delay={0.15} /></span>
+            <span className="mdl-hero-line"><StaggerText text="Talent" delay={0.15} /></span>
             <span className="mdl-hero-line mdl-hero-amp">
               <span className="word-stagger" style={{ animationDelay: '0.4s' }}>&amp;&nbsp;</span>
               <span className="word-stagger mdl-accent" style={{ animationDelay: '0.5s' }}>Talent</span>
@@ -189,7 +185,7 @@ function ModelsPage() {
         <div className="mdl-section-head scroll-reveal">
           <span className="mdl-eyebrow">Meet the Roster</span>
           <h2 className="mdl-section-title">Featured <span className="mdl-accent">Faces</span></h2>
-          <p className="mdl-section-deck">Tap any portrait to open the full profile in a new tab.</p>
+          <p className="mdl-section-deck">Tap any name to open the full talent profile in a new tab.</p>
         </div>
         <div className="mdl-feature-grid">
           {FEATURED_MODELS.map((model, index) => (
@@ -200,9 +196,9 @@ function ModelsPage() {
 
       <section className="mdl-section" id="roster" aria-label="Talent roster">
         <div className="mdl-section-head scroll-reveal">
-          <span className="mdl-eyebrow">Our Models</span>
+          <span className="mdl-eyebrow">Our Talent</span>
           <h2 className="mdl-section-title">Talent <span className="mdl-accent">Roster</span></h2>
-          <p className="mdl-section-deck">Every portrait, name, and portfolio prompt opens the model’s full profile.</p>
+          <p className="mdl-section-deck">Every name opens the talent profile and booking information.</p>
         </div>
 
         <div className="mdl-filters scroll-reveal" role="tablist" aria-label="Filter talent by specialty">

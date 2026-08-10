@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { WatchPage } from './watch'
 
 export const Route = createFileRoute('/media')({
   component: MediaPage,
@@ -80,6 +81,8 @@ function MediaPage() {
           </div>
         </div>
       </section>
+
+      <WatchPage />
 
     </div>
   )
