@@ -85,9 +85,18 @@ function ModelCard({ model, index = 0, featured = false }: {
       style={{ animationDelay: `${index * 0.07}s` }}
       aria-label={`View ${model.name}'s talent profile in a new tab`}
     >
-      <span className={featured ? 'mdl-feature-img mdl-talent-placeholder' : 'mdl-card-img mdl-talent-placeholder'} aria-hidden="true">
-        {model.name.slice(0, 1)}
-      </span>
+      {model.imagePaths[0] ? (
+        <img
+          className={featured ? 'mdl-feature-img' : 'mdl-card-img'}
+          src={model.imagePaths[0]}
+          alt={model.name}
+          loading="lazy"
+        />
+      ) : (
+        <span className={featured ? 'mdl-feature-img mdl-talent-placeholder' : 'mdl-card-img mdl-talent-placeholder'} aria-hidden="true">
+          {model.name.slice(0, 1)}
+        </span>
+      )}
       <span className={featured ? 'mdl-feature-overlay' : 'mdl-card-overlay'}>
         <span className={featured ? 'mdl-feature-name' : 'mdl-card-name'}>{model.name}</span>
         <span className={featured ? 'mdl-feature-cats' : 'mdl-card-cats'}>
