@@ -8,45 +8,70 @@ export const Route = createFileRoute('/about')({
 })
 
 type Member = {
+  id: string
   name: string
+  /* Shown under the portrait — one array entry per line. */
+  cardRole: string[]
+  /* Full title line used inside the bio modal. */
   role: string
-  desc: string
-  bio: string
-  tags: string[]
+  bio: string[]
   image: string
 }
 
 const TEAM: Member[] = [
   {
+    id: 'zachary',
     name: 'Zachary Heneden',
-    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF',
-    desc: 'Handles creative direction, PR execution, original series development, editorial output, and day-to-day operational management across all LSMG divisions.',
-    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. As Creative Director and Editor in Chief he leads creative direction, PR execution, original series development, and the editorial standard for everything LSMG publishes — from press releases to media-campaign strategy. He stays hands-on with day-to-day operations across every LSMG division, from the editorial desk to the booking floor.',
-    tags: ['Co-CEO', 'Creative Director', 'Editor In Chief'],
+    cardRole: ['CO-CEO · CREATIVE DIRECTOR', 'EDITOR-IN-CHIEF, LEDGERA MAGAZINE'],
+    role: 'Co-CEO & Creative Director, Last Shot Media Group · Editor-in-Chief, LEDGERA Magazine',
+    bio: [
+      'Zachary Heneden is a media executive, creative strategist, and entrepreneur serving as Co-CEO and Creative Director of Last Shot Media Group (LSMG) and Editor-in-Chief of LEDGERA Magazine. As a co-founder of LSMG, Zachary has helped shape the company into a growing media/PR, entertainment, and creative enterprise focused on connecting talent, brands, storytelling, and opportunity.',
+      'At LSMG, Zachary leads the company’s creative direction and works across its media, talent, public relations, brand partnership, and production efforts. He remains closely involved in day-to-day operations, helping guide projects from initial concept and outreach through execution, placement, and distribution. His work includes developing original media concepts, supporting talent and client strategy, building brand and industry relationships, executing publicity campaigns, and identifying opportunities that expand LSMG’s reach across entertainment, sports, culture, and business.',
+      'As Editor-in-Chief of LEDGERA Magazine, Zachary oversees the publication’s editorial vision and creative standard. He helps shape coverage, interviews, features, special projects, and multimedia storytelling while positioning LEDGERA as a platform for emerging and established voices across culture, entertainment, entrepreneurship, sports, lifestyle, and community impact.',
+      'Zachary brings a strong business foundation to his creative leadership. His professional background includes financial management, operations, budgeting, forecasting, strategic planning, marketing, sales, and organizational growth. That combination allows him to approach media not only from a creative perspective, but also with an understanding of the business infrastructure required to build sustainable brands, partnerships, productions, and intellectual property.',
+      'Before LSMG, Zachary co-founded PRJCT LAZRUS LLC, where he served as Chief Operating Officer and oversaw operations, finance, marketing, and product development. He has also served as Chief Financial Officer and Comptroller of The JSO Consulting Group, LLC, further strengthening his experience in financial strategy and organizational management.',
+      'A graduate of Morehouse College with a Bachelor of Arts in Political Science, Zachary brings a collaborative and entrepreneurial approach to leadership. Through LSMG and LEDGERA, he is focused on building platforms that give creators, talent, entrepreneurs, brands, and compelling stories the strategy, infrastructure, and visibility needed to reach larger audiences.',
+    ],
     image: '/team/zachary.jpg',
   },
   {
-    name: "Julien Serrano-O'Neil",
-    role: 'CO-FOUNDER · CO-CEO',
-    desc: 'Co-founder handling operational systems, business development, and organizational infrastructure. The operational backbone of LSMG.',
-    bio: 'Julien is the operational backbone of LSMG. He architects the systems, business-development pipelines, and organizational infrastructure that let the company move with the intensity of a counterculture movement and the precision of a serious enterprise. If it scales, Julien built the rails for it.',
-    tags: ['Co-CEO', 'Co-Founder'],
+    id: 'julien',
+    name: 'Julien Serrano-O’Neil, MNM, MPA, ACNP',
+    cardRole: ['CO-CEO · HEAD OF OPERATIONS'],
+    role: 'Co-CEO & Head of Operations, Last Shot Media Group',
+    bio: [
+      'Julien Serrano-O’Neil is a media executive, strategist, entrepreneur, and civic leader serving as Co-Chief Executive Officer and Head of Operations of Last Shot Media Group (LSMG). As a co-founder of LSMG, Julien leads the business and operational infrastructure behind the company, overseeing organizational strategy, business development, partnerships, operations, and the continued growth of its media and entertainment portfolio.',
+      'Built around the philosophy “Where Creativity Meets Capital,” LSMG operates at the intersection of media, entertainment, talent, brands, and culture. Julien works across the company to turn creative ideas and relationships into sustainable business opportunities, helping develop the systems, partnerships, and strategies that move projects from concept to execution. His leadership spans public relations and communications strategy, talent and media opportunities, brand partnerships, production, licensing, merchandise, business development, and organizational growth.',
+      'Working alongside LSMG’s creative leadership, Julien helps guide the company’s broader strategy while developing relationships with brands, corporations, media organizations, talent, publicists, community partners, and other industry stakeholders. He also supports the growth of LEDGERA Magazine, LSMG’s editorial and media platform, helping expand its partnerships, access, special projects, events, interviews, and opportunities for original storytelling.',
+      'Julien brings to LSMG a multidisciplinary background spanning executive leadership, communications, public relations, organizational management, fundraising, partnerships, and community engagement. He is also Founder, President, and Chief Executive Officer of The JSO Consulting Group, LLC, where he advises nonprofit organizations, higher education institutions, businesses, civic organizations, campaigns, and mission-driven leaders on strategy, governance, communications, public relations, fundraising, management, and organizational capacity.',
+      'He serves as Chief Relationship Officer, First Vice President, and Chief of Staff for the United Foundation of Central Florida, Inc., where his work includes strategic partnerships, external relations, philanthropy, executive coordination, and community engagement. His broader nonprofit leadership has contributed to initiatives generating significant economic and community impact throughout the United States and internationally.',
+      'In 2026, Julien was elected President of the Pine Hills Community Council, Inc., becoming the youngest and first Generation Z president in the organization’s history. Through his PACE Administration, centered on Participation, Accessibility, Collaboration, and Excellence, he leads efforts focused on civic engagement, neighborhood advocacy, economic development, community visibility, and public-private collaboration.',
+      'A graduate of Morehouse College, Julien earned a Bachelor of Arts in Political Science before completing both a Master of Nonprofit Management and Master of Public Administration at the University of Central Florida, along with a Graduate Certificate in Nonprofit Management. He holds both the Certified Nonprofit Professional (CNP) and Advanced Certified Nonprofit Professional (ACNP) credentials through the Nonprofit Leadership Alliance.',
+      'Julien’s leadership and service have been recognized through more than 40 local, state, and national honors, including the Orlando Business Journal 40 Under 40, Alpha Phi Alpha Fraternity, Inc.’s 40 Under 40 Gamma Class, and the 2024 Presidential Lifetime Achievement Award.',
+      'Across media, business, and community leadership, Julien’s work centers on building the relationships and infrastructure that allow ideas, organizations, and people to grow. At LSMG, that translates into a clear focus: building a media enterprise where creativity is supported by strategy, opportunity is backed by infrastructure, and compelling stories can become lasting brands and businesses.',
+    ],
     image: '/team/julien.jpg',
   },
   {
+    id: 'ashley',
     name: 'Ashley Diaz',
+    cardRole: ['BRAND STRATEGY LEAD'],
     role: 'Brand Strategy Lead',
-    desc: 'Brand positioning, visual identity strategy, and market positioning for LSMG and its clients.',
-    bio: 'As Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
-    tags: ['Brand Strategy', 'Strategy Lead'],
+    bio: [
+      'As Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
+    ],
     image: '/team/ashley.jpg',
   },
   {
+    id: 'james',
     name: 'James P. Claude',
-    role: 'CHIEF TECHNOLOGY OFFICER',
-    desc: 'Oversees global technology strategy, leading engineering, cybersecurity, and data science teams to deliver robust, scalable solutions.',
-    bio: 'James P. Claude is a visionary C-level technology executive with over 20 years of experience driving digital transformation, scaling enterprise infrastructure, and pioneering cutting-edge product innovation. As Chief Technology Officer at LSMG, James oversees the company’s global technology strategy, leading high-performance engineering, cybersecurity, and data science teams to deliver robust, scalable solutions that power the business forward. Throughout his career he has built a reputation for bridging the gap between complex technological capabilities and high-level business strategy, specializing in cloud architecture, machine learning integration, and modernizing legacy systems to optimize operational efficiency and maximize ROI. He holds an M.S. in Computer Science from Stanford University and a B.S. in Computer Engineering from the Massachusetts Institute of Technology (MIT).',
-    tags: ['Technology', 'CTO'],
+    cardRole: ['CHIEF TECHNOLOGY OFFICER'],
+    role: 'Chief Technology Officer',
+    bio: [
+      'James P. Claude is a visionary C-level technology executive with over 20 years of experience driving digital transformation, scaling enterprise infrastructure, and pioneering cutting-edge product innovation. As Chief Technology Officer at LSMG, James oversees the company’s global technology strategy, leading high-performance engineering, cybersecurity, and data science teams to deliver robust, scalable solutions that power the business forward.',
+      'Throughout his career he has built a reputation for bridging the gap between complex technological capabilities and high-level business strategy, specializing in cloud architecture, machine learning integration, and modernizing legacy systems to optimize operational efficiency and maximize ROI.',
+      'He holds an M.S. in Computer Science from Stanford University and a B.S. in Computer Engineering from the Massachusetts Institute of Technology (MIT).',
+    ],
     image: '/team/james.png',
   },
 ]
@@ -132,6 +157,9 @@ function AboutPage() {
   const revealRef = useScrollReveal()
   const [active, setActive] = useState<Member | null>(null)
   const [closing, setClosing] = useState(false)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
 
   // Fluid, dondregreen-style dismissal: play the exit animation first, then
   // unmount — so the bio never cuts off abruptly the way a hard unmount does.
@@ -140,19 +168,43 @@ function AboutPage() {
     window.setTimeout(() => {
       setActive(null)
       setClosing(false)
+      lastFocusedRef.current?.focus()
+      lastFocusedRef.current = null
     }, 250)
   }, [])
 
   const openBio = useCallback((member: Member) => {
+    lastFocusedRef.current = document.activeElement as HTMLElement | null
     setClosing(false)
     setActive(member)
   }, [])
 
-  // Lock scroll + handle Escape while the bio modal is open
+  // Lock scroll, handle Escape, and keep Tab inside the dialog while it is open
   useEffect(() => {
     if (!active) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeBio()
+      if (e.key === 'Escape') {
+        closeBio()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const modal = modalRef.current
+      if (!modal) return
+      const focusable = Array.from(
+        modal.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => el.offsetParent !== null)
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener('keydown', onKey)
     // Lock scroll without a layout shift: hiding the scrollbar widens the page
@@ -164,7 +216,10 @@ function AboutPage() {
     if (scrollbarWidth > 0) {
       document.body.style.paddingRight = `${scrollbarWidth}px`
     }
+    // Move focus into the dialog so keyboard and screen-reader users land there.
+    const frame = window.requestAnimationFrame(() => closeButtonRef.current?.focus())
     return () => {
+      window.cancelAnimationFrame(frame)
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prevOverflow
       document.body.style.paddingRight = prevPaddingRight
@@ -226,45 +281,58 @@ function AboutPage() {
       </section>
 
       {/* Leadership */}
-      <section style={{ padding: '120px 40px', background: '#060606' }}>
+      <section style={{ padding: 'clamp(72px, 8vw, 120px) clamp(16px, 4vw, 40px)', background: '#060606' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-16">
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Leadership</span>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a portrait to read the full bio.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 640, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists working across media, entertainment, technology, brand strategy, storytelling, and business development. Select a portrait to learn more about our leadership.</p>
           </div>
-          <div className="hm-team-grid">
+          <div className="lsmg-team-grid">
             {TEAM.map((member, idx) => (
               <button
                 type="button"
-                key={member.name}
-                className="hm-member scroll-reveal"
+                key={member.id}
+                className="lsmg-team-card scroll-reveal"
                 style={{ transitionDelay: `${idx * 0.06}s` }}
                 onClick={() => openBio(member)}
-                aria-label={`View bio for ${member.name}, ${member.role}`}
+                aria-label={`Read biography for ${member.name}`}
               >
-                {member.image ? (
-                  <img
-                    src={netlifyImage(member.image, 720, 960)}
-                    alt={member.name}
-                    className="hm-member-photo"
-                    loading="lazy"
-                    onError={(event) => {
-                      event.currentTarget.onerror = null
-                      event.currentTarget.src = member.image
-                    }}
-                  />
-                ) : (
-                  <span className="hm-member-placeholder" aria-hidden="true">
-                    {member.name.charAt(0)}
+                <span className="lsmg-team-card__image">
+                  {member.image ? (
+                    <img
+                      src={netlifyImage(member.image, 720, 960)}
+                      alt={member.name}
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.onerror = null
+                        event.currentTarget.src = member.image
+                      }}
+                    />
+                  ) : (
+                    <span className="lsmg-team-card__placeholder" aria-hidden="true">
+                      {member.name.charAt(0)}
+                    </span>
+                  )}
+                  <span className="lsmg-team-card__overlay" aria-hidden="true">
+                    <span className="lsmg-team-card__view">View Bio &rarr;</span>
                   </span>
-                )}
-                <span className="hm-member-overlay">
-                  <span className="hm-member-name">{member.name}</span>
-                  <span className="hm-member-role">{member.role}</span>
-                  <span className="hm-member-cta">View Bio &rarr;</span>
+                </span>
+                <span className="lsmg-team-card__content">
+                  <h3>{member.name}</h3>
+                  <p>
+                    {member.cardRole.map((line, i) => (
+                      <span key={line}>
+                        {i > 0 && <br />}
+                        {line}
+                      </span>
+                    ))}
+                  </p>
+                  <span className="lsmg-team-card__cue" aria-hidden="true">
+                    View Bio &rarr;
+                  </span>
                 </span>
               </button>
             ))}
@@ -272,51 +340,68 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Bio Lightbox — full-screen: blurred, zoomed backdrop of the same
-          portrait with the sharp, uncropped image and bio floated on top. */}
+      {/* Bio modal — portrait column beside a bio column that scrolls on its
+          own; both stack and scroll as one block on phones. */}
       {active && (
         <div
-          className={`bio-lightbox${closing ? ' bio-lightbox--closing' : ''}`}
+          ref={modalRef}
+          className={`lsmg-bio-modal${closing ? ' lsmg-bio-modal--closing' : ''}`}
           onClick={closeBio}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${active.name} biography`}
         >
-          <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close">
-            &times;
-          </button>
-          <div className="bio-lightbox-panel" onClick={(e) => e.stopPropagation()}>
-            <div className="bio-lightbox-figure">
+          <div
+            className="lsmg-bio-modal__dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="lsmgBioName"
+            aria-describedby="lsmgBioText"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              ref={closeButtonRef}
+              className="lsmg-bio-modal__close"
+              onClick={closeBio}
+              aria-label="Close biography"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div className="lsmg-bio-modal__visual">
               {active.image ? (
                 <FullResolutionImage
                   src={active.image}
                   alt={active.name}
-                  className="bio-lightbox-img"
-                  linkClassName="bio-lightbox-image-link"
+                  className="lsmg-bio-modal__photo"
+                  linkClassName="lsmg-bio-modal__image-link"
                 />
               ) : (
-                <div className="bio-lightbox-placeholder">
-                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>
-                    {active.name.charAt(0)}
-                  </span>
+                <div className="lsmg-bio-modal__placeholder" aria-hidden="true">
+                  {active.name.charAt(0)}
                 </div>
               )}
+              <div className="lsmg-bio-modal__visual-shade" />
+              <div className="lsmg-bio-modal__mark" aria-hidden="true">
+                LS
+                <br />
+                MG
+              </div>
             </div>
-            <div className="bio-lightbox-info">
-              <span className="bio-lightbox-eyebrow">Leadership</span>
-              <h3 className="bio-lightbox-name">{active.name}</h3>
-              <p className="bio-lightbox-role">{active.role}</p>
-              <div className="bio-lightbox-rule" />
-              <p className="bio-lightbox-bio">{active.bio}</p>
-              <div className="bio-lightbox-tags">
-                {active.tags.map((tag, i) => (
-                  <span
-                    key={tag}
-                    className={`bio-lightbox-tag${i === active.tags.length - 1 ? ' bio-lightbox-tag--accent' : ''}`}
-                  >
-                    {tag}
-                  </span>
+
+            <div className="lsmg-bio-modal__content">
+              <p className="lsmg-bio-modal__eyebrow">LSMG Leadership</p>
+              <h2 className="lsmg-bio-modal__name" id="lsmgBioName">
+                {active.name}
+              </h2>
+              <p className="lsmg-bio-modal__role">{active.role}</p>
+              <div className="lsmg-bio-modal__rule" />
+              <div className="lsmg-bio-modal__bio" id="lsmgBioText">
+                {active.bio.map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                 ))}
+              </div>
+              <div className="lsmg-bio-modal__footer">
+                <span>Last Shot Media Group</span>
+                <span aria-hidden="true">Where Creativity Meets Capital</span>
               </div>
             </div>
           </div>
