@@ -227,112 +227,193 @@ img {
   box-shadow: 0 0 24px 2px rgba(200,16,46,.15);
 }
 
-/* ── Leadership team — portrait roster matching the Models page ── */
-.hm-team-grid {
+/* ── Leadership team — responsive portrait roster ──
+   Names and roles live *below* the portrait rather than inside the overlay, so
+   long credentialed titles stay legible at every width instead of being
+   squeezed over the image. The grid steps 4 → 2 → 1 column. */
+.lsmg-team-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(12px, 1.6vw, 22px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(14px, 2vw, 24px);
   align-items: start;
 }
-@media (min-width: 768px) { .hm-team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 1280px) { .hm-team-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.hm-member {
-  position: relative;
+@media (max-width: 1050px) {
+  .lsmg-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px 18px;
+  }
+}
+@media (max-width: 520px) {
+  .lsmg-team-grid { gap: 30px 10px; }
+}
+@media (max-width: 370px) {
+  .lsmg-team-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+.lsmg-team-card {
+  appearance: none;
   display: block;
   width: 100%;
   margin: 0;
   padding: 0;
-  border: none;
-  appearance: none;
-  overflow: hidden;
-  background: #0c0c0c;
+  border: 0;
+  background: transparent;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
   animation: mdlCardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
 }
-.hm-member:focus-visible {
+.lsmg-team-card:focus-visible {
   outline: 2px solid var(--red);
-  outline-offset: 5px;
+  outline-offset: 6px;
 }
-.hm-member-photo {
+.lsmg-team-card__image {
+  position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #0c0c0c;
+}
+.lsmg-team-card__image::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s ease;
+}
+.lsmg-team-card__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: center top;
   filter: grayscale(45%) contrast(1.05) brightness(0.86);
-  transition: transform 0.85s cubic-bezier(0.16,1,0.3,1), filter 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.2,0.7,0.2,1), filter 0.45s ease;
 }
-.hm-member:hover .hm-member-photo,
-.hm-member:focus-visible .hm-member-photo {
-  transform: scale(1.07);
-  filter: grayscale(0%) contrast(1.08) brightness(1);
-}
-.hm-member-placeholder {
+.lsmg-team-card__placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 100%;
   background: linear-gradient(135deg, #160006, #080808);
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(80px, 12vw, 160px);
+  font-size: clamp(72px, 11vw, 150px);
+  line-height: 1;
   color: var(--red);
   opacity: 0.6;
 }
-.hm-member-overlay {
+.lsmg-team-card__overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: clamp(16px, 1.8vw, 24px);
-  background: linear-gradient(to top, rgba(6,6,6,0.88) 0%, rgba(6,6,6,0.18) 45%, transparent 70%);
-  transition: background 0.5s ease;
+  align-items: flex-end;
+  padding: clamp(16px, 1.8vw, 22px);
+  background: linear-gradient(to top, rgba(6,6,6,0.88) 0%, rgba(6,6,6,0.18) 48%, rgba(6,6,6,0) 72%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
-.hm-member:hover .hm-member-overlay,
-.hm-member:focus-visible .hm-member-overlay {
-  background: linear-gradient(to top, rgba(6,6,6,0.94) 0%, rgba(120,8,20,0.3) 58%, transparent 88%);
-}
-.hm-member-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(26px, 3vw, 40px);
-  line-height: 0.94;
-  color: var(--white);
-  letter-spacing: 0.5px;
-}
-.hm-member-role {
+.lsmg-team-card__view {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--white);
+  transform: translateY(8px);
+  transition: transform 0.35s ease;
 }
-.hm-member-cta {
+.lsmg-team-card:hover .lsmg-team-card__image img,
+.lsmg-team-card:focus-visible .lsmg-team-card__image img {
+  transform: scale(1.045);
+  filter: grayscale(0%) contrast(1.08) brightness(1);
+}
+.lsmg-team-card:hover .lsmg-team-card__overlay,
+.lsmg-team-card:focus-visible .lsmg-team-card__overlay { opacity: 1; }
+.lsmg-team-card:hover .lsmg-team-card__view,
+.lsmg-team-card:focus-visible .lsmg-team-card__view { transform: translateY(0); }
+.lsmg-team-card:hover .lsmg-team-card__image::after,
+.lsmg-team-card:focus-visible .lsmg-team-card__image::after { transform: scaleX(1); }
+.lsmg-team-card__content {
+  display: block;
+  padding: 20px 2px 5px;
+}
+.lsmg-team-card__content h3 {
+  margin: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.02;
+  letter-spacing: 0.5px;
+  color: var(--white);
+}
+.lsmg-team-card__content p {
+  min-height: 45px;
+  margin: 9px 0 0;
   font-family: 'DM Mono', monospace;
-  font-size: 8px;
+  font-size: 10px;
+  line-height: 1.55;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--mid);
+}
+.lsmg-team-card__cue {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--white);
-  margin-top: 5px;
-  opacity: 0.7;
-  transition: color 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
-}
-.hm-member:hover .hm-member-cta,
-.hm-member:focus-visible .hm-member-cta {
   color: var(--red);
-  opacity: 1;
-  transform: translateX(5px);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.lsmg-team-card:hover .lsmg-team-card__cue,
+.lsmg-team-card:focus-visible .lsmg-team-card__cue {
+  color: var(--white);
+  transform: translateX(4px);
+}
+@media (max-width: 520px) {
+  .lsmg-team-card__content { padding-top: 13px; }
+  .lsmg-team-card__content h3 { font-size: 21px; }
+  .lsmg-team-card__content p {
+    min-height: 0;
+    margin-top: 6px;
+    font-size: 9px;
+    line-height: 1.48;
+    letter-spacing: 1.1px;
+  }
+  .lsmg-team-card__cue {
+    margin-top: 10px;
+    font-size: 8px;
+  }
+  /* Hover does not exist on most phones — the cue below the card is the affordance. */
+  .lsmg-team-card__overlay { display: none; }
+}
+@media (max-width: 370px) {
+  .lsmg-team-card__image { aspect-ratio: 4 / 5; }
+  .lsmg-team-card__content h3 { font-size: 26px; }
+  .lsmg-team-card__content p { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hm-member,
-  .hm-member-photo,
-  .hm-member-overlay,
-  .hm-member-cta { transition: none; }
+  .lsmg-team-card,
+  .lsmg-team-card__image img,
+  .lsmg-team-card__image::after,
+  .lsmg-team-card__overlay,
+  .lsmg-team-card__view,
+  .lsmg-team-card__cue {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* ── Page Loader (mescubook-inspired) ── */
@@ -1326,171 +1407,257 @@ img {
   to { opacity: 0; transform: scale(0.96); }
 }
 
-/* ── Team bio lightbox ──
-   Simplified centered modal on a solid dark overlay with clean side-by-side or stacked layout. */
-.bio-lightbox {
+/* ── Team bio modal ──
+   Desktop: portrait column beside a bio column that scrolls on its own, so the
+   dialog never grows past the viewport. Mobile: the whole thing stacks and the
+   dialog itself scrolls. Sized in dvh so mobile browser chrome can't clip it. */
+.lsmg-bio-modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: clamp(16px, 4vw, 56px);
-  background: rgba(0, 0, 0, 0.85); /* plain solid dark background overlay */
-  overflow-y: auto; /* allow scrolling of whole overlay on mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(18px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    max(18px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   animation: modalOverlayIn 250ms ease-out both;
 }
-.bio-lightbox--closing {
+.lsmg-bio-modal--closing {
   animation: modalOverlayOut 250ms ease-out both;
 }
-.bio-lightbox-panel {
+.lsmg-bio-modal__dialog {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 960px;
-  max-height: 90vh; /* keep the whole modal inside the viewport */
-  overflow-y: auto; /* long bios scroll inside the modal, not off-screen */
-  overscroll-behavior: contain;
-  background: #0d0d0d; /* solid dark background for panel */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+  display: grid;
+  grid-template-columns: minmax(300px, 40%) minmax(0, 60%);
+  /* Bound the row to the dialog's max-height so the bio column scrolls
+     internally instead of overflowing and being clipped. */
+  grid-template-rows: minmax(0, 1fr);
+  width: min(1180px, 100%);
+  max-height: calc(100dvh - 36px);
+  overflow: hidden;
+  background: #0d0d0d;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7);
   animation: modalPanelIn 250ms ease-out both;
-  margin: auto;
 }
-.bio-lightbox--closing .bio-lightbox-panel {
+.lsmg-bio-modal--closing .lsmg-bio-modal__dialog {
   animation: modalPanelOut 250ms ease-out both;
 }
-@media (min-width: 900px) {
-  .bio-lightbox-panel {
-    flex-direction: row;
-    align-items: stretch;
-  }
+
+/* Portrait */
+.lsmg-bio-modal__visual {
+  position: relative;
+  min-height: min(760px, calc(100dvh - 36px));
+  overflow: hidden;
+  background: #0a0a0a;
 }
-.bio-lightbox-figure {
-  flex: 1 1 50%;
-  background: #050505;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-  padding: 24px;
-}
-.bio-lightbox-img {
+.lsmg-bio-modal__image-link {
   display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 40vh;
-  object-fit: contain;
-}
-.bio-lightbox-image-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 100%;
+  position: absolute;
+  inset: 0;
   cursor: zoom-in;
 }
-.bio-lightbox-image-link:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
-.bio-lightbox-placeholder {
+.lsmg-bio-modal__image-link:focus-visible { outline: 2px solid var(--red); outline-offset: -4px; }
+.lsmg-bio-modal__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(45%) contrast(1.05);
+}
+.lsmg-bio-modal__placeholder {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  aspect-ratio: 3 / 4;
   background: linear-gradient(135deg, #160006, #080808);
-  border: 1px solid rgba(245, 242, 237, 0.16);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(90px, 14vw, 160px);
+  line-height: 1;
+  color: var(--red);
+  opacity: 0.5;
 }
-@media (min-width: 900px) {
-  .bio-lightbox-figure {
-    max-width: 50%;
-  }
-  .bio-lightbox-img {
-    max-height: 70vh;
-  }
+.lsmg-bio-modal__visual-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 55%);
 }
-.bio-lightbox-info {
-  flex: 1 1 50%;
-  width: 100%;
-  padding: clamp(24px, 4vw, 44px);
-  background: #0d0d0d;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.lsmg-bio-modal__mark {
+  position: absolute;
+  left: 28px;
+  bottom: 24px;
+  pointer-events: none;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(38px, 5vw, 72px);
+  line-height: 0.78;
+  letter-spacing: 1px;
+  color: var(--white);
+  opacity: 0.92;
 }
-.bio-lightbox-eyebrow {
+
+/* Bio column */
+.lsmg-bio-modal__content {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: clamp(44px, 5vw, 76px) clamp(26px, 4vw, 64px) clamp(34px, 4vw, 56px);
+}
+.lsmg-bio-modal__eyebrow {
+  margin: 0 0 14px;
   font-family: 'DM Mono', monospace;
   font-size: 10px;
   letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--red);
 }
-.bio-lightbox-name {
+.lsmg-bio-modal__name {
+  margin: 0;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(40px, 6vw, 66px);
-  line-height: 0.9;
-  margin: 10px 0 8px;
+  font-size: clamp(38px, 5vw, 66px);
+  line-height: 0.92;
   color: var(--white);
 }
-.bio-lightbox-role {
+.lsmg-bio-modal__role {
+  max-width: 600px;
+  margin: 16px 0 0;
   font-family: 'DM Mono', monospace;
   font-size: 11px;
-  letter-spacing: 3px;
+  line-height: 1.7;
+  letter-spacing: 2.4px;
   text-transform: uppercase;
   color: var(--red);
-  margin-bottom: 22px;
 }
-.bio-lightbox-rule {
+.lsmg-bio-modal__rule {
   width: 60px;
   height: 3px;
+  margin: 26px 0;
   background: var(--red);
-  margin-bottom: 24px;
 }
-.bio-lightbox-bio {
+.lsmg-bio-modal__bio {
   font-size: 16px;
+  line-height: 1.85;
   color: #dcdcdc;
-  line-height: 1.8;
-  margin-bottom: 26px;
 }
-.bio-lightbox-tags {
+.lsmg-bio-modal__bio p { margin: 0 0 1.4em; }
+.lsmg-bio-modal__bio p:last-child { margin-bottom: 0; }
+.lsmg-bio-modal__footer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.bio-lightbox-tag {
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  padding: 6px 14px;
-  border: 1px solid #262626;
-  color: var(--mid);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #666;
 }
-.bio-lightbox-tag--accent {
-  border-color: var(--red);
-  color: var(--red);
-}
-.bio-lightbox-close {
-  position: fixed;
-  top: clamp(14px, 3vw, 24px);
-  right: clamp(14px, 3vw, 24px);
+
+/* Close */
+.lsmg-bio-modal__close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
   z-index: 6;
-  width: 44px;
-  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
   font-size: 28px;
   line-height: 1;
   color: var(--white);
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
-.bio-lightbox-close:hover {
+.lsmg-bio-modal__close:hover,
+.lsmg-bio-modal__close:focus-visible {
   background: var(--red);
   border-color: var(--red);
-  transform: scale(1.1);
+  transform: scale(1.08);
+}
+
+/* Tablet */
+@media (max-width: 1050px) {
+  .lsmg-bio-modal__dialog {
+    grid-template-columns: 42% 58%;
+    width: min(920px, 100%);
+  }
+  .lsmg-bio-modal__visual {
+    min-height: min(680px, calc(100dvh - 36px));
+  }
+}
+
+/* Mobile — stack the portrait above the bio and scroll the dialog as one */
+@media (max-width: 720px) {
+  .lsmg-bio-modal {
+    align-items: flex-start;
+    padding:
+      max(10px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+  }
+  .lsmg-bio-modal__dialog {
+    display: block;
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .lsmg-bio-modal__visual {
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 4 / 4.25;
+  }
+  .lsmg-bio-modal__photo { object-position: center 20%; }
+  .lsmg-bio-modal__mark {
+    left: 20px;
+    bottom: 18px;
+    font-size: 44px;
+  }
+  /* The dialog scrolls as a whole here, so the bio column must not scroll too. */
+  .lsmg-bio-modal__content {
+    overflow: visible;
+    padding: 32px 22px 38px;
+  }
+  .lsmg-bio-modal__name { font-size: clamp(34px, 10vw, 52px); }
+  .lsmg-bio-modal__footer {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 34px;
+  }
+  /* Pinned to the viewport so Close stays reachable while the dialog scrolls. */
+  .lsmg-bio-modal__close {
+    position: fixed;
+    top: max(14px, env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+  }
+}
+
+@media (max-width: 520px) {
+  .lsmg-bio-modal__bio {
+    font-size: 15px;
+    line-height: 1.8;
+  }
 }
 
 /* ── Micro-interaction: subtle press feedback ── */
@@ -1501,10 +1668,10 @@ img {
 /* ── Respect reduced-motion preferences ── */
 @media (prefers-reduced-motion: reduce) {
   .word-stagger,
-  .bio-lightbox,
-  .bio-lightbox--closing,
-  .bio-lightbox-backdrop,
-  .bio-lightbox-panel,
+  .lsmg-bio-modal,
+  .lsmg-bio-modal--closing,
+  .lsmg-bio-modal__dialog,
+  .lsmg-bio-modal__close,
   .team-photo,
   .team-card {
     animation: none !important;
