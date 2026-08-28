@@ -57,9 +57,7 @@ function ModelProfilePage() {
             alt={`${model.name}, ${model.types.join(' and ')} model represented by LSMG`}
             className="model-profile-image"
           />
-          <span className="model-profile-shot-count">
-            {model.imagePaths.length} shots{model.videoPath ? ' · 1 reel' : ''}
-          </span>
+          <span className="model-profile-shot-count">{model.imagePaths.length} shots</span>
         </div>
 
         <div className="model-profile-info">
@@ -87,28 +85,6 @@ function ModelProfilePage() {
           </Link>
         </div>
       </div>
-
-      {model.videoPath && (
-        <section className="model-profile-reel" aria-label={`${model.name} motion reel`}>
-          <div className="model-profile-gallery-head">
-            <span className="mdl-eyebrow">Motion</span>
-            <h2>{model.name}’s Reel</h2>
-          </div>
-          <div className="model-profile-reel-frame">
-            <video
-              className="model-profile-reel-video"
-              src={model.videoPath}
-              poster={netlifyImage(model.imagePaths[0], 1100, 1500)}
-              controls
-              playsInline
-              preload="metadata"
-            >
-              Your browser does not support embedded video.{' '}
-              <a href={model.videoPath}>Download {model.name}’s reel</a>.
-            </video>
-          </div>
-        </section>
-      )}
 
       {model.imagePaths.length > 1 && (
         <section className="model-profile-gallery" aria-label={`${model.name} portfolio gallery`}>

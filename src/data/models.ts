@@ -9,7 +9,6 @@ export type Model = {
     waist: string
   }
   imagePaths: string[]
-  videoPath?: string
   bio: string
   featured: boolean
 }
@@ -67,7 +66,6 @@ export const MODELS: Model[] = [
       '/models/nani-6.jpg',
       '/models/nani-7.jpg',
     ],
-    videoPath: '/models/nani-reel.mp4',
     bio: 'Dallas-based Nani brings warmth, clarity, and an easy connection to commercial and print assignments. Her camera-ready range is a natural fit for lifestyle campaigns, catalogs, and polished brand storytelling.',
     featured: true,
   },
