@@ -1,0 +1,255 @@
+/* LSMG digital system layer — shared across every public page. */
+:root {
+  --lsmg-neon-red: #ff2149;
+  --lsmg-neon-soft: rgba(255, 33, 73, .2);
+  --lsmg-code: rgba(245, 248, 255, .11);
+}
+
+body {
+  background:
+    radial-gradient(circle at 78% 8%, rgba(200,16,46,.08), transparent 26rem),
+    radial-gradient(circle at 8% 72%, rgba(200,16,46,.045), transparent 30rem),
+    #101114;
+}
+
+.lsmg-main-shell {
+  position: relative;
+  z-index: 2;
+  min-height: 70vh;
+}
+
+.lsmg-digital-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: .78;
+}
+
+.lsmg-digital-atmosphere::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px);
+  background-size: 54px 54px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 80%);
+}
+
+.lsmg-digital-atmosphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255,255,255,.012) 4px
+  );
+  mix-blend-mode: screen;
+}
+
+.lsmg-bg-code {
+  position: absolute;
+  top: -28%;
+  width: 220px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  line-height: 1.8;
+  letter-spacing: 2px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--lsmg-code);
+  text-shadow: 0 0 10px rgba(255,255,255,.04);
+  animation: lsmgGlobalCodeFall linear infinite;
+}
+
+.lsmg-bg-code--left { left: 2.5%; animation-duration: 34s; }
+.lsmg-bg-code--mid { left: 47%; animation-duration: 43s; animation-delay: -18s; color: rgba(255,33,73,.10); }
+.lsmg-bg-code--right { right: 2.5%; animation-duration: 38s; animation-delay: -9s; color: rgba(255,33,73,.13); }
+
+.lsmg-global-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  top: 15%;
+  background: linear-gradient(90deg, transparent, rgba(255,33,73,.12), rgba(255,255,255,.08), rgba(255,33,73,.12), transparent);
+  box-shadow: 0 0 14px rgba(255,33,73,.12);
+  animation: lsmgGlobalScan 11s ease-in-out infinite;
+}
+
+@keyframes lsmgGlobalCodeFall {
+  from { transform: translate3d(0,-12%,0); }
+  to { transform: translate3d(0,72%,0); }
+}
+
+@keyframes lsmgGlobalScan {
+  0%,100% { transform: translateY(0); opacity: .25; }
+  50% { transform: translateY(70vh); opacity: .78; }
+}
+
+/* Global system status band. This replaces city/location clutter in the opening. */
+.lsmg-system-bar {
+  position: relative;
+  z-index: 35;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,.045);
+  border-bottom: 1px solid rgba(255,33,73,.28);
+  background: rgba(5,5,6,.92);
+  box-shadow: 0 5px 24px rgba(0,0,0,.34), 0 1px 16px rgba(200,16,46,.08);
+  backdrop-filter: blur(12px);
+}
+
+.lsmg-system-bar-status {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 0 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 2.2px;
+  color: var(--white);
+  background: #09090a;
+  border-right: 1px solid rgba(255,33,73,.28);
+}
+
+.lsmg-system-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lsmg-neon-red);
+  box-shadow: 0 0 7px rgba(255,33,73,.95), 0 0 18px rgba(255,33,73,.4);
+  animation: lsmgSystemPulse 1.2s steps(2,end) infinite;
+}
+
+.lsmg-system-stream {
+  white-space: nowrap;
+  min-width: max-content;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2.4px;
+  color: rgba(255,255,255,.36);
+  animation: lsmgSystemMarquee 29s linear infinite;
+}
+
+.lsmg-system-stream b {
+  color: rgba(255,33,73,.9);
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(255,33,73,.35);
+}
+
+@keyframes lsmgSystemPulse { 50% { opacity: .3; } }
+@keyframes lsmgSystemMarquee { to { transform: translateX(-50%); } }
+
+/* Shared section language: cleaner hierarchy, precise rules, restrained neon. */
+.lsmg-main-shell section {
+  position: relative;
+  isolation: isolate;
+}
+
+.lsmg-main-shell section + section {
+  border-top: 1px solid rgba(255,255,255,.045);
+}
+
+.lsmg-main-shell section::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  top: 0;
+  right: 0;
+  width: min(34vw, 480px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,33,73,.42));
+  box-shadow: 0 0 12px rgba(255,33,73,.12);
+}
+
+.lsmg-main-shell h1,
+.lsmg-main-shell h2,
+.lsmg-main-shell h3 {
+  text-wrap: balance;
+}
+
+.lsmg-main-shell h1 span[style*="var(--red)"],
+.lsmg-main-shell h2 span[style*="var(--red)"],
+.lsmg-main-shell h3 span[style*="var(--red)"] {
+  text-shadow: 0 0 18px rgba(200,16,46,.18);
+}
+
+.lsmg-main-shell a[style*="background: 'var(--red)'"],
+.lsmg-main-shell button[style*="background: 'var(--red)'"] {
+  box-shadow: 0 0 0 1px rgba(255,255,255,.025), 0 0 20px rgba(200,16,46,.13);
+}
+
+.glow-hover:hover,
+.team-card:hover,
+.mdl-card:hover,
+.mdl-feature-card:hover {
+  box-shadow: 0 18px 48px rgba(0,0,0,.34), 0 0 28px rgba(200,16,46,.16) !important;
+}
+
+/* Header now reads like a clean control surface rather than a plain nav. */
+.lsmg-header {
+  border-bottom-color: rgba(255,255,255,.055) !important;
+  box-shadow: 0 8px 34px rgba(0,0,0,.22);
+}
+
+.lsmg-header--scrolled {
+  box-shadow: 0 10px 36px rgba(0,0,0,.46), 0 1px 18px rgba(200,16,46,.08) !important;
+}
+
+.lsmg-logo span:last-child {
+  text-shadow: 0 0 9px rgba(255,33,73,.38);
+}
+
+.lsmg-btn-solid {
+  box-shadow: 0 0 18px rgba(200,16,46,.15);
+}
+
+/* Footer gets the same technical-grid finish without overwhelming content. */
+footer {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to top, black, transparent 80%);
+}
+
+footer > * { position: relative; z-index: 1; }
+
+@media (max-width: 800px) {
+  .lsmg-system-bar { height: 29px; }
+  .lsmg-system-bar-status { padding: 0 12px; font-size: 7px; letter-spacing: 1.5px; }
+  .lsmg-system-stream { font-size: 7px; letter-spacing: 1.7px; }
+  .lsmg-bg-code { width: 150px; font-size: 7px; opacity: .68; }
+  .lsmg-bg-code--mid { display: none; }
+  .lsmg-global-scan { opacity: .45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lsmg-bg-code,
+  .lsmg-global-scan,
+  .lsmg-system-stream,
+  .lsmg-system-dot { animation: none !important; }
+}
