@@ -18,13 +18,10 @@ body {
   min-height: 70vh;
 }
 
+/* Raw global code was too intrusive on mobile. Keep code effects contained to the
+   intentional boot/hero components instead of rendering text behind every page. */
 .lsmg-digital-atmosphere {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: .78;
+  display: none !important;
 }
 
 .lsmg-digital-atmosphere::before {
@@ -242,14 +239,9 @@ footer > * { position: relative; z-index: 1; }
   .lsmg-system-bar { height: 29px; }
   .lsmg-system-bar-status { padding: 0 12px; font-size: 7px; letter-spacing: 1.5px; }
   .lsmg-system-stream { font-size: 7px; letter-spacing: 1.7px; }
-  .lsmg-bg-code { width: 150px; font-size: 7px; opacity: .68; }
-  .lsmg-bg-code--mid { display: none; }
-  .lsmg-global-scan { opacity: .45; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lsmg-bg-code,
-  .lsmg-global-scan,
   .lsmg-system-stream,
   .lsmg-system-dot { animation: none !important; }
 }
