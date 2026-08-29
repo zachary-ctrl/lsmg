@@ -85,7 +85,7 @@ function HomePage() {
         <div className="relative z-10 max-w-[1400px] mx-auto w-full">
           <div className="inline-flex items-center gap-3 mb-6" style={{ animation: 'fadeUp .7s ease both' }}>
             <span className="w-10 h-[1px]" style={{ background: 'var(--red)' }} />
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)' }}>Dallas, Orlando, New York and Atlanta &middot; Est. 2022</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)' }}>EST. 2022 &middot; INDEPENDENT CREATIVE HOLDING COMPANY</span>
           </div>
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(72px, 12vw, 160px)', lineHeight: '.85', marginBottom: 32, animation: 'fadeUp .7s ease .1s both' }}>
             LAST<br /><span style={{ color: 'var(--red)' }}>SHOT</span><br />MEDIA
@@ -110,8 +110,8 @@ function HomePage() {
       {/* Ticker */}
       <div className="overflow-hidden" style={{ background: 'var(--red)', padding: '16px 0', whiteSpace: 'nowrap' }}>
         <div className="inline-flex gap-0" style={{ animation: 'ticker 25s linear infinite' }}>
-          {['PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Dallas · Orlando · New York · Atlanta',
-            'PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Dallas · Orlando · New York · Atlanta'].map((item, i) => (
+          {['PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Media · Talent · Culture · Capital',
+            'PR', 'Talent Representation', 'Talent Booking', 'Media Production', 'Media Training', 'Licensing & IP', 'Merchandise', 'LSMG Studios', 'Media · Talent · Culture · Capital'].map((item, i) => (
             <span key={i} className="inline-flex items-center gap-6" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: 4, color: 'var(--white)', padding: '0 48px' }}>
               {item}<span style={{ fontSize: 10, opacity: .5 }}>&diams;</span>
             </span>
