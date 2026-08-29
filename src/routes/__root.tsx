@@ -93,23 +93,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
 }
 
-const DIGITAL_CODE = `01001100 01010011 01001101 01000111 00110010 00110000 00110010 00110110
-MEDIA // TALENT // PR // BOOKING // CULTURE // CAPITAL // SIGNAL
-4C 53 4D 47 00 19 A7 F2 72 11 C0 6D 8B 33 09 B7
-SYSTEM ACTIVE // NETWORK READY // CREATIVE INFRASTRUCTURE ONLINE
-11001010 00110101 10101100 01101001 11100100 00101110`
-
-function DigitalAtmosphere() {
-  return (
-    <div className="lsmg-digital-atmosphere" aria-hidden="true">
-      <div className="lsmg-bg-code lsmg-bg-code--left">{DIGITAL_CODE.repeat(7)}</div>
-      <div className="lsmg-bg-code lsmg-bg-code--mid">{DIGITAL_CODE.repeat(7)}</div>
-      <div className="lsmg-bg-code lsmg-bg-code--right">{DIGITAL_CODE.repeat(7)}</div>
-      <div className="lsmg-global-scan" />
-    </div>
-  )
-}
-
 function SystemBar() {
   const stream = ' 01001100 01010011 01001101 01000111 // MEDIA // TALENT // PR // BOOKING // PARTNERSHIPS // EVENTS // LEDGERA // CULTURE // CAPITAL // SIGNAL // '
   return (
@@ -167,7 +150,6 @@ function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <>
-      <DigitalAtmosphere />
       <Header />
       <SystemBar />
       <main className="lsmg-main-shell">
