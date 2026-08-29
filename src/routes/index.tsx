@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { DigitalBootIntro, DigitalHeroCode } from '../components/DigitalSiteEffects'
+import { DigitalBootIntro } from '../components/DigitalSiteEffects'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -81,7 +81,6 @@ function HomePage() {
           background: 'radial-gradient(ellipse 60% 40% at 70% 50%, rgba(200,16,46,.08) 0%, transparent 60%), linear-gradient(rgba(200,16,46,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,16,46,.03) 1px, transparent 1px)',
           backgroundSize: '100% 100%, 48px 48px, 48px 48px',
         }} />
-        <DigitalHeroCode />
         <div className="relative z-10 max-w-[1400px] mx-auto w-full">
           <div className="inline-flex items-center gap-3 mb-6" style={{ animation: 'fadeUp .7s ease both' }}>
             <span className="w-10 h-[1px]" style={{ background: 'var(--red)' }} />
