@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from 'react'
 import { IdentityProvider } from '../lib/identity-context'
 import { CallbackHandler } from '../components/CallbackHandler'
 import '../styles.css'
+import '../digital-shell.css'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -92,33 +93,34 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
 }
 
-function PageLoader() {
-  const [visible, setVisible] = useState(true)
+const DIGITAL_CODE = `01001100 01010011 01001101 01000111 00110010 00110000 00110010 00110110
+MEDIA // TALENT // PR // BOOKING // CULTURE // CAPITAL // SIGNAL
+4C 53 4D 47 00 19 A7 F2 72 11 C0 6D 8B 33 09 B7
+SYSTEM ACTIVE // NETWORK READY // CREATIVE INFRASTRUCTURE ONLINE
+11001010 00110101 10101100 01101001 11100100 00101110`
 
-  useEffect(() => {
-    // Check sessionStorage so loader only shows once per session
-    if (typeof window !== 'undefined' && sessionStorage.getItem('lsmg-loaded')) {
-      setVisible(false)
-      return
-    }
-    const timer = setTimeout(() => {
-      setVisible(false)
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('lsmg-loaded', '1')
-      }
-    }, 2600)
-    return () => clearTimeout(timer)
-  }, [])
-
-  if (!visible) return null
-
+function DigitalAtmosphere() {
   return (
-    <div className="page-loader">
-      <div className="loader-brand">
-        <span style={{ color: 'var(--white)' }}>LS</span>
-        <span style={{ color: 'var(--red)' }}>MG</span>
+    <div className="lsmg-digital-atmosphere" aria-hidden="true">
+      <div className="lsmg-bg-code lsmg-bg-code--left">{DIGITAL_CODE.repeat(7)}</div>
+      <div className="lsmg-bg-code lsmg-bg-code--mid">{DIGITAL_CODE.repeat(7)}</div>
+      <div className="lsmg-bg-code lsmg-bg-code--right">{DIGITAL_CODE.repeat(7)}</div>
+      <div className="lsmg-global-scan" />
+    </div>
+  )
+}
+
+function SystemBar() {
+  const stream = ' 01001100 01010011 01001101 01000111 // MEDIA // TALENT // PR // BOOKING // PARTNERSHIPS // EVENTS // LEDGERA // CULTURE // CAPITAL // SIGNAL // '
+  return (
+    <div className="lsmg-system-bar" aria-hidden="true">
+      <div className="lsmg-system-bar-status">
+        <span className="lsmg-system-dot" />
+        <span>LSMG // SYSTEM ACTIVE</span>
       </div>
-      <div className="loader-sub">Dallas, Orlando, New York and Atlanta</div>
+      <div className="lsmg-system-stream">
+        {stream}<b>NETWORK ONLINE</b>{stream}{stream}<b>NETWORK ONLINE</b>{stream}
+      </div>
     </div>
   )
 }
@@ -165,9 +167,10 @@ function PageTransitionWrapper({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <>
-      <PageLoader />
+      <DigitalAtmosphere />
       <Header />
-      <main>
+      <SystemBar />
+      <main className="lsmg-main-shell">
         <PageTransitionWrapper>
           <Outlet />
         </PageTransitionWrapper>
@@ -189,8 +192,6 @@ function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Subtle, smooth scroll state — deepens the header background + adds a
-  // hairline shadow once the page leaves the very top.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
@@ -198,8 +199,6 @@ function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close the mobile menu whenever we grow past the mobile breakpoint so it
-  // never lingers half-open when a resize crosses lg.
   useEffect(() => {
     if (!mobileOpen) return
     const mq = window.matchMedia('(min-width: 1024px)')
@@ -242,7 +241,6 @@ function Header() {
         </button>
       </div>
 
-      {/* Mobile menu — always mounted so it animates both open and closed. */}
       <nav className={`lsmg-mobile-menu${mobileOpen ? ' lsmg-mobile-menu--open' : ''}`} aria-hidden={!mobileOpen}>
         <div className="lsmg-mobile-inner max-w-[1400px] mx-auto px-4 sm:px-6">
           {navLinks.map((link) => (
