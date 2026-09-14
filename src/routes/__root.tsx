@@ -226,11 +226,12 @@ function Footer() {
           <div>
             <h4>Representation</h4>
             <ul>
-              <li><a href="/models">Talent</a></li>
               <li><a href="/models#models">Models</a></li>
               <li><a href="/models#actors">Actors</a></li>
               <li><a href="/models#sports">Sports</a></li>
-              <li><a href="/models#media">Media &amp; Creators</a></li>
+              <li><a href="/models#music">Music</a></li>
+              <li><a href="/models#media">Media</a></li>
+              <li><a href="/models#politicians">Politicians</a></li>
               <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA Models ↗</a></li>
             </ul>
           </div>
