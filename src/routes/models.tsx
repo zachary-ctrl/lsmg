@@ -1,304 +1,214 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MODELS } from '../data/models'
 import { netlifyImage } from '../lib/netlify-image'
-import { FullResolutionImage } from '../components/FullResolutionImage'
 
 export const Route = createFileRoute('/models')({
-  component: ModelsPage,
+  component: TalentPage,
   head: () => ({
     meta: [
-      { title: 'Models & Talent | Last Shot Media Group — LSMG Talent Roster' },
+      { title: 'Talent | Last Shot Media Group' },
       {
         name: 'description',
         content:
-          'The LSMG talent roster — editorial, commercial, runway and beauty models represented by Last Shot Media Group across Dallas, Orlando, New York and Atlanta. Explore the roster and book talent.',
+          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and politicians.',
       },
-      { property: 'og:title', content: 'Models & Talent | LSMG Talent Roster' },
+      { property: 'og:title', content: 'Talent | Last Shot Media Group' },
       {
         property: 'og:description',
         content:
-          'Explore the Last Shot Media Group talent roster — editorial, commercial, runway and beauty models across four cities.',
+          'Talent represented by Last Shot Media Group across entertainment, fashion, sports, media and public life.',
       },
     ],
   }),
 })
 
-const FILTERS = ['All', ...Array.from(new Set(MODELS.flatMap((model) => model.types)))]
-const FEATURED_MODELS = MODELS.filter((model) => model.featured)
-const TOTAL_SHOTS = MODELS.reduce((count, model) => count + model.imagePaths.length, 0)
+const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Politicians'] as const
 
-function StaggerText({ text, delay = 0.2 }: { text: string; delay?: number }) {
-  const words = text.split(' ')
+type Category = (typeof CATEGORIES)[number]
 
-  return (
-    <>
-      {words.map((word, index) => (
-        <span
-          key={`${word}-${index}`}
-          className="word-stagger"
-          style={{ animationDelay: `${delay + index * 0.06}s` }}
-        >
-          {word}
-          {index < words.length - 1 ? ' ' : ''}
-        </span>
-      ))}
-    </>
-  )
+const categoryHash: Record<Category, string> = {
+  Models: 'models',
+  Actors: 'actors',
+  Sports: 'sports',
+  Music: 'music',
+  Media: 'media',
+  Politicians: 'politicians',
 }
 
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null)
+function TalentPage() {
+  const [activeCategory, setActiveCategory] = useState<Category>('Models')
+  const representedModels = useMemo(() => MODELS, [])
 
   useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('revealed')
-        })
-      },
-      { threshold: 0.12 },
-    )
-
-    element
-      .querySelectorAll('.scroll-reveal:not(.revealed)')
-      .forEach((child) => observer.observe(child))
-
-    return () => observer.disconnect()
-  })
-
-  return ref
-}
-
-function ModelCard({ model, index = 0, featured = false }: {
-  model: (typeof MODELS)[number]
-  index?: number
-  featured?: boolean
-}) {
-  return (
-    <Link
-      to="/models/$slug"
-      params={{ slug: model.slug }}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={featured ? 'mdl-feature-card' : 'mdl-card'}
-      style={{ animationDelay: `${index * 0.07}s` }}
-      aria-label={`View ${model.name}'s portfolio in a new tab`}
-    >
-      <img
-        src={netlifyImage(model.imagePaths[0], featured ? 900 : 720, featured ? 1080 : 960)}
-        alt={`${model.name} — LSMG ${model.types.join(' and ')} model`}
-        className={featured ? 'mdl-feature-img' : 'mdl-card-img'}
-        loading={featured ? 'eager' : 'lazy'}
-      />
-      <span className={featured ? 'mdl-feature-overlay' : 'mdl-card-overlay'}>
-        {featured && <span className="mdl-feature-city">{model.city}</span>}
-        <span className={featured ? 'mdl-feature-name' : 'mdl-card-name'}>{model.name}</span>
-        <span className={featured ? 'mdl-feature-cats' : 'mdl-card-cats'}>
-          {model.types.join(' · ')}
-        </span>
-        <span className={featured ? 'mdl-feature-link' : 'mdl-card-profile-label'}>
-          View Portfolio →
-        </span>
-      </span>
-    </Link>
-  )
-}
-
-function ModelsPage() {
-  const revealRef = useScrollReveal()
-  const [filter, setFilter] = useState('All')
-  const heroRef = useRef<HTMLDivElement>(null)
-  const glowRef = useRef<HTMLDivElement>(null)
-  const parallaxRef = useRef<HTMLDivElement>(null)
-  const filtered = useMemo(
-    () => (filter === 'All' ? MODELS : MODELS.filter((model) => model.types.includes(filter))),
-    [filter],
-  )
-  const galleryShots = useMemo(
-    () =>
-      filtered.flatMap((model) =>
-        model.imagePaths.map((imagePath, shotIndex) => ({
-          imagePath,
-          shotIndex,
-          model,
-        })),
-      ),
-    [filtered],
-  )
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
-
-    const hero = heroRef.current
-    const glow = glowRef.current
-    const layer = parallaxRef.current
-    if (!hero) return
-
-    let frame = 0
-    const onMove = (event: MouseEvent) => {
-      const rect = hero.getBoundingClientRect()
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
-      const offsetX = (x / rect.width - 0.5) * 2
-      const offsetY = (y / rect.height - 0.5) * 2
-
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        if (glow) glow.style.transform = `translate(${x}px, ${y}px)`
-        if (layer) layer.style.transform = `translate(${offsetX * -14}px, ${offsetY * -14}px)`
-      })
-    }
-
-    hero.addEventListener('mousemove', onMove)
-    return () => {
-      hero.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(frame)
-    }
+    const hash = window.location.hash.replace('#', '').toLowerCase()
+    const match = CATEGORIES.find((category) => categoryHash[category] === hash)
+    if (match) setActiveCategory(match)
   }, [])
 
+  const selectCategory = (category: Category) => {
+    setActiveCategory(category)
+    window.history.replaceState(null, '', `#${categoryHash[category]}`)
+  }
+
   return (
-    <div className="models-page" ref={revealRef}>
-      <section className="mdl-hero" ref={heroRef} aria-label="Models and talent introduction">
-        <div
-          className="mdl-hero-bg"
-          ref={parallaxRef}
-          style={{ backgroundImage: `url(${netlifyImage('/models/hero-jada.jpg', 1600, undefined, 60)})` }}
-        />
-        <div className="mdl-hero-scrim" />
-        <div className="mdl-hero-glow" ref={glowRef} aria-hidden="true" />
+    <div className="min-h-screen bg-black text-white">
+      <section className="relative overflow-hidden border-b border-white/10 px-4 pb-16 pt-32 sm:px-6 lg:px-10 lg:pb-24 lg:pt-40">
+        <div className="pointer-events-none absolute inset-0 opacity-35" aria-hidden="true">
+          <div className="absolute left-0 top-0 h-px w-full bg-[var(--red)]" />
+          <div className="absolute right-[-10%] top-16 h-80 w-80 rounded-full bg-[var(--red)]/20 blur-[120px]" />
+        </div>
 
-        <div className="mdl-hero-inner">
-          <span className="mdl-eyebrow" style={{ animation: 'fadeUp .7s ease both' }}>
-            LSMG Talent Division
-          </span>
-          <h1 className="mdl-hero-title">
-            <span className="mdl-hero-line"><StaggerText text="Models" delay={0.15} /></span>
-            <span className="mdl-hero-line mdl-hero-amp">
-              <span className="word-stagger" style={{ animationDelay: '0.4s' }}>&amp;&nbsp;</span>
-              <span className="word-stagger mdl-accent" style={{ animationDelay: '0.5s' }}>Talent</span>
-            </span>
+        <div className="relative mx-auto max-w-[1400px]">
+          <div className="mb-8 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.32em] text-white/45">
+            <span className="text-[var(--red)]">LSMG / Representation</span>
+            <span>Dallas · Orlando · New York · Atlanta</span>
+          </div>
+
+          <h1 className="max-w-6xl font-['Bebas_Neue'] text-[clamp(5rem,15vw,13rem)] leading-[0.76] tracking-[-0.03em]">
+            TALENT
           </h1>
-          <p className="mdl-hero-deck scroll-reveal" style={{ animation: 'fadeUp .7s ease .55s both' }}>
-            The Last Shot Media Group roster — editorial, commercial, runway and beauty talent
-            represented across Dallas, Orlando, New York and Atlanta.
-          </p>
-          <div className="mdl-hero-cta" style={{ animation: 'fadeUp .7s ease .7s both' }}>
-            <a href="#featured" className="mdl-btn mdl-btn-primary">Explore Roster</a>
-            <Link to="/contact" className="mdl-btn mdl-btn-ghost">Book Talent</Link>
-          </div>
-          <div className="mdl-hero-meta" style={{ animation: 'fadeUp .7s ease .85s both' }}>
-            <span><strong>{MODELS.length}</strong> Talent</span>
-            <span><strong>{TOTAL_SHOTS}</strong> Shots</span>
-            <span><strong>4</strong> Cities</span>
-            <span><strong>{FILTERS.length - 1}</strong> Specialties</span>
+
+          <div className="mt-10 grid gap-8 border-t border-white/10 pt-8 lg:grid-cols-[1.4fr_.6fr] lg:items-end">
+            <p className="max-w-3xl text-xl leading-relaxed text-white/70 sm:text-2xl">
+              Last Shot Media Group represents talent across entertainment, fashion, sports, media and public life — building careers, visibility and opportunities around the people we represent.
+            </p>
+            <div className="lg:text-right">
+              <Link
+                to="/contact"
+                className="inline-flex border border-[var(--red)] bg-[var(--red)] px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white transition hover:bg-transparent"
+              >
+                Representation Inquiry →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mdl-feature-section" id="featured" aria-label="Featured faces">
-        <div className="mdl-section-head scroll-reveal">
-          <span className="mdl-eyebrow">Meet the Roster</span>
-          <h2 className="mdl-section-title">Featured <span className="mdl-accent">Faces</span></h2>
-          <p className="mdl-section-deck">Tap any portrait to open the full profile in a new tab.</p>
-        </div>
-        <div className="mdl-feature-grid">
-          {FEATURED_MODELS.map((model, index) => (
-            <ModelCard key={model.slug} model={model} index={index} featured />
-          ))}
-        </div>
-      </section>
-
-      <section className="mdl-section" id="roster" aria-label="Talent roster">
-        <div className="mdl-section-head scroll-reveal">
-          <span className="mdl-eyebrow">Our Models</span>
-          <h2 className="mdl-section-title">Talent <span className="mdl-accent">Roster</span></h2>
-          <p className="mdl-section-deck">Every portrait, name, and portfolio prompt opens the model’s full profile.</p>
-        </div>
-
-        <div className="mdl-filters scroll-reveal" role="tablist" aria-label="Filter talent by specialty">
-          {FILTERS.map((specialty) => (
+      <section className="sticky top-[70px] z-20 border-b border-white/10 bg-black/95 px-4 backdrop-blur sm:px-6 lg:px-10">
+        <div className="mx-auto flex max-w-[1400px] gap-6 overflow-x-auto py-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {CATEGORIES.map((category) => (
             <button
-              key={specialty}
+              key={category}
               type="button"
-              role="tab"
-              aria-selected={filter === specialty}
-              className={`mdl-filter${filter === specialty ? ' mdl-filter-active' : ''}`}
-              onClick={() => setFilter(specialty)}
+              onClick={() => selectCategory(category)}
+              className={`shrink-0 border-b pb-2 font-mono text-[11px] uppercase tracking-[0.2em] transition ${
+                activeCategory === category
+                  ? 'border-[var(--red)] text-white'
+                  : 'border-transparent text-white/45 hover:text-white'
+              }`}
             >
-              {specialty}
-              {specialty !== 'All' && (
-                <span className="mdl-filter-count">
-                  {MODELS.filter((model) => model.types.includes(specialty)).length}
-                </span>
-              )}
+              {category}
             </button>
           ))}
         </div>
-
-        <div className="mdl-grid" key={filter}>
-          {filtered.map((model, index) => (
-            <ModelCard key={model.slug} model={model} index={index} />
-          ))}
-        </div>
       </section>
 
-      <section className="mdl-section mdl-portfolio-section" id="portfolio" aria-label="Full talent portfolio gallery">
-        <div className="mdl-section-head scroll-reveal">
-          <span className="mdl-eyebrow">The Full Library</span>
-          <h2 className="mdl-section-title">Every <span className="mdl-accent">Shot</span></h2>
-          <p className="mdl-section-deck">
-            All {TOTAL_SHOTS} portfolio images across the roster, in one place. Click any frame for
-            the full-resolution file, or open the model’s profile for specs and booking.
-          </p>
-        </div>
+      <section id="talent-roster" className="px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mb-12 flex flex-col justify-between gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end">
+            <div>
+              <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
+                LSMG Talent
+              </div>
+              <h2 className="font-['Bebas_Neue'] text-6xl uppercase leading-none sm:text-7xl lg:text-8xl">
+                {activeCategory}
+              </h2>
+            </div>
 
-        <div className="mdl-portfolio-grid" key={`portfolio-${filter}`}>
-          {galleryShots.map(({ imagePath, shotIndex, model }) => (
-            <figure className="mdl-portfolio-item" key={imagePath}>
-              <FullResolutionImage
-                src={netlifyImage(imagePath, 640, 854)}
-                fullResolutionSrc={imagePath}
-                alt={`${model.name} — LSMG portfolio image ${shotIndex + 1}`}
-                loading="lazy"
-                linkClassName="mdl-portfolio-link"
-              />
-              <figcaption className="mdl-portfolio-caption">
-                <Link
-                  to="/models/$slug"
-                  params={{ slug: model.slug }}
+            {activeCategory === 'Models' && (
+              <a
+                href="https://ledgeramagazine.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
+              >
+                Looking for LEDGERA Models?
+                <span className="text-[var(--red)] transition-transform group-hover:translate-x-1">→</span>
+              </a>
+            )}
+          </div>
+
+          {activeCategory === 'Models' ? (
+            <>
+              <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
+                Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.
+              </p>
+
+              <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {representedModels.map((model) => (
+                  <article key={model.slug} className="group">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
+                      <img
+                        src={netlifyImage(model.imagePaths[0], 800, 1000, 75)}
+                        alt={`${model.name} — represented by Last Shot Media Group`}
+                        className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
+                        loading="lazy"
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent opacity-80" />
+                      <div className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-[var(--red)] transition-transform duration-500 group-hover:scale-x-100" />
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4 border-b border-white/10 py-4">
+                      <div>
+                        <h3 className="font-['Bebas_Neue'] text-3xl tracking-wide">{model.name}</h3>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
+                          Model · {model.city}
+                        </p>
+                      </div>
+                      <Link
+                        to="/contact"
+                        className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--red)] hover:text-white"
+                        aria-label={`Inquire about ${model.name}`}
+                      >
+                        Inquire →
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              <div className="mt-20 border border-white/10 bg-[#080808] p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
+                <div>
+                  <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
+                    LEDGERA / Models
+                  </div>
+                  <h3 className="font-['Bebas_Neue'] text-5xl uppercase sm:text-6xl">Models representing LEDGERA</h3>
+                  <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/55">
+                    LEDGERA also works with its own faces for magazine editorials, campaigns, events and brand activations. Those models are presented separately from LSMG representation.
+                  </p>
+                </div>
+                <a
+                  href="https://ledgeramagazine.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mdl-portfolio-name"
+                  className="mt-8 inline-flex border border-white/20 px-6 py-3 font-mono text-[11px] uppercase tracking-[0.2em] transition hover:border-[var(--red)] hover:text-[var(--red)] lg:mt-0"
                 >
-                  {model.name}
+                  Explore LEDGERA →
+                </a>
+              </div>
+            </>
+          ) : (
+            <div className="min-h-[420px] border-y border-white/10 py-16 sm:py-24">
+              <div className="max-w-3xl">
+                <div className="mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
+                  Representation Category
+                </div>
+                <h3 className="font-['Bebas_Neue'] text-5xl uppercase leading-none sm:text-7xl">
+                  {activeCategory} roster
+                </h3>
+                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
+                  This category is now part of the new LSMG Talent architecture. Represented talent will appear here as the roster is added, using the same clean one-image representation format.
+                </p>
+                <Link
+                  to="/contact"
+                  className="mt-8 inline-flex border-b border-[var(--red)] pb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white"
+                >
+                  Representation & booking inquiries →
                 </Link>
-                <span className="mdl-portfolio-meta">
-                  {model.city} · {shotIndex + 1}/{model.imagePaths.length}
-                  {model.videoPath ? ' · Reel' : ''}
-                </span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section className="mdl-cta-band scroll-reveal" aria-label="Become talent">
-        <div className="mdl-cta-inner">
-          <span className="mdl-eyebrow">Join the Roster</span>
-          <h2 className="mdl-cta-title">Think you have <span className="mdl-accent">the look?</span></h2>
-          <p className="mdl-cta-deck">
-            LSMG is always scouting new faces across editorial, commercial, runway and beauty.
-            Submit for representation or book existing talent for your next production.
-          </p>
-          <div className="mdl-hero-cta">
-            <Link to="/apply" className="mdl-btn mdl-btn-primary">Become a Talent</Link>
-            <Link to="/pr" className="mdl-btn mdl-btn-ghost">Booking &amp; PR</Link>
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </div>
