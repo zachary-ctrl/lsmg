@@ -91,7 +91,7 @@ function ServicesPage() {
           <span className="editorial-kicker">Representation</span>
           <h2>PEOPLE<br />FIRST.</h2>
           <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
-            The Talent division is organized by representation category — models, actors, music, sports, media and public figures — with a clean roster built for booking and business inquiries.
+            The Talent division is organized by representation category — models, actors, music, sports, media and politicians — with a clean roster built for booking and business inquiries.
           </p>
           <a href="/models" className="editorial-cta red">Explore Talent ↗</a>
         </div>
