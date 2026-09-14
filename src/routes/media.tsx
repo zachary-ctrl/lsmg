@@ -1,86 +1,89 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/media')({
   component: MediaPage,
+  head: () => ({
+    meta: [
+      { title: 'LSMG Studios | Last Shot Media Group' },
+      {
+        name: 'description',
+        content: 'LSMG Studios develops and produces scripted series, podcasts, documentary content, music videos and branded media.',
+      },
+    ],
+  }),
 })
+
+const formats = [
+  { num: '01', title: 'Scripted Series', copy: 'Original scripted development for digital and streaming audiences, built around strong creative voices and cultural storytelling.' },
+  { num: '02', title: 'Podcasts', copy: 'Full-service podcast development, recording, editing, distribution and interview programming for LSMG and outside partners.' },
+  { num: '03', title: 'Documentary', copy: 'Community and culture-driven documentary development designed for digital release, streaming and festival pathways.' },
+  { num: '04', title: 'Brand Content', copy: 'Campaign concepts, music videos and branded productions developed for artists, companies and creative partners.' },
+]
 
 function MediaPage() {
   return (
-    <div>
-      <div className="relative overflow-hidden" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)', background: 'linear-gradient(135deg,#080808 0%,#0d0002 100%)' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
-        <div className="relative z-10 max-w-[1400px] mx-auto">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Studios</span>
-          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
-            Media &amp; <span style={{ color: 'var(--red)' }}>Film</span>
-          </h1>
-          <p style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75 }}>Original content production for film, streaming, and digital platforms. LSMG Studios develops scripted series, podcasts, and documentary content rooted in authentic cultural storytelling.</p>
-        </div>
-      </div>
-
-      {/* Studios Overview */}
-      <section style={{ padding: '120px 40px' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-            <div>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>About LSMG Studios</span>
-              <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', margin: '12px 0' }}>
-                Story Is<br /><span style={{ color: 'var(--red)' }}>Everything.</span>
-              </h2>
-              <div className="w-[60px] h-[3px] my-5" style={{ background: 'var(--red)' }} />
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 24 }}>LSMG Studios is the production arm of Last Shot Media Group. We develop, produce, and distribute original content — from scripted adult animation to documentary and podcast programming.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 32 }}>Our approach is simple: real stories told with craft. We work with creators, directors, and writers who have something to say and the talent to say it.</p>
-              <div className="flex flex-wrap gap-2">
-                {['Scripted Series', 'Podcasts', 'Documentary', 'Brand Content'].map((tag, i) => (
-                  <span key={tag} style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: i === 0 ? 'var(--red)' : 'var(--mid)', border: `1px solid ${i === 0 ? 'var(--red)' : '#222'}`, padding: '6px 14px' }}>{tag}</span>
-                ))}
-              </div>
-            </div>
-            <div className="grid grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
-              {[
-                { label: 'TV/Film', sub: 'Scripted Content' },
-                { label: 'Pod', sub: 'Podcast Network' },
-                { label: 'Doc', sub: 'Documentary' },
-                { label: 'Brand', sub: 'Brand Content' },
-              ].map((item) => (
-                <div key={item.label} className="text-center" style={{ background: '#0a0a0a', padding: 36 }}>
-                  <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 56, color: 'var(--red)' }}>{item.label}</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#8f8f8f' }}>{item.sub}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+    <div className="editorial-shell">
+      <section className="page-hero">
+        <div className="editorial-container">
+          <span className="editorial-kicker">LSMG / Studios</span>
+          <h1>STUDIOS</h1>
+          <p>
+            Original content production for film, streaming and digital platforms. LSMG Studios develops scripted series, podcasts, documentary content and brand productions rooted in authentic cultural storytelling.
+          </p>
         </div>
       </section>
 
-      {/* Production Services */}
-      <section style={{ padding: '120px 40px' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="mb-16">
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Production Services</span>
-            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
-              We <span style={{ color: 'var(--red)' }}>Produce</span> For You Too
-            </h2>
+      <section className="editorial-section">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div>
+              <span className="editorial-kicker">About LSMG Studios</span>
+              <h2 className="editorial-display section-title">STORY IS<br /><span className="editorial-red">EVERYTHING.</span></h2>
+            </div>
+            <div className="section-intro">
+              <p style={{ marginBottom: 20 }}>
+                LSMG Studios is the production arm of Last Shot Media Group. We develop, produce and distribute original content — from scripted programming to documentary and podcast work.
+              </p>
+              <p>Our approach is simple: real stories told with craft. We work with creators, directors and writers who have something to say and the talent to say it.</p>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 2, background: 'var(--red)' }}>
-            {[
-              { icon: '🎥', title: 'Music Video Production', desc: 'Concept development, filming, and editing for artist music videos.' },
-              { icon: '🎙️', title: 'Podcast Production', desc: 'Full-service podcast setup, recording, editing, and distribution for brands and creators.' },
-              { icon: '🎞️', title: 'Documentary Development', desc: 'Community and cultural documentary development targeting streaming platforms and festival circuits.' },
-            ].map((s) => (
-              <div key={s.title} className="hover:bg-[#0d0002] transition-colors" style={{ background: 'var(--black)', padding: '40px 36px' }}>
-                <div style={{ fontSize: 36, marginBottom: 20 }}>{s.icon}</div>
-                <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, color: 'var(--white)', marginBottom: 12 }}>{s.title}</div>
-                <p style={{ fontSize: 15, color: '#b3b3b3', lineHeight: 1.7 }}>{s.desc}</p>
-              </div>
+
+          <div className="service-list">
+            {formats.map((format) => (
+              <article className="service-row" key={format.num}>
+                <span className="service-row-num">{format.num}</span>
+                <h2>{format.title}</h2>
+                <p>{format.copy}</p>
+                <a href="mailto:info@lastshotmediagroup.com?subject=Production%20Inquiry">Inquire ↗</a>
+              </article>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <a href="mailto:info@lastshotmediagroup.com?subject=Production Inquiry" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '16px 32px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>Production Inquiry</a>
-          </div>
         </div>
       </section>
 
+      <section className="split-panel">
+        <div className="split-panel-dark">
+          <span className="editorial-kicker">Original productions</span>
+          <h2>DEVELOP.<br />PRODUCE.</h2>
+          <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
+            Scripted content, podcasts and documentary projects are developed in-house as part of the broader LSMG ecosystem.
+          </p>
+          <a href="/work" className="editorial-cta red">Selected Work ↗</a>
+        </div>
+
+        <div className="split-panel-red">
+          <div>
+            <span className="editorial-kicker" style={{ color: '#fff', opacity: .75 }}>Production services</span>
+            <h2 style={{ marginTop: 18 }}>MAKE<br />WITH US.</h2>
+          </div>
+          <div>
+            <p style={{ marginBottom: 30 }}>
+              LSMG Studios also develops music videos, podcasts, documentary projects and branded content for outside artists, creators and companies.
+            </p>
+            <a href="mailto:info@lastshotmediagroup.com?subject=Production%20Inquiry" className="editorial-cta">Production Inquiry ↗</a>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
