@@ -6,62 +6,35 @@ import {
   createRootRoute,
   useMatches,
 } from '@tanstack/react-router'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IdentityProvider } from '../lib/identity-context'
 import { CallbackHandler } from '../components/CallbackHandler'
 import '../styles.css'
+import '../redesign.css'
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'Last Shot Media Group | LSMG — Dallas, Orlando, New York and Atlanta',
-      },
+      { charSet: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { title: 'Last Shot Media Group | Where Creativity Becomes Capital' },
       {
         name: 'description',
         content:
-          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. PR, talent booking, media production, communications, and more.',
+          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. Talent representation, PR, booking, media production, communications, licensing and original content.',
       },
-      {
-        property: 'og:title',
-        content: 'Last Shot Media Group | LSMG — Dallas, Orlando, New York and Atlanta',
-      },
+      { property: 'og:title', content: 'Last Shot Media Group | Where Creativity Becomes Capital' },
       {
         property: 'og:description',
         content:
-          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. PR, talent booking, media production, communications, and more.',
+          'Independent creative holding company across talent, PR, booking, media production, communications and culture.',
       },
-      {
-        property: 'og:image',
-        content: '/og-image.png',
-      },
-      {
-        property: 'og:type',
-        content: 'website',
-      },
-      {
-        name: 'twitter:card',
-        content: 'summary_large_image',
-      },
-      {
-        name: 'twitter:image',
-        content: '/og-image.png',
-      },
+      { property: 'og:image', content: '/og-image.png' },
+      { property: 'og:type', content: 'website' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:image', content: '/og-image.png' },
     ],
-    links: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico',
-      },
-    ],
+    links: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   }),
   component: RootWrap,
   shellComponent: RootDocument,
@@ -96,17 +69,14 @@ function PageLoader() {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    // Check sessionStorage so loader only shows once per session
     if (typeof window !== 'undefined' && sessionStorage.getItem('lsmg-loaded')) {
       setVisible(false)
       return
     }
     const timer = setTimeout(() => {
       setVisible(false)
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('lsmg-loaded', '1')
-      }
-    }, 2600)
+      if (typeof window !== 'undefined') sessionStorage.setItem('lsmg-loaded', '1')
+    }, 1500)
     return () => clearTimeout(timer)
   }, [])
 
@@ -118,35 +88,33 @@ function PageLoader() {
         <span style={{ color: 'var(--white)' }}>LS</span>
         <span style={{ color: 'var(--red)' }}>MG</span>
       </div>
-      <div className="loader-sub">Dallas, Orlando, New York and Atlanta</div>
+      <div className="loader-sub">WHERE CREATIVITY BECOMES CAPITAL</div>
     </div>
   )
 }
 
 function useSectionReveal() {
   const ref = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const el = ref.current
     if (!el) return
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
+          if (entry.isIntersecting) entry.target.classList.add('visible')
         })
       },
       { threshold: 0.08 },
     )
     const sections = el.querySelectorAll('section, .section-reveal')
-    sections.forEach((s) => {
-      if (!s.classList.contains('section-reveal')) {
-        s.classList.add('section-reveal')
-      }
-      observer.observe(s)
+    sections.forEach((section) => {
+      if (!section.classList.contains('section-reveal')) section.classList.add('section-reveal')
+      observer.observe(section)
     })
     return () => observer.disconnect()
   }, [])
+
   return ref
 }
 
@@ -177,95 +145,67 @@ function RootComponent() {
   )
 }
 
-const navLinks = [
-  { to: '/' as const, label: 'Home' },
-  { to: '/about' as const, label: 'About' },
-  { to: '/models' as const, label: 'Models' },
-  { to: '/pr' as const, label: 'PR & Booking' },
-  { to: '/media' as const, label: 'Media' },
-  { to: '/watch' as const, label: 'Watch' },
-  { to: '/culture-ledger' as const, label: 'LEDGERA' },
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/models', label: 'Talent' },
+  { href: '/services', label: 'Services' },
+  { href: '/media', label: 'Studios' },
+  { href: '/work', label: 'Work' },
+  { href: '/about', label: 'About' },
 ]
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Subtle, smooth scroll state — deepens the header background + adds a
-  // hairline shadow once the page leaves the very top.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8)
+    const onScroll = () => setScrolled(window.scrollY > 10)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close the mobile menu whenever we grow past the mobile breakpoint so it
-  // never lingers half-open when a resize crosses lg.
   useEffect(() => {
     if (!mobileOpen) return
-    const mq = window.matchMedia('(min-width: 1024px)')
-    const onChange = () => mq.matches && setMobileOpen(false)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
+    const onResize = () => {
+      if (window.innerWidth > 1050) setMobileOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [mobileOpen])
 
   return (
-    <header className={`lsmg-header${scrolled ? ' lsmg-header--scrolled' : ''}${mobileOpen ? ' lsmg-header--menu-open' : ''}`}>
-      <div className="lsmg-header-bar max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
-        <Link to="/" className="lsmg-logo" onClick={() => setMobileOpen(false)}>
-          <span style={{ color: 'var(--white)' }}>LS</span>
-          <span style={{ color: 'var(--red)' }}>MG</span>
+    <header className={`redesign-header${scrolled ? ' is-scrolled' : ''}`}>
+      <div className="redesign-header-row">
+        <Link to="/" className="redesign-logo" onClick={() => setMobileOpen(false)} aria-label="Last Shot Media Group home">
+          <span style={{ color: '#fff' }}>LS</span><span style={{ color: 'var(--red)' }}>MG</span>
         </Link>
 
-        <nav className="lsmg-nav">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className="lsmg-nav-link [&.active]:text-[var(--white)] relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 hover:after:w-full after:h-[1px] after:bg-[var(--red)] after:transition-all after:duration-300 [&.active]:after:w-full"
-            >
-              {link.label.toUpperCase()}
-            </Link>
+        <nav className="redesign-nav" aria-label="Main navigation">
+          {navItems.map((item) => (
+            <a key={item.href} href={item.href}>{item.label}</a>
           ))}
-          <Link to="/contact" className="lsmg-btn lsmg-btn-solid">CONTACT</Link>
+          <a className="nav-ledgera" href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
+          <a className="redesign-contact" href="/contact">Contact</a>
         </nav>
 
         <button
-          onClick={() => setMobileOpen((v) => !v)}
-          className={`lsmg-burger${mobileOpen ? ' lsmg-burger--open' : ''}`}
-          aria-label="Toggle menu"
+          className="redesign-burger"
+          type="button"
           aria-expanded={mobileOpen}
+          aria-label="Toggle menu"
+          onClick={() => setMobileOpen((open) => !open)}
         >
-          <span />
-          <span />
-          <span />
+          <span /><span /><span />
         </button>
       </div>
 
-      {/* Mobile menu — always mounted so it animates both open and closed. */}
-      <nav className={`lsmg-mobile-menu${mobileOpen ? ' lsmg-mobile-menu--open' : ''}`} aria-hidden={!mobileOpen}>
-        <div className="lsmg-mobile-inner max-w-[1400px] mx-auto px-4 sm:px-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              tabIndex={mobileOpen ? 0 : -1}
-              onClick={() => setMobileOpen(false)}
-              className="lsmg-mobile-link"
-            >
-              {link.label.toUpperCase()}
-            </Link>
-          ))}
-          <Link
-            to="/contact"
-            tabIndex={mobileOpen ? 0 : -1}
-            onClick={() => setMobileOpen(false)}
-            className="lsmg-mobile-link lsmg-mobile-link--contact"
-          >
-            CONTACT
-          </Link>
-        </div>
+      <nav className={`redesign-mobile${mobileOpen ? ' open' : ''}`} aria-label="Mobile navigation">
+        {navItems.map((item) => (
+          <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>{item.label}</a>
+        ))}
+        <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
+        <a href="/contact" onClick={() => setMobileOpen(false)}>Contact</a>
       </nav>
     </header>
   )
@@ -273,67 +213,55 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="border-t border-[var(--border)]" style={{ background: '#050505', padding: '80px 40px 40px' }}>
-      <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16 mb-16">
+    <footer className="redesign-footer">
+      <div className="editorial-container">
+        <div className="redesign-footer-grid">
           <div>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 48, letterSpacing: 4, marginBottom: 16 }}>
-              <span style={{ color: 'var(--white)' }}>LS</span>
-              <span style={{ color: 'var(--red)' }}>MG</span>
-            </div>
-            <p className="text-[15px] text-[#8f8f8f] leading-[1.75] max-w-[320px]">
-              An independent creative holding company operating across PR, talent booking, media production, communications, and licensing. Dallas, Orlando, New York and Atlanta.
+            <span className="footer-brand">LAST SHOT<br /><span className="editorial-red">MEDIA GROUP</span></span>
+            <p style={{ maxWidth: 390 }}>
+              An independent creative holding company operating across talent representation, PR, booking, media production, communications and licensing. Dallas, Orlando, New York and Atlanta.
             </p>
           </div>
+
           <div>
-            <h4 style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', marginBottom: 20 }}>
-              DIVISIONS
-            </h4>
-            <ul className="flex flex-col gap-2.5">
-              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR, Comms & Talent</Link></li>
-              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LSMG Booking</Link></li>
-              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
-              <li><Link to="/media" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Media & Film</Link></li>
+            <h4>Representation</h4>
+            <ul>
+              <li><a href="/models">Talent</a></li>
+              <li><a href="/models#models">Models</a></li>
+              <li><a href="/models#actors">Actors</a></li>
+              <li><a href="/models#sports">Sports</a></li>
+              <li><a href="/models#media">Media &amp; Creators</a></li>
+              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA Models ↗</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', marginBottom: 20 }}>
-              COMPANY
-            </h4>
-            <ul className="flex flex-col gap-2.5">
-              <li><Link to="/about" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">About</Link></li>
-              <li><Link to="/models" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Models & Talent</Link></li>
-              <li><Link to="/pr" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">PR & Booking</Link></li>
-              <li><Link to="/culture-ledger" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">LEDGERA</Link></li>
-              <li><Link to="/watch" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Watch</Link></li>
-              <li><Link to="/contact" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Contact</Link></li>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/services">Services</a></li>
+              <li><Link to="/media">LSMG Studios</Link></li>
+              <li><a href="/work">Selected Work</a></li>
+              <li><Link to="/about">About</Link></li>
+              <li><Link to="/contact">Contact</Link></li>
+              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 4, color: 'var(--red)', marginBottom: 20 }}>
-              CONNECT
-            </h4>
-            <ul className="flex flex-col gap-2.5">
-              <li><a href="mailto:info@lastshotmediagroup.com" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">info@lastshotmediagroup.com</a></li>
-              <li><a href="https://instagram.com/lastshotmediagroup" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Instagram</a></li>
-              <li><a href="https://www.youtube.com/channel/UCqaNPrCXK07Q1YYbSvChaOQ" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">YouTube</a></li>
-              <li><a href="https://open.spotify.com/show/17PGdRA2WnVjpbLDeeZlgR" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Spotify</a></li>
-              <li><a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer" className="text-[15px] text-[#8f8f8f] hover:text-[var(--white)] transition-colors">Apple Podcasts</a></li>
-              <li><span className="text-[15px] text-[#8f8f8f]">Dallas, Orlando, New York and Atlanta</span></li>
+            <h4>Connect</h4>
+            <ul>
+              <li><a href="mailto:info@lastshotmediagroup.com">info@lastshotmediagroup.com</a></li>
+              <li><a href="https://instagram.com/lastshotmediagroup" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+              <li><a href="https://www.youtube.com/channel/UCqaNPrCXK07Q1YYbSvChaOQ" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+              <li><a href="https://open.spotify.com/show/17PGdRA2WnVjpbLDeeZlgR" target="_blank" rel="noopener noreferrer">Spotify</a></li>
+              <li><a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer">Apple Podcasts</a></li>
             </ul>
           </div>
         </div>
-        <div className="pt-10 border-t border-[#111] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }}>
-            &copy; {new Date().getFullYear()} LAST SHOT MEDIA GROUP. ALL RIGHTS RESERVED.
-          </span>
-          <div className="flex flex-wrap gap-5">
-            <a href="https://instagram.com/lastshotmediagroup" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">INSTAGRAM</a>
-            <a href="https://www.youtube.com/channel/UCqaNPrCXK07Q1YYbSvChaOQ" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">YOUTUBE</a>
-            <a href="https://open.spotify.com/show/17PGdRA2WnVjpbLDeeZlgR" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">SPOTIFY</a>
-            <a href="https://podcasts.apple.com/us/podcast/the-last-shot-podcast/id1494831568" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">APPLE PODCASTS</a>
-            <a href="https://twitter.com/lastshotmg" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: 2, color: '#707070' }} className="hover:text-[var(--red)] transition-colors">TWITTER</a>
-          </div>
+
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} Last Shot Media Group</span>
+          <span>Where Creativity Becomes Capital.</span>
         </div>
       </div>
     </footer>
