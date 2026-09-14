@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MODELS } from '../data/models'
 import { netlifyImage } from '../lib/netlify-image'
 
@@ -11,7 +11,7 @@ export const Route = createFileRoute('/models')({
       {
         name: 'description',
         content:
-          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and public figures.',
+          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and politicians.',
       },
       { property: 'og:title', content: 'Talent | Last Shot Media Group' },
       {
@@ -23,13 +23,33 @@ export const Route = createFileRoute('/models')({
   }),
 })
 
-const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Public Figures'] as const
+const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Politicians'] as const
 
 type Category = (typeof CATEGORIES)[number]
+
+const categoryHash: Record<Category, string> = {
+  Models: 'models',
+  Actors: 'actors',
+  Sports: 'sports',
+  Music: 'music',
+  Media: 'media',
+  Politicians: 'politicians',
+}
 
 function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
+
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '').toLowerCase()
+    const match = CATEGORIES.find((category) => categoryHash[category] === hash)
+    if (match) setActiveCategory(match)
+  }, [])
+
+  const selectCategory = (category: Category) => {
+    setActiveCategory(category)
+    window.history.replaceState(null, '', `#${categoryHash[category]}`)
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -71,7 +91,7 @@ function TalentPage() {
             <button
               key={category}
               type="button"
-              onClick={() => setActiveCategory(category)}
+              onClick={() => selectCategory(category)}
               className={`shrink-0 border-b pb-2 font-mono text-[11px] uppercase tracking-[0.2em] transition ${
                 activeCategory === category
                   ? 'border-[var(--red)] text-white'
@@ -84,7 +104,7 @@ function TalentPage() {
         </div>
       </section>
 
-      <section className="px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
+      <section id="talent-roster" className="px-4 py-16 sm:px-6 lg:px-10 lg:py-24">
         <div className="mx-auto max-w-[1400px]">
           <div className="mb-12 flex flex-col justify-between gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end">
             <div>
