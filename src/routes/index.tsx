@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
+import '../home-redesign.css'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -23,6 +24,16 @@ interface TickerItem {
   isActive: boolean
 }
 
+const categories = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Politicians']
+
+const divisions = [
+  ['01', 'Talent', 'Representation across models, actors, sports, music, media and politicians.', '/models'],
+  ['02', 'PR + Communications', 'Press campaigns, media relations, positioning, narrative strategy and reputation support.', '/pr'],
+  ['03', 'Booking', 'Appearances, performances, negotiations and opportunity development across markets.', '/booking'],
+  ['04', 'Studios', 'Scripted projects, podcasts, documentary, editorial and branded production.', '/media'],
+  ['05', 'Partnerships', 'Brand collaborations, sponsorship strategy, licensing and commercial opportunities.', '/services'],
+] as const
+
 function LiveTicker() {
   const [items, setItems] = useState<TickerItem[]>([])
 
@@ -41,20 +52,19 @@ function LiveTicker() {
   if (items.length === 0) return null
 
   return (
-    <div style={{ background: '#0a0002', borderBottom: '1px solid rgba(255,255,255,.1)', overflow: 'hidden' }}>
-      <div className="editorial-container" style={{ minHeight: 42, display: 'flex', alignItems: 'center', gap: 16 }}>
-        <span className="editorial-kicker" style={{ whiteSpace: 'nowrap' }}>● LIVE</span>
-        <div style={{ display: 'flex', overflow: 'hidden', whiteSpace: 'nowrap', gap: 32 }}>
+    <div className="v2-livebar">
+      <div className="editorial-container v2-livebar-inner">
+        <span className="v2-live-dot" />
+        <span className="v2-live-label">LIVE / LSMG</span>
+        <div className="v2-live-items">
           {items.slice(0, 4).map((item) => {
-            if (item.linkUrl) {
-              const external = item.linkType === 'external' || item.linkUrl.startsWith('http')
-              return external ? (
-                <a key={item.id} href={item.linkUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#bcbcbc' }}>{item.text}</a>
-              ) : (
-                <a key={item.id} href={item.linkUrl} style={{ fontSize: 12, color: '#bcbcbc' }}>{item.text}</a>
-              )
-            }
-            return <span key={item.id} style={{ fontSize: 12, color: '#bcbcbc' }}>{item.text}</span>
+            if (!item.linkUrl) return <span key={item.id}>{item.text}</span>
+            const external = item.linkType === 'external' || item.linkUrl.startsWith('http')
+            return (
+              <a key={item.id} href={item.linkUrl} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+                {item.text}
+              </a>
+            )
           })}
         </div>
       </div>
@@ -62,150 +72,144 @@ function LiveTicker() {
   )
 }
 
-const marquee = [
-  'Talent Representation',
-  'Public Relations',
-  'Talent Booking',
-  'Media Production',
-  'Communications',
-  'Licensing & IP',
-  'LSMG Studios',
-  'Dallas · Orlando · New York · Atlanta',
-]
-
 function HomePage() {
   return (
-    <div className="editorial-shell">
+    <div className="v2-home">
       <LiveTicker />
 
-      <section className="home-hero">
-        <div className="editorial-container home-hero-grid">
-          <div>
-            <span className="editorial-kicker">Independent creative holding company · Est. 2022</span>
-            <h1 className="editorial-display home-hero-title">
-              LAST SHOT<br /><span className="editorial-red">MEDIA</span><br />GROUP
-            </h1>
-            <p className="home-hero-tagline">Where Creativity Becomes Capital.</p>
-            <p className="home-hero-copy">
-              An independent creative holding company operating across PR, talent booking, media production, communications strategy, licensing and merchandise. We don&apos;t just tell your story — we build your legacy.
-            </p>
+      <section className="v2-hero">
+        <div className="v2-hero-copy">
+          <div className="v2-hero-meta">EST. 2022 / DALLAS · ORLANDO · NEW YORK · ATLANTA</div>
+          <h1>
+            <span>LAST</span>
+            <span className="v2-red">SHOT</span>
+            <span>MEDIA</span>
+            <span>GROUP</span>
+          </h1>
+          <div className="v2-hero-bottom">
+            <div>
+              <p className="v2-tagline">Where Creativity Becomes Capital.</p>
+              <p className="v2-core-copy">
+                An independent creative holding company operating across PR, talent booking, media production, communications strategy, licensing and merchandise. We don&apos;t just tell your story — we build your legacy.
+              </p>
+            </div>
+            <div className="v2-hero-actions">
+              <Link to="/contact" className="v2-solid-btn">Work With Us ↗</Link>
+              <Link to="/about" className="v2-text-btn">Our Story →</Link>
+            </div>
           </div>
+        </div>
 
-          <div className="hero-index" aria-label="Explore LSMG">
-            <a href="/models">01 / Talent</a>
-            <a href="/services">02 / Services</a>
-            <Link to="/media">03 / Studios</Link>
-            <a href="/work">04 / Work</a>
-            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">05 / LEDGERA</a>
-          </div>
+        <div className="v2-hero-art" aria-label="LSMG represented talent collage">
+          <figure className="v2-photo v2-photo-a"><img src="/models/jada-1.jpg" alt="Jada, LSMG talent" /></figure>
+          <figure className="v2-photo v2-photo-b"><img src="/models/halie-1.jpg" alt="Halie, LSMG talent" /></figure>
+          <figure className="v2-photo v2-photo-c"><img src="/models/amora-1.jpg" alt="Amora, LSMG talent" /></figure>
+          <div className="v2-hero-stamp">LSMG<br />26</div>
+          <div className="v2-vertical-copy">REPRESENTATION / MEDIA / CULTURE / CAPITAL</div>
         </div>
       </section>
 
-      <div className="red-marquee" aria-hidden="true">
-        <div className="red-marquee-track">
-          {[...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item} ◆</span>)}
+      <div className="v2-marquee" aria-hidden="true">
+        <div className="v2-marquee-track">
+          {[...categories, ...categories].map((item, index) => <span key={`${item}-${index}`}>{item} / </span>)}
         </div>
       </div>
 
-      <section className="editorial-section">
-        <div className="editorial-container">
-          <div className="section-heading-grid">
-            <div>
-              <span className="editorial-kicker">The LSMG ecosystem</span>
-              <h2 className="editorial-display section-title">ONE COMPANY.<br /><span className="editorial-red">MULTIPLE ENGINES.</span></h2>
-            </div>
-            <p className="section-intro">
-              LSMG connects representation, communications, booking, production and owned media under one independent structure. The goal is simple: create opportunity around talent and turn visibility into durable business.
-            </p>
-          </div>
-
-          <div className="home-feature-grid">
-            <a href="/models" className="home-feature primary">
-              <span className="home-feature-number">01 / REPRESENTATION</span>
-              <div>
-                <h3 className="home-feature-title">TALENT</h3>
-                <p>Models, actors, music, sports, media and public figures represented through one clear LSMG talent division.</p>
-                <span className="home-feature-link">Explore talent <span>↗</span></span>
-              </div>
-            </a>
-
-            <a href="/services" className="home-feature">
-              <span className="home-feature-number">02 / STRATEGY</span>
-              <div>
-                <h3 className="home-feature-title">SERVICES</h3>
-                <p>PR, communications, booking, media training, partnerships, licensing and career strategy.</p>
-                <span className="home-feature-link">View services <span>↗</span></span>
-              </div>
-            </a>
-
-            <Link to="/media" className="home-feature">
-              <span className="home-feature-number">03 / PRODUCTION</span>
-              <div>
-                <h3 className="home-feature-title">STUDIOS</h3>
-                <p>Original scripted content, podcasts, documentaries, editorial content and brand productions.</p>
-                <span className="home-feature-link">Enter studios <span>↗</span></span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="editorial-section" style={{ background: '#080808' }}>
-        <div className="editorial-container">
-          <div className="section-heading-grid">
-            <div>
-              <span className="editorial-kicker">Built for culture</span>
-              <h2 className="editorial-display section-title">INDEPENDENT.<br /><span className="editorial-red">CONNECTED.</span></h2>
-            </div>
-            <p className="section-intro">
-              LSMG operates from Dallas, Orlando, New York and Atlanta, connecting creative talent, media relationships and production capabilities across markets without losing the speed of an independent company.
-            </p>
-          </div>
-
-          <div className="proof-grid">
-            <div className="proof-cell"><div className="proof-value">2022</div><div className="proof-label">Established</div></div>
-            <div className="proof-cell"><div className="proof-value editorial-red">04</div><div className="proof-label">Core markets</div></div>
-            <div className="proof-cell"><div className="proof-value">06</div><div className="proof-label">Business divisions</div></div>
-            <div className="proof-cell"><div className="proof-value editorial-red">01</div><div className="proof-label">Integrated ecosystem</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="split-panel">
-        <div className="split-panel-dark">
-          <span className="editorial-kicker">LSMG Studios</span>
-          <h2>ORIGINAL<br />CONTENT.</h2>
-          <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
-            LSMG Studios develops scripted projects, podcasts, documentaries and editorial productions for digital and streaming audiences.
-          </p>
-          <Link to="/media" className="editorial-cta red">Explore Studios ↗</Link>
-        </div>
-
-        <div className="split-panel-red">
+      <section className="v2-manifesto">
+        <div className="editorial-container v2-manifesto-grid">
+          <div className="v2-section-index">01 / THE COMPANY</div>
           <div>
-            <span className="editorial-kicker" style={{ color: '#fff', opacity: .75 }}>Owned media</span>
-            <h2 style={{ marginTop: 18 }}>LEDGERA</h2>
-          </div>
-          <div>
-            <p style={{ marginBottom: 30 }}>
-              LSMG&apos;s independent culture and editorial platform. Explore features, interviews, covers and the separate LEDGERA model community.
+            <p className="v2-manifesto-lead">
+              We built LSMG to make the parts of the creative industry that usually live in separate rooms work as one system.
             </p>
-            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="editorial-cta">Visit LEDGERA ↗</a>
+            <div className="v2-manifesto-copy-grid">
+              <p>Representation, press, booking, production and owned media connect here. Talent should not have to build five different teams just to move one career forward.</p>
+              <p>LSMG keeps the original independent structure, but presents it with the scale, confidence and clarity of a modern cultural company.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="editorial-section">
+      <section className="v2-talent-section">
         <div className="editorial-container">
-          <div className="section-heading-grid">
-            <div>
-              <span className="editorial-kicker">Start a conversation</span>
-              <h2 className="editorial-display section-title">THE NEXT<br /><span className="editorial-red">SHOT.</span></h2>
-            </div>
-            <div className="section-intro">
-              <p style={{ marginBottom: 28 }}>For representation, press, partnerships, booking, production or other business inquiries, contact LSMG directly.</p>
-              <Link to="/contact" className="editorial-cta red">Work with LSMG ↗</Link>
-            </div>
+          <div className="v2-section-head">
+            <div className="v2-section-index">02 / REPRESENTATION</div>
+            <h2>TALENT<br /><span>IS THE CENTER.</span></h2>
+          </div>
+
+          <div className="v2-talent-grid">
+            <a href="/models#models" className="v2-talent-card v2-talent-card-large">
+              <img src="/models/halie-1.jpg" alt="LSMG Models" />
+              <div><span>01</span><strong>MODELS</strong><em>View roster ↗</em></div>
+            </a>
+            <a href="/models#actors" className="v2-talent-card v2-talent-card-dark">
+              <div><span>02</span><strong>ACTORS</strong><em>Representation ↗</em></div>
+            </a>
+            <a href="/models#sports" className="v2-talent-card v2-talent-card-red">
+              <div><span>03</span><strong>SPORTS</strong><em>Representation ↗</em></div>
+            </a>
+            <a href="/models#music" className="v2-talent-card v2-talent-card-image">
+              <img src="/models/nani-1.jpg" alt="LSMG music talent" />
+              <div><span>04</span><strong>MUSIC</strong><em>Representation ↗</em></div>
+            </a>
+            <a href="/models#media" className="v2-talent-card v2-talent-card-paper">
+              <div><span>05</span><strong>MEDIA</strong><em>Creators + personalities ↗</em></div>
+            </a>
+            <a href="/models#politicians" className="v2-talent-card v2-talent-card-dark">
+              <div><span>06</span><strong>POLITICIANS</strong><em>Public-facing representation ↗</em></div>
+            </a>
+          </div>
+
+          <div className="v2-ledgera-link">
+            <span>LEDGERA MODELS ARE PRESENTED SEPARATELY FROM LSMG REPRESENTATION.</span>
+            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">Explore LEDGERA Models ↗</a>
+          </div>
+        </div>
+      </section>
+
+      <section className="v2-divisions">
+        <div className="editorial-container">
+          <div className="v2-section-head v2-section-head-light">
+            <div className="v2-section-index">03 / THE SYSTEM</div>
+            <h2>ONE COMPANY.<br /><span>MULTIPLE ENGINES.</span></h2>
+          </div>
+
+          <div className="v2-division-list">
+            {divisions.map(([num, title, copy, href]) => (
+              <a href={href} className="v2-division-row" key={num}>
+                <span className="v2-division-num">{num}</span>
+                <strong>{title}</strong>
+                <p>{copy}</p>
+                <span className="v2-arrow">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="v2-culture-split">
+        <div className="v2-studios-panel">
+          <div className="v2-section-index">04 / PRODUCTION</div>
+          <h2>LSMG<br />STUDIOS</h2>
+          <p>Original scripted content, podcasts, documentaries, editorial production and brand storytelling.</p>
+          <Link to="/media" className="v2-outline-btn">Enter Studios ↗</Link>
+        </div>
+
+        <div className="v2-ledgera-panel">
+          <div className="v2-section-index">05 / OWNED MEDIA</div>
+          <h2>LEDGERA</h2>
+          <p>Independent editorial publishing, culture features, interviews, covers and the magazine&apos;s own model community.</p>
+          <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="v2-outline-btn v2-outline-dark">Visit LEDGERA ↗</a>
+        </div>
+      </section>
+
+      <section className="v2-final-cta">
+        <div className="editorial-container v2-final-grid">
+          <div className="v2-section-index">06 / CONTACT</div>
+          <div>
+            <h2>MAKE THE<br /><span>NEXT MOVE.</span></h2>
+            <p>Representation. Press. Partnerships. Booking. Production. Licensing. Communications.</p>
+            <Link to="/contact" className="v2-solid-btn">Start a Conversation ↗</Link>
           </div>
         </div>
       </section>
