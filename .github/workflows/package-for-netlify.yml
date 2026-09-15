@@ -1,3 +1,4 @@
+# Triggered packaging workflow for the production source tree
 name: Package LSMG source for Netlify
 
 on:
