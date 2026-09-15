@@ -1,0 +1,81 @@
+name: Secure LSMG Netlify deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/secure-netlify-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Generate one-time deployment certificate
+        run: |
+          openssl req -x509 -newkey rsa:4096 \
+            -keyout /tmp/netlify-private.pem \
+            -out /tmp/netlify-cert.pem \
+            -days 1 -nodes \
+            -subj '/CN=lsmg-netlify-deploy'
+
+      - name: Upload one-time public certificate
+        uses: actions/upload-artifact@v4
+        with:
+          name: netlify-deploy-cert
+          path: /tmp/netlify-cert.pem
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Wait for encrypted Netlify proxy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -f /tmp/proxy.enc.b64
+          for i in $(seq 1 120); do
+            if gh api "repos/${GITHUB_REPOSITORY}/contents/.github/netlify-proxy.enc?ref=main" --jq .content 2>/dev/null | tr -d '\n' | base64 -d > /tmp/proxy.enc.b64; then
+              if [ -s /tmp/proxy.enc.b64 ]; then
+                break
+              fi
+            fi
+            rm -f /tmp/proxy.enc.b64
+            sleep 3
+          done
+          test -s /tmp/proxy.enc.b64
+          base64 -d /tmp/proxy.enc.b64 > /tmp/proxy.cms
+          openssl cms -decrypt \
+            -inform DER \
+            -in /tmp/proxy.cms \
+            -recip /tmp/netlify-cert.pem \
+            -inkey /tmp/netlify-private.pem \
+            -out /tmp/proxy.txt
+          case "$(cat /tmp/proxy.txt)" in
+            https://netlify-mcp.netlify.app/proxy/*) ;;
+            *) echo 'Invalid Netlify proxy payload'; exit 1 ;;
+          esac
+
+      - name: Checkout exact LSMG production branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent-the-spelling-of-haile-to-halie-4e2a
+          path: production-source
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Netlify MCP deploy runner
+        run: npm install -g @netlify/mcp@latest --no-audit --no-fund
+
+      - name: Deploy LSMG to Netlify production
+        working-directory: production-source
+        run: |
+          netlify-mcp \
+            --site-id 8bf5568f-f9e8-4625-8c4d-050c409c9652 \
+            --proxy-path "$(cat /tmp/proxy.txt)"
