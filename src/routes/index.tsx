@@ -49,7 +49,7 @@ function HomePage(){return <div className="v2-home">
     <a href="/models#models" className="v2-talent-card v2-talent-card-large"><img src="/models/halie-1.jpg" alt="LSMG Models"/><div><span>01</span><strong>MODELS</strong><em>View roster ↗</em></div></a>
     <a href="/models#actors" className="v2-talent-card v2-talent-card-dark"><div><span>02</span><strong>ACTORS</strong><em>Representation ↗</em></div></a>
     <a href="/models#sports" className="v2-talent-card v2-talent-card-red"><div><span>03</span><strong>SPORTS</strong><em>Representation ↗</em></div></a>
-    <a href="/models#music" className="v2-talent-card v2-talent-card-image"><img src="/models/nani-1.jpg" alt="LSMG music talent"/><div><span>04</span><strong>MUSIC</strong><em>Representation ↗</em></div></a>
+    <a href="/models#music" className="v2-talent-card v2-talent-card-dark"><div><span>04</span><strong>MUSIC</strong><em>Representation ↗</em></div></a>
     <a href="/models#media" className="v2-talent-card v2-talent-card-paper"><div><span>05</span><strong>MEDIA</strong><em>Creators + personalities ↗</em></div></a>
     <a href="/models#politicians" className="v2-talent-card v2-talent-card-dark"><div><span>06</span><strong>POLITICIANS</strong><em>Public-facing representation ↗</em></div></a>
   </div><div className="v2-ledgera-link"><span>LEDGERA MODELS ARE PRESENTED SEPARATELY FROM LSMG REPRESENTATION.</span><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">Explore LEDGERA Models ↗</a></div></div></section>
