@@ -1,3 +1,4 @@
+# Secure one-time LSMG production deployment
 name: Secure LSMG Netlify deploy
 
 on:
