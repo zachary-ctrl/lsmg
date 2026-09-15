@@ -1,4 +1,4 @@
-# Secure one-time LSMG production deployment
+# Secure one-time LSMG production deployment — retry after migration restore
 name: Secure LSMG Netlify deploy
 
 on:
