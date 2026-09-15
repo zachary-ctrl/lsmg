@@ -1,4 +1,4 @@
-# Secure one-time LSMG production deployment — retry after migration restore
+# Secure one-time LSMG production deployment — remove Nani image from Music card
 name: Secure LSMG Netlify deploy
 
 on:
