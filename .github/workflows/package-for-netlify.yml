@@ -1,4 +1,4 @@
-# Triggered packaging workflow for the production source tree
+# Triggered packaging workflow for the production source tree and Netlify MCP runner
 name: Package LSMG source for Netlify
 
 on:
@@ -30,5 +30,26 @@ jobs:
         with:
           name: lsmg-source
           path: /tmp/lsmg-source.tgz
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Package Netlify MCP runner
+        run: |
+          mkdir -p /tmp/netlify-mcp-runner
+          cd /tmp/netlify-mcp-runner
+          npm init -y >/dev/null 2>&1
+          npm install @netlify/mcp@latest --no-audit --no-fund
+          tar -czf /tmp/netlify-mcp-runner.tgz .
+
+      - name: Upload Netlify MCP runner artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: netlify-mcp-runner
+          path: /tmp/netlify-mcp-runner.tgz
           if-no-files-found: error
           retention-days: 1
