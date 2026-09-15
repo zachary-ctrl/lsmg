@@ -1,0 +1,33 @@
+name: Package LSMG source for Netlify
+
+on:
+  push:
+    branches:
+      - agent-the-spelling-of-haile-to-halie-4e2a
+    paths:
+      - '.github/workflows/package-for-netlify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout production branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent-the-spelling-of-haile-to-halie-4e2a
+
+      - name: Package exact source tree
+        run: |
+          tar --exclude=.git --exclude=node_modules -czf /tmp/lsmg-source.tgz .
+
+      - name: Upload source artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lsmg-source
+          path: /tmp/lsmg-source.tgz
+          if-no-files-found: error
+          retention-days: 1
