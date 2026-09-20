@@ -1,0 +1,16 @@
+name: Deploy LSMG no-click bios
+on:
+  push:
+    branches:
+      - agent-the-spelling-of-haile-to-halie-4e2a
+    paths:
+      - .github/workflows/deploy-lsmg-bios-temp.yml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Netlify
+        run: npx -y @netlify/mcp@latest --site-id 8bf5568f-f9e8-4625-8c4d-050c409c9652 --proxy-path "https://netlify-mcp.netlify.app/proxy/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..mc8mz-1lmK7RO0Hq.hwov4oEZ8eo33mT6FhcPwhkZrDuCNowun0kE6TQ-OpIOEXEIj02MwBrlBaGpYBzcOSzQgSZlQjtgzl2YugS8W32rQuNJ9fu2d_CblEfSNz0k9bmmZ8nchrzfM4OY4Ip2tzp7IwMCvTuh4AwZfxLt3A5zE6HQiBVjHH8QAM8TKVVtUrwCTqluZXSnVeTS7kziiM_M35CEjFxDeJHkNJD0FhWxT78e9S_QJNyesUiDv4kJXmPNSd86OWL1h5l4wCbij7N8EZcFeOuvpwmcxi7o48PZC0viK2lrYyk1U2ZECdXKXLWBu6c_PA2TxPybWw57M-s3fjY1Mh8oqD7XWQ-as5nnQ1_cFs8CDF5c_Y18kMyMQA9fqKaTPZ0PIpLxVkMAfjYrHac8.Kr-xKU-PyGBR3Tp1hXdrAQ"
