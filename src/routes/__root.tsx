@@ -151,6 +151,7 @@ const navItems = [
   { href: '/services', label: 'Services' },
   { href: '/media', label: 'Studios' },
   { href: '/work', label: 'Work' },
+  { href: '/internships', label: 'Internships' },
   { href: '/about', label: 'About' },
 ]
 
@@ -242,6 +243,7 @@ function Footer() {
               <li><a href="/services">Services</a></li>
               <li><Link to="/media">LSMG Studios</Link></li>
               <li><a href="/work">Selected Work</a></li>
+              <li><Link to="/internships">College Internships</Link></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/contact">Contact</Link></li>
               <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a></li>
