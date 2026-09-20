@@ -1,16 +1,21 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FullResolutionImage } from '../components/FullResolutionImage'
-import { netlifyImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
+  head: () => ({
+    meta: [
+      { title: 'About LSMG | Last Shot Media Group' },
+      { name: 'description', content: 'Meet the leadership behind Last Shot Media Group and learn how LSMG operates across talent, media, PR, production, partnerships and owned publishing.' },
+    ],
+  }),
 })
 
 type Member = {
   name: string
   role: string
-  desc: string
+  shortRole: string
   bio: string
   tags: string[]
   image: string
@@ -20,243 +25,151 @@ const TEAM: Member[] = [
   {
     name: 'Zachary Heneden',
     role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF',
-    desc: 'Handles creative direction, PR execution, original series development, editorial output, and day-to-day operational management across all LSMG divisions.',
-    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. As Creative Director and Editor in Chief he leads creative direction, PR execution, original series development, and the editorial standard for everything LSMG publishes — from press releases to media-campaign strategy. He stays hands-on with day-to-day operations across every LSMG division, from the editorial desk to the booking floor.',
+    shortRole: 'Co-CEO · Creative Director',
+    bio: 'Zachary co-founded Last Shot Media Group to build the kind of creative infrastructure talent rarely gets in one place. He leads creative direction, PR execution, original series development, editorial output and day-to-day work across LSMG properties, including LEDGERA.',
     tags: ['Co-CEO', 'Creative Director', 'Editor In Chief'],
     image: '/team/zachary.jpg',
   },
   {
-    name: "Julien Serrano-O'Neil",
+    name: "Julien Serrano-O'Neill",
     role: 'CO-FOUNDER · CO-CEO',
-    desc: 'Co-founder handling operational systems, business development, and organizational infrastructure. The operational backbone of LSMG.',
-    bio: 'Julien is the operational backbone of LSMG. He architects the systems, business-development pipelines, and organizational infrastructure that let the company move with the intensity of a counterculture movement and the precision of a serious enterprise. If it scales, Julien built the rails for it.',
-    tags: ['Co-CEO', 'Co-Founder'],
+    shortRole: 'Co-Founder · Co-CEO',
+    bio: 'Julien leads operational systems, business development and organizational infrastructure across LSMG. His work connects the company’s creative ambitions to the structure required to scale partnerships, talent activity and long-term business operations.',
+    tags: ['Co-Founder', 'Co-CEO', 'Operations'],
     image: '/team/julien.jpg',
   },
   {
     name: 'Ashley Diaz',
-    role: 'Brand Strategy Lead',
-    desc: 'Brand positioning, visual identity strategy, and market positioning for LSMG and its clients.',
-    bio: 'As Brand Strategy Lead, Ashley shapes how LSMG and its clients show up in the world. She owns brand positioning, visual identity strategy, and market positioning — translating raw creative ambition into a sharp, ownable presence that holds up across every platform and city the company operates in.',
-    tags: ['Brand Strategy', 'Strategy Lead'],
+    role: 'VP OF TALENT RELATIONS',
+    shortRole: 'VP of Talent Relations',
+    bio: 'Ashley serves as Vice President of Talent Relations, helping shape the relationship between LSMG and the people it represents and collaborates with. Her focus is talent communication, relationship management, coordination and maintaining a strong experience across the company’s talent-facing work.',
+    tags: ['VP', 'Talent Relations', 'Leadership'],
     image: '/team/ashley.jpg',
   },
 ]
 
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
-          }
-        })
-      },
-      { threshold: 0.15 },
-    )
-    const children = el.querySelectorAll('.scroll-reveal')
-    children.forEach((child) => observer.observe(child))
-    return () => observer.disconnect()
-  }, [])
-  return ref
-}
-
-/* steven.com-style magnetic pull — subtly pulls an element toward the cursor */
-function Magnetic({
-  children,
-  strength = 0.35,
-  className,
-  style,
-}: {
-  children: React.ReactNode
-  strength?: number
-  className?: string
-  style?: React.CSSProperties
-}) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = (e.clientX - (rect.left + rect.width / 2)) * strength
-    const y = (e.clientY - (rect.top + rect.height / 2)) * strength
-    el.style.transform = `translate(${x}px, ${y}px)`
-  }
-  const reset = () => {
-    const el = ref.current
-    if (el) el.style.transform = 'translate(0, 0)'
-  }
-
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{ transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)', willChange: 'transform', ...style }}
-      onMouseMove={handleMove}
-      onMouseLeave={reset}
-    >
-      {children}
-    </div>
-  )
-}
-
-/* Staggered, word-by-word typography fade */
-function StaggerText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
-  const words = text.split(' ')
-  return (
-    <span className={className} style={style}>
-      {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="word-stagger" style={{ animationDelay: `${0.2 + i * 0.045}s` }}>
-          {word}
-          {i < words.length - 1 ? ' ' : ''}
-        </span>
-      ))}
-    </span>
-  )
-}
+const DIVISIONS = [
+  ['01', 'Talent', 'Representation, booking, opportunity sourcing and career infrastructure.'],
+  ['02', 'Public Relations', 'Press strategy, communications, media outreach and narrative positioning.'],
+  ['03', 'Studios', 'Photo, video, editorial production and original media.'],
+  ['04', 'LEDGERA', 'Owned publishing, interviews, culture coverage and visual storytelling.'],
+  ['05', 'Partnerships', 'Brand collaborations, sponsorships, activations and cultural alignment.'],
+  ['06', 'Operations', 'The systems, coordination and execution that keep every division moving together.'],
+]
 
 function AboutPage() {
-  const revealRef = useScrollReveal()
   const [active, setActive] = useState<Member | null>(null)
   const [closing, setClosing] = useState(false)
 
-  // Fluid, dondregreen-style dismissal: play the exit animation first, then
-  // unmount — so the bio never cuts off abruptly the way a hard unmount does.
   const closeBio = useCallback(() => {
     setClosing(true)
     window.setTimeout(() => {
       setActive(null)
       setClosing(false)
-    }, 250)
+    }, 220)
   }, [])
 
-  const openBio = useCallback((member: Member) => {
-    setClosing(false)
-    setActive(member)
-  }, [])
-
-  // Lock scroll + handle Escape while the bio modal is open
   useEffect(() => {
     if (!active) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeBio()
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeBio()
     }
-    document.addEventListener('keydown', onKey)
-    // Lock scroll without a layout shift: hiding the scrollbar widens the page
-    // and pushes centered content sideways, so pad the gap it leaves behind.
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
-    const prevOverflow = document.body.style.overflow
-    const prevPaddingRight = document.body.style.paddingRight
+    const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`
-    }
+    document.addEventListener('keydown', onKey)
     return () => {
+      document.body.style.overflow = previous
       document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prevOverflow
-      document.body.style.paddingRight = prevPaddingRight
     }
   }, [active, closeBio])
 
   return (
-    <div ref={revealRef}>
-      {/* Page Hero */}
-      <div className="relative overflow-hidden" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)' }}>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
-        <div className="relative z-10 max-w-[1400px] mx-auto">
-          <span className="scroll-reveal" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase', animation: 'fadeUp .7s ease both' }}>Our Story</span>
-          <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
-            <StaggerText text="About" /> <span style={{ color: 'var(--red)' }}><span className="word-stagger" style={{ animationDelay: '0.34s' }}>LSMG</span></span>
-          </h1>
-          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. We built it because the industry needed something different.</p>
+    <div className="about-v3">
+      <section className="about-v3-hero">
+        <div className="editorial-container about-v3-hero-grid">
+          <div className="about-v3-index">LSMG / ABOUT / 2026</div>
+          <div className="about-v3-hero-copy">
+            <div className="editorial-kicker">INDEPENDENT CREATIVE HOLDING COMPANY</div>
+            <h1>WE BUILD<br />THE <span>INFRASTRUCTURE.</span></h1>
+            <p>
+              Last Shot Media Group operates across talent, media, public relations,
+              production, partnerships and owned publishing. One company built to move
+              creative people and cultural ideas forward.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Company Info */}
-      <section style={{ padding: '120px 40px' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
-            <div className="scroll-reveal">
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>The Company</span>
-              <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 7vw, 96px)', lineHeight: '.88', margin: '12px 0' }}>
-                Built<br /><span style={{ color: 'var(--red)' }}>Different.</span>
-              </h2>
-              <div className="w-[60px] h-[3px] my-5 line-reveal" style={{ background: 'var(--red)' }} />
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group was founded with a simple principle: creative talent deserves full-stack business infrastructure. Not just a publicist. Not just a booking agent. Everything — under one roof, owned and operated by people who actually live in the culture.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We operate across Dallas, Orlando, New York and Atlanta — unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>Six divisions. One vision. We operate where PR, media, booking, production, training, and licensing intersect — and we build career infrastructure for artists and brands who are serious about longevity.</p>
-            </div>
-            <div>
-              <div className="grid grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
-                {[
-                  { value: '6', label: 'Divisions' },
-                  { value: '4', label: 'Cities', accent: true },
-                  { value: '2022', label: 'Founded' },
-                  { value: '∞', label: 'Last Shot Taken', accent: true },
-                ].map((s, i) => (
-                  <div key={s.label} className="text-center glow-hover scroll-reveal" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease, opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${i * 0.08}s` }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  >
-                    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 72, color: s.accent ? 'var(--red)' : 'var(--white)', lineHeight: 1 }}>{s.value}</div>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, color: 'var(--mid)', marginTop: 8, display: 'block' }}>{s.label}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="scroll-reveal" style={{ background: '#0a0a0a', border: '1px solid #1a1a1a', borderTop: '4px solid var(--red)', padding: 36, marginTop: 2 }}>
-                <h4 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 28, marginBottom: 12 }}>Our Identity</h4>
-                <p style={{ fontSize: 15, color: '#9c9c9c', lineHeight: 1.7 }}>Unapologetic creative ambition backed by serious operational muscle. We move with the intensity of a counterculture movement and the precision of an enterprise built to last. Red, Black, White. No compromise on vision or execution.</p>
-              </div>
+      <section className="about-v3-statement">
+        <div className="editorial-container about-v3-statement-grid">
+          <div className="v2-section-index">01 / WHY WE EXIST</div>
+          <div>
+            <p className="about-v3-big-copy">
+              Creative talent should not have to choose between <em>vision</em> and
+              <em> infrastructure.</em>
+            </p>
+            <div className="about-v3-copy-columns">
+              <p>
+                LSMG was built to connect the pieces that are usually fragmented:
+                representation, communications, booking, production, publishing and
+                business development.
+              </p>
+              <p>
+                We operate independently and stay close to the work. That means strategy
+                can move quickly, talent relationships stay personal, and every division
+                can support the others instead of working in isolation.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Leadership */}
-      <section style={{ padding: '120px 40px', background: '#060606' }}>
-        <div className="max-w-[1400px] mx-auto">
-          <div className="mb-16">
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Leadership</span>
-            <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
-              The <span style={{ color: 'var(--red)' }}>Team</span>
-            </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a portrait to read the full bio.</p>
+      <section className="about-v3-facts">
+        <div className="editorial-container">
+          <div className="about-v3-fact-grid">
+            <article><span>06</span><p>Core business divisions</p></article>
+            <article><span>04</span><p>Primary markets</p></article>
+            <article><span>01</span><p>Owned culture publication</p></article>
+            <article><span>360°</span><p>Creative + business support</p></article>
           </div>
-          <div className="hm-team-grid">
-            {TEAM.map((member, idx) => (
+        </div>
+      </section>
+
+      <section className="about-v3-leadership">
+        <div className="editorial-container">
+          <div className="about-v3-section-head">
+            <div>
+              <div className="v2-section-index">02 / LEADERSHIP</div>
+              <h2>THE PEOPLE<br /><span>BEHIND LSMG.</span></h2>
+            </div>
+            <p>
+              Portrait-first. No corporate headshot wall. Meet the people directing the
+              company, its operations and its talent relationships.
+            </p>
+          </div>
+
+          <div className="about-roster">
+            {TEAM.map((member, index) => (
               <button
-                type="button"
                 key={member.name}
-                className="hm-member scroll-reveal"
-                style={{ transitionDelay: `${idx * 0.06}s` }}
-                onClick={() => openBio(member)}
-                aria-label={`View bio for ${member.name}, ${member.role}`}
+                type="button"
+                className="about-roster-card"
+                onClick={() => setActive(member)}
+                aria-label={`Read more about ${member.name}, ${member.shortRole}`}
               >
-                {member.image ? (
-                  <img
-                    src={netlifyImage(member.image, 720, 960)}
-                    alt={member.name}
-                    className="hm-member-photo"
-                    loading="lazy"
-                    onError={(event) => {
-                      event.currentTarget.onerror = null
-                      event.currentTarget.src = member.image
-                    }}
-                  />
-                ) : (
-                  <span className="hm-member-placeholder" aria-hidden="true">
-                    {member.name.charAt(0)}
-                  </span>
-                )}
-                <span className="hm-member-overlay">
-                  <span className="hm-member-name">{member.name}</span>
-                  <span className="hm-member-role">{member.role}</span>
-                  <span className="hm-member-cta">View Bio &rarr;</span>
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="about-roster-photo"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <span className="about-roster-shade" aria-hidden="true" />
+                <span className="about-roster-number">{String(index + 1).padStart(2, '0')}</span>
+                <span className="about-roster-copy">
+                  <strong>{member.name}</strong>
+                  <small>{member.shortRole}</small>
+                  <i>View profile ↗</i>
                 </span>
               </button>
             ))}
@@ -264,8 +177,63 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* Bio Lightbox — full-screen: blurred, zoomed backdrop of the same
-          portrait with the sharp, uncropped image and bio floated on top. */}
+      <section className="about-v3-divisions">
+        <div className="editorial-container">
+          <div className="about-v3-section-head light">
+            <div>
+              <div className="v2-section-index">03 / HOW WE OPERATE</div>
+              <h2>ONE COMPANY.<br /><span>SIX LANES.</span></h2>
+            </div>
+            <p>
+              Each division has its own function. The value comes from how they work
+              together around talent, clients, projects and owned media.
+            </p>
+          </div>
+
+          <div className="about-v3-division-list">
+            {DIVISIONS.map(([number, title, copy]) => (
+              <article key={number}>
+                <span>{number}</span>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="about-v3-footprint">
+        <div className="editorial-container about-v3-footprint-grid">
+          <div className="v2-section-index">04 / FOOTPRINT</div>
+          <div>
+            <h2>DALLAS.<br />ORLANDO.<br />NEW YORK.<br /><span>ATLANTA.</span></h2>
+            <p>
+              LSMG operates across multiple cultural and entertainment markets while
+              remaining built for remote collaboration, travel and project-based work.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="about-v3-cta">
+        <div className="editorial-container about-v3-cta-grid">
+          <div>
+            <div className="editorial-kicker">WORK WITH LSMG</div>
+            <h2>BUILD<br /><span>SOMETHING.</span></h2>
+          </div>
+          <div>
+            <p>
+              Talent, brands, partners, press, creatives and students can enter LSMG
+              through a clear path.
+            </p>
+            <div className="about-v3-actions">
+              <Link to="/contact" className="v2-solid-btn">Start a Conversation ↗</Link>
+              <Link to="/internships" className="v2-text-btn">College Internships →</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {active && (
         <div
           className={`bio-lightbox${closing ? ' bio-lightbox--closing' : ''}`}
@@ -274,62 +242,31 @@ function AboutPage() {
           aria-modal="true"
           aria-label={`${active.name} biography`}
         >
-          <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close">
-            &times;
+          <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close biography">
+            ×
           </button>
-          <div className="bio-lightbox-panel" onClick={(e) => e.stopPropagation()}>
+          <div className="bio-lightbox-panel" onClick={(event) => event.stopPropagation()}>
             <div className="bio-lightbox-figure">
-              {active.image ? (
-                <FullResolutionImage
-                  src={active.image}
-                  alt={active.name}
-                  className="bio-lightbox-img"
-                  linkClassName="bio-lightbox-image-link"
-                />
-              ) : (
-                <div className="bio-lightbox-placeholder">
-                  <span style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 140, color: 'var(--red)', opacity: 0.5 }}>
-                    {active.name.charAt(0)}
-                  </span>
-                </div>
-              )}
+              <FullResolutionImage
+                src={active.image}
+                alt={active.name}
+                className="bio-lightbox-img"
+                linkClassName="bio-lightbox-image-link"
+              />
             </div>
             <div className="bio-lightbox-info">
-              <span className="bio-lightbox-eyebrow">Leadership</span>
+              <span className="bio-lightbox-eyebrow">LSMG Leadership</span>
               <h3 className="bio-lightbox-name">{active.name}</h3>
               <p className="bio-lightbox-role">{active.role}</p>
               <div className="bio-lightbox-rule" />
               <p className="bio-lightbox-bio">{active.bio}</p>
               <div className="bio-lightbox-tags">
-                {active.tags.map((tag, i) => (
-                  <span
-                    key={tag}
-                    className={`bio-lightbox-tag${i === active.tags.length - 1 ? ' bio-lightbox-tag--accent' : ''}`}
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {active.tags.map((tag) => <span key={tag} className="bio-lightbox-tag">{tag}</span>)}
               </div>
             </div>
           </div>
         </div>
       )}
-
-      {/* CTA */}
-      <section className="text-center" style={{ padding: '120px 40px' }}>
-        <div className="max-w-[800px] mx-auto">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Join The Movement</span>
-          <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 112px)', lineHeight: '.88', margin: '16px 0' }}>
-            This Is<br />Your <span style={{ color: 'var(--red)' }}>Last Shot.</span>
-          </h2>
-          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you're looking to be a client, join the team, or partner with LSMG on something larger — the door is open.</p>
-          <Magnetic className="inline-block" strength={0.45}>
-            <Link to="/contact" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: 3, padding: '18px 48px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
-              Get In Touch
-            </Link>
-          </Magnetic>
-        </div>
-      </section>
     </div>
   )
 }
