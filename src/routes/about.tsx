@@ -1,6 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useCallback, useEffect, useState } from 'react'
-import { FullResolutionImage } from '../components/FullResolutionImage'
 
 export const Route = createFileRoute('/about')({
   component: AboutPage,
@@ -58,26 +56,7 @@ const DIVISIONS = [
 ]
 
 function AboutPage() {
-  const [active, setActive] = useState<Member | null>(null)
-  const [closing, setClosing] = useState(false)
-
-  const closeBio = useCallback(() => {
-    setClosing(true)
-    window.setTimeout(() => {
-      setActive(null)
-      setClosing(false)
-    }, 220)
-  }, [])
-
-  useEffect(() => {
-    if (!active) return
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') closeBio()
-    }
-    const previous = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', onKey)
-    return () => {
+  return () => {
       document.body.style.overflow = previous
       document.removeEventListener('keydown', onKey)
     }
@@ -150,28 +129,31 @@ function AboutPage() {
 
           <div className="about-roster">
             {TEAM.map((member, index) => (
-              <button
-                key={member.name}
-                type="button"
-                className="about-roster-card"
-                onClick={() => setActive(member)}
-                aria-label={`Read more about ${member.name}, ${member.shortRole}`}
-              >
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="about-roster-photo"
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                />
-                <span className="about-roster-shade" aria-hidden="true" />
-                <span className="about-roster-number">{String(index + 1).padStart(2, '0')}</span>
-                <span className="about-roster-copy">
-                  <strong>{member.name}</strong>
-                  <small>{member.shortRole}</small>
-                  <i>View profile ↗</i>
-                </span>
-              </button>
+              <article key={member.name} className="about-profile">
+                <div className="about-roster-card">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="about-roster-photo"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                  />
+                  <span className="about-roster-shade" aria-hidden="true" />
+                  <span className="about-roster-number">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="about-roster-copy">
+                    <strong>{member.name}</strong>
+                    <small>{member.shortRole}</small>
+                  </span>
+                </div>
+
+                <div className="about-profile-bio">
+                  <div className="about-profile-role">{member.role}</div>
+                  <p>{member.bio}</p>
+                  <div className="about-profile-tags">
+                    {member.tags.map((tag) => <span key={tag}>{tag}</span>)}
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
         </div>
@@ -234,39 +216,6 @@ function AboutPage() {
         </div>
       </section>
 
-      {active && (
-        <div
-          className={`bio-lightbox${closing ? ' bio-lightbox--closing' : ''}`}
-          onClick={closeBio}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${active.name} biography`}
-        >
-          <button type="button" className="bio-lightbox-close" onClick={closeBio} aria-label="Close biography">
-            ×
-          </button>
-          <div className="bio-lightbox-panel" onClick={(event) => event.stopPropagation()}>
-            <div className="bio-lightbox-figure">
-              <FullResolutionImage
-                src={active.image}
-                alt={active.name}
-                className="bio-lightbox-img"
-                linkClassName="bio-lightbox-image-link"
-              />
-            </div>
-            <div className="bio-lightbox-info">
-              <span className="bio-lightbox-eyebrow">LSMG Leadership</span>
-              <h3 className="bio-lightbox-name">{active.name}</h3>
-              <p className="bio-lightbox-role">{active.role}</p>
-              <div className="bio-lightbox-rule" />
-              <p className="bio-lightbox-bio">{active.bio}</p>
-              <div className="bio-lightbox-tags">
-                {active.tags.map((tag) => <span key={tag} className="bio-lightbox-tag">{tag}</span>)}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
