@@ -56,12 +56,6 @@ const DIVISIONS = [
 ]
 
 function AboutPage() {
-  return () => {
-      document.body.style.overflow = previous
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [active, closeBio])
-
   return (
     <div className="about-v3">
       <section className="about-v3-hero">
