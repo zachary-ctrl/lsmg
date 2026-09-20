@@ -1,0 +1,16 @@
+name: Deploy LSMG inline bios
+on:
+  push:
+    branches:
+      - agent-the-spelling-of-haile-to-halie-4e2a
+    paths:
+      - .github/workflows/deploy-lsmg-inline-bios-temp.yml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Netlify
+        run: npx -y @netlify/mcp@latest --site-id 8bf5568f-f9e8-4625-8c4d-050c409c9652 --proxy-path "https://netlify-mcp.netlify.app/proxy/eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..uXnxbdGBLV_Cn4K7.cDOK1gcPz15qIbA5o9igC3Xs_q6v3Nb6evCDIzSlys69nU7ds2UEIsX3Lw7Y_6g_AnnOYQ7RqMSysNdJmBHDdqf4kWZk9VNZcT3BTkO4NnT1dD5uSCg2NUYXp8BFY20xxypA2zP834G9rtanLD5j3CD7QgNjbrCP38IXgTUrwzT8YVVL_Y6t1xmU_cb4bnhx5eGTINfKTBOmAik-BMsuKx_7R3zbEiPYlapAgmBXo_D6KYgegN8nRT0Su9Up96Dr0-jMtE4HHd8ZGDKGIC80dxiwg-BoEzmwKUDpdI2gTe7LODjMuIfRJkd-PsUgbGfSO_w7FShcc6ISM5Is3SmX1q8CfFNWo0rBxYVAOpFrv_f4Fd6n4IwUc8MKvTc0uKW2zp1dlSiP.JkvGNUxAK92JjDf8kjjCRQ"
