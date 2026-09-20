@@ -193,3 +193,87 @@
       linear-gradient(180deg,rgba(23,23,23,.04) 0%,rgba(23,23,23,.03) 50%,rgba(23,23,23,.58) 76%,#171717 100%);
   }
 }
+
+/* Leadership bios — always visible, no modal/click interaction */
+.about-profile{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  background:#171717;
+  color:#fff;
+  border:1px solid #242424;
+}
+.about-profile .about-roster-card{
+  cursor:default;
+  flex:0 0 auto;
+  border:0;
+}
+.about-profile .about-roster-card:hover .about-roster-photo{
+  transform:scale(1.015);
+}
+.about-profile-bio{
+  background:#171717;
+  color:#fff;
+  padding:clamp(24px,2.6vw,36px);
+  border-top:1px solid #2d2d2d;
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+}
+.about-profile-role{
+  font:500 9px/1.5 'DM Mono',monospace;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--lsmg-red);
+  margin-bottom:18px;
+}
+.about-profile-bio p{
+  margin:0;
+  color:#c5c5c5;
+  font-size:16px;
+  line-height:1.72;
+}
+.about-profile-tags{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:auto;
+  padding-top:28px;
+}
+.about-profile-tags span{
+  border:1px solid #363636;
+  padding:7px 9px;
+  font:500 8px/1 'DM Mono',monospace;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#bdbdbd;
+}
+.about-roster-copy{
+  pointer-events:none;
+}
+.about-roster-copy i{
+  display:none;
+}
+.about-profile .about-roster-card:focus-visible{
+  outline:none;
+}
+@media(max-width:1050px){
+  .about-profile-bio{min-height:230px}
+}
+@media(max-width:680px){
+  .about-profile{
+    width:100%;
+  }
+  .about-profile-bio{
+    min-height:0;
+    padding:24px 22px 28px;
+  }
+  .about-profile-bio p{
+    font-size:16px;
+    line-height:1.68;
+  }
+  .about-profile-tags{
+    margin-top:24px;
+    padding-top:0;
+  }
+}
