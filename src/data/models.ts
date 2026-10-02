@@ -103,7 +103,7 @@ export const MODELS: Model[] = [
     types: ['Editorial', 'Music'],
     specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
     imagePaths: [
-      '/models/wovie-1.svg',
+      '/models/wovie-1.webp',
       '/models/wovie-2.svg',
       '/models/wovie-3.svg',
     ],
