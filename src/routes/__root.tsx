@@ -231,7 +231,7 @@ function Footer() {
               <li><a href="/models#sports">Sports</a></li>
               <li><a href="/models#music">Music</a></li>
               <li><a href="/models#media">Media</a></li>
-              <li><a href="/models#politicians">Politicians</a></li>
+              <li><a href="/models#public-figures">Public Figures</a></li>
               <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA Models ↗</a></li>
             </ul>
           </div>
