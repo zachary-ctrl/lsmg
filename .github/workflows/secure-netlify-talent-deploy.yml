@@ -56,3 +56,5 @@ jobs:
         run: netlify-mcp --site-id 8bf5568f-f9e8-4625-8c4d-050c409c9652 --proxy-path "$(cat /tmp/proxy.txt)"
 
 # production refresh: Sophia HD + Public Figures
+
+# deploy refresh 2026-10-02 final-live-check
