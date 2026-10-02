@@ -1,8 +1,8 @@
-export function netlifyImage(src: string, width: number, height?: number, quality = 90) {
+export function netlifyImage(src: string, width: number, height?: number, quality = 72) {
   const params = new URLSearchParams({
     url: src,
     w: String(width),
-    q: String(Math.max(90, quality)),
+    q: String(quality),
   })
 
   if (height) {
