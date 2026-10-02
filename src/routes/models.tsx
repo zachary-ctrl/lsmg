@@ -141,7 +141,7 @@ function TalentPage() {
                   <article key={model.slug} className="group">
                     <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
                       <img
-                        src={netlifyImage(model.imagePaths[0], 800, 1000, 75)}
+                        src={netlifyImage(model.imagePaths[0], 1200, 1500, 95)}
                         alt={`${model.name} — represented by Last Shot Media Group`}
                         className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
                         loading="lazy"
