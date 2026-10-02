@@ -1961,7 +1961,7 @@ img {
 }
 .model-profile-info { max-width: 530px; }
 .model-profile-back {
-  display: inline-block;
+  display: table; /* own line, so the eyebrow below never runs into it */
   margin-bottom: clamp(42px, 7vw, 86px);
   color: #aaa;
   font-family: 'DM Mono', monospace;

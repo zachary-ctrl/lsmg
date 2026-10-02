@@ -223,7 +223,7 @@ function TalentPage() {
                   <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
                     LEDGERA / Models
                   </div>
-                  <h3 className="font-['Bebas_Neue'] text-5xl uppercase sm:text-6xl">Models representing LEDGERA</h3>
+                  <h3 className="font-['Bebas_Neue'] text-4xl uppercase leading-none [overflow-wrap:anywhere] sm:text-6xl">Models representing LEDGERA</h3>
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/55">
                     LEDGERA also works with its own faces for magazine editorials, campaigns, events and brand activations. Those models are presented separately from LSMG representation.
                   </p>
