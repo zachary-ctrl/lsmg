@@ -12,9 +12,9 @@ export const Route = createFileRoute('/')({
 })
 
 interface TickerItem { id:number; text:string; linkUrl:string|null; linkType:string; isActive:boolean }
-const categories=['Models','Actors','Sports','Music','Media','Politicians']
+const categories=['Models','Actors','Sports','Music','Media','Public Figures']
 const divisions=[
-  ['01','Talent','Representation across models, actors, sports, music, media and politicians.','/models'],
+  ['01','Talent','Representation across models, actors, sports, music, media and public figures.','/models'],
   ['02','PR + Communications','Press campaigns, media relations, positioning, narrative strategy and reputation support.','/pr'],
   ['03','Booking','Appearances, performances, negotiations and opportunity development across markets.','/booking'],
   ['04','Studios','Scripted projects, podcasts, documentary, editorial and branded production.','/media'],
@@ -51,7 +51,7 @@ function HomePage(){return <div className="v2-home">
     <a href="/models#sports" className="v2-talent-card v2-talent-card-red"><div><span>03</span><strong>SPORTS</strong><em>Representation ↗</em></div></a>
     <a href="/models#music" className="v2-talent-card v2-talent-card-dark"><div><span>04</span><strong>MUSIC</strong><em>Representation ↗</em></div></a>
     <a href="/models#media" className="v2-talent-card v2-talent-card-paper"><div><span>05</span><strong>MEDIA</strong><em>Creators + personalities ↗</em></div></a>
-    <a href="/models#politicians" className="v2-talent-card v2-talent-card-dark"><div><span>06</span><strong>POLITICIANS</strong><em>Public-facing representation ↗</em></div></a>
+    <a href="/models#public-figures" className="v2-talent-card v2-talent-card-dark"><div><span>06</span><strong>PUBLIC FIGURES</strong><em>Public-facing representation ↗</em></div></a>
   </div><div className="v2-ledgera-link"><span>LEDGERA MODELS ARE PRESENTED SEPARATELY FROM LSMG REPRESENTATION.</span><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">Explore LEDGERA Models ↗</a></div></div></section>
   <section className="v2-divisions"><div className="editorial-container"><div className="v2-section-head v2-section-head-light"><div className="v2-section-index">03 / THE SYSTEM</div><h2>ONE COMPANY.<br/><span>MULTIPLE ENGINES.</span></h2></div><div className="v2-division-list">{divisions.map(([n,t,c,h])=><a href={h} className="v2-division-row" key={n}><span className="v2-division-num">{n}</span><strong>{t}</strong><p>{c}</p><span className="v2-arrow">↗</span></a>)}</div></div></section>
   <section className="v2-culture-split"><div className="v2-studios-panel"><div className="v2-section-index">04 / PRODUCTION</div><h2>LSMG<br/>STUDIOS</h2><p>Original scripted content, podcasts, documentaries, editorial production and brand storytelling.</p><Link to="/media" className="v2-outline-btn">Enter Studios ↗</Link></div><div className="v2-ledgera-panel"><div className="v2-section-index">05 / OWNED MEDIA</div><h2>LEDGERA</h2><p>Independent editorial publishing, culture features, interviews, covers and the magazine&apos;s own model community.</p><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="v2-outline-btn v2-outline-dark">Visit LEDGERA ↗</a></div></section>

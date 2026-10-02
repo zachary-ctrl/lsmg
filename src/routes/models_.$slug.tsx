@@ -1,6 +1,12 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { getModelBySlug } from '../data/models'
-import { netlifyImage } from '../lib/netlify-image'
+import { IMAGE_WIDTHS, getModelBySlug, hasKnownCity } from '../data/models'
+import { responsiveImage } from '../lib/netlify-image'
+
+const SITE_URL = 'https://lastshotmediagroup.com'
+
+function absoluteUrl(path: string) {
+  return /^https?:\/\//.test(path) ? path : `${SITE_URL}${path}`
+}
 
 export const Route = createFileRoute('/models_/$slug')({
   head: ({ params }) => {
@@ -10,7 +16,10 @@ export const Route = createFileRoute('/models_/$slug')({
       return { meta: [{ title: 'Model Not Found | Last Shot Media Group' }] }
     }
 
-    const description = `${model.name} is a ${model.city}-based ${model.types.join(' and ')} model represented by Last Shot Media Group.`
+    const roles = (model.roles ?? ['Model']).map((role) => role.toLowerCase()).join(' and ')
+    const description = hasKnownCity(model)
+      ? `${model.name} is a ${model.city}-based ${model.types.join(' and ')} ${roles} represented by Last Shot Media Group.`
+      : `${model.name} is a ${model.types.join(' and ')} ${roles} represented by Last Shot Media Group.`
 
     return {
       meta: [
@@ -18,7 +27,7 @@ export const Route = createFileRoute('/models_/$slug')({
         { name: 'description', content: description },
         { property: 'og:title', content: `${model.name} | LSMG Models & Talent` },
         { property: 'og:description', content: description },
-        { property: 'og:image', content: model.imagePaths[0] },
+        { property: 'og:image', content: absoluteUrl(model.imagePaths[0]) },
       ],
     }
   },
@@ -42,6 +51,12 @@ function ModelProfilePage() {
     )
   }
 
+  const hero = responsiveImage(model.imagePaths[0], {
+    widths: [600, 900, 1200, 1500],
+    sourceWidth: IMAGE_WIDTHS[model.imagePaths[0]],
+  })
+  const roleLabel = (model.roles ?? ['Model']).join(' · ')
+
   const measurements = [
     ['Height', model.specs.height],
     ['Bust', model.specs.bust],
@@ -53,9 +68,13 @@ function ModelProfilePage() {
       <div className="model-profile-hero">
         <div className="model-profile-image-wrap">
           <img
-            src={netlifyImage(model.imagePaths[0], 1100, 1500)}
-            alt={`${model.name}, ${model.types.join(' and ')} model represented by LSMG`}
+            src={hero.src}
+            srcSet={hero.srcSet}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            alt={`${model.name}, ${model.types.join(' and ')} talent represented by LSMG`}
             className="model-profile-image"
+            fetchPriority="high"
+            decoding="async"
           />
           <span className="model-profile-shot-count">
             {model.imagePaths.length} shots{model.videoPath ? ' · 1 reel' : ''}
@@ -66,7 +85,7 @@ function ModelProfilePage() {
           <Link to="/models" className="model-profile-back">
             ← Back to roster
           </Link>
-          <span className="mdl-eyebrow">{model.city} · LSMG Talent</span>
+          <span className="mdl-eyebrow">{hasKnownCity(model) ? `${model.city} · ` : ''}{roleLabel} · LSMG Talent</span>
           <h1>{model.name}</h1>
           <div className="model-profile-types">
             {model.types.map((type) => (
@@ -82,6 +101,11 @@ function ModelProfilePage() {
             ))}
           </dl>
           <p className="model-profile-bio">{model.bio}</p>
+          {model.imageSource && (
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+              Photography via {model.imageSource}
+            </p>
+          )}
           <Link to="/contact" className="mdl-btn mdl-btn-primary model-profile-book">
             Book {model.name}
           </Link>
@@ -98,7 +122,7 @@ function ModelProfilePage() {
             <video
               className="model-profile-reel-video"
               src={model.videoPath}
-              poster={netlifyImage(model.imagePaths[0], 1100, 1500)}
+              poster={model.videoPoster ?? responsiveImage(model.imagePaths[0], { widths: [1100], sourceWidth: IMAGE_WIDTHS[model.imagePaths[0]] }).src}
               controls
               playsInline
               preload="metadata"
@@ -117,14 +141,26 @@ function ModelProfilePage() {
             <h2>Selected Work</h2>
           </div>
           <div className="model-profile-gallery-grid">
-            {model.imagePaths.slice(1).map((imagePath, index) => (
-              <img
-                key={imagePath}
-                src={netlifyImage(imagePath, 720, 960)}
-                alt={`${model.name} portfolio image ${index + 2}`}
-                loading="lazy"
-              />
-            ))}
+            {model.imagePaths.slice(1).map((imagePath, index) => {
+              const image = responsiveImage(imagePath, {
+                widths: [480, 720, 960, 1200],
+                sourceWidth: IMAGE_WIDTHS[imagePath],
+                aspect: 3 / 4,
+              })
+              return (
+                <img
+                  key={imagePath}
+                  src={image.src}
+                  srcSet={image.srcSet}
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  width={720}
+                  height={960}
+                  alt={`${model.name} portfolio image ${index + 2}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              )
+            })}
           </div>
         </section>
       )}

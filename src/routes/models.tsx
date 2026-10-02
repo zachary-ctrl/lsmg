@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
-import { MODELS } from '../data/models'
-import { netlifyImage } from '../lib/netlify-image'
+import { IMAGE_WIDTHS, MODELS, MUSIC_TALENT_SLUGS, hasKnownCity, type Model } from '../data/models'
+import { responsiveImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/models')({
   component: TalentPage,
@@ -27,6 +27,25 @@ const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Public Figu
 
 type Category = (typeof CATEGORIES)[number]
 
+// Legacy anchors that should still land on the right tab.
+const LEGACY_HASHES: Record<string, Category> = { politicians: 'Public Figures' }
+
+const CARD_SIZES = '(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw'
+
+function cardImage(model: Model) {
+  const path = model.imagePaths[0]
+  return responsiveImage(path, {
+    widths: [400, 600, 800, 1000, 1200],
+    sourceWidth: IMAGE_WIDTHS[path],
+    aspect: 4 / 5,
+  })
+}
+
+function cardMeta(model: Model, category: Category) {
+  const roles = category === 'Music' ? ['Artist', 'Singer'] : model.roles ?? ['Model']
+  return [...roles, ...(hasKnownCity(model) ? [model.city] : [])].join(' · ')
+}
+
 const categoryHash: Record<Category, string> = {
   Models: 'models',
   Actors: 'actors',
@@ -39,12 +58,25 @@ const categoryHash: Record<Category, string> = {
 function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
-  const musicTalent = useMemo(() => MODELS.filter((talent) => ['halie', 'jada', 'wovie'].includes(talent.slug)), [])
+  const musicTalent = useMemo(
+    () =>
+      MUSIC_TALENT_SLUGS.map((slug) => MODELS.find((talent) => talent.slug === slug)).filter(
+        (talent): talent is Model => Boolean(talent),
+      ),
+    [],
+  )
 
   useEffect(() => {
-    const hash = window.location.hash.replace('#', '').toLowerCase()
-    const match = CATEGORIES.find((category) => categoryHash[category] === hash)
-    if (match) setActiveCategory(match)
+    const syncFromHash = () => {
+      const hash = window.location.hash.replace('#', '').toLowerCase()
+      const match = CATEGORIES.find((category) => categoryHash[category] === hash) ?? LEGACY_HASHES[hash]
+      if (!match) return
+      setActiveCategory(match)
+      if (LEGACY_HASHES[hash]) window.history.replaceState(null, '', `#${categoryHash[match]}`)
+    }
+    syncFromHash()
+    window.addEventListener('hashchange', syncFromHash)
+    return () => window.removeEventListener('hashchange', syncFromHash)
   }, [])
 
   const selectCategory = (category: Category) => {
@@ -137,24 +169,40 @@ function TalentPage() {
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {(activeCategory === 'Music' ? musicTalent : representedModels).map((model) => (
+                {(activeCategory === 'Music' ? musicTalent : representedModels).map((model) => {
+                  const image = cardImage(model)
+                  return (
                   <article key={model.slug} className="group">
-                    <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
+                    <Link
+                      to="/models/$slug"
+                      params={{ slug: model.slug }}
+                      className="relative block aspect-[4/5] overflow-hidden bg-[#0d0d0d]"
+                      aria-label={`View ${model.name}'s profile`}
+                    >
                       <img
-                        src={netlifyImage(model.imagePaths[0], 800, 1000, 75)}
+                        src={image.src}
+                        srcSet={image.srcSet}
+                        sizes={CARD_SIZES}
+                        width={800}
+                        height={1000}
                         alt={`${model.name} — represented by Last Shot Media Group`}
-                        className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
+                        className="h-full w-full object-cover object-top transition duration-700 ease-out group-hover:scale-[1.025]"
                         loading="lazy"
+                        decoding="async"
                       />
                       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent opacity-80" />
                       <div className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-[var(--red)] transition-transform duration-500 group-hover:scale-x-100" />
-                    </div>
+                    </Link>
 
                     <div className="flex items-start justify-between gap-4 border-b border-white/10 py-4">
                       <div>
-                        <h3 className="font-['Bebas_Neue'] text-3xl tracking-wide">{model.name}</h3>
+                        <h3 className="font-['Bebas_Neue'] text-3xl tracking-wide">
+                          <Link to="/models/$slug" params={{ slug: model.slug }} className="hover:text-[var(--red)]">
+                            {model.name}
+                          </Link>
+                        </h3>
                         <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-                          {activeCategory === 'Music' ? 'Artist · Singer' : 'Model'} · {model.city}
+                          {cardMeta(model, activeCategory)}
                         </p>
                       </div>
                       <Link
@@ -166,7 +214,8 @@ function TalentPage() {
                       </Link>
                     </div>
                   </article>
-                ))}
+                  )
+                })}
               </div>
 
               {activeCategory === 'Models' && <div className="mt-20 border border-white/10 bg-[#080808] p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">

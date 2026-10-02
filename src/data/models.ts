@@ -10,6 +10,12 @@ export type Model = {
   }
   imagePaths: string[]
   videoPath?: string
+  /** Poster frame for the reel (should match the video's aspect ratio). */
+  videoPoster?: string
+  /** Talent disciplines shown on the Talent page (e.g. Model, Singer). */
+  roles?: string[]
+  /** Where the photography originated, if it was sourced from another LSMG property. */
+  imageSource?: string
   bio: string
   featured: boolean
 }
@@ -41,6 +47,7 @@ export const MODELS: Model[] = [
     name: 'Halie',
     city: 'New York',
     types: ['Editorial', 'Commercial'],
+    roles: ['Model', 'Singer'],
     specs: { height: "5'10\"", bust: '33"', waist: '25"' },
     imagePaths: [
       '/models/halie-1.jpg',
@@ -76,6 +83,7 @@ export const MODELS: Model[] = [
     name: 'Jada',
     city: 'TBD',
     types: ['Editorial'],
+    roles: ['Model', 'Singer'],
     specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
     imagePaths: [
       '/models/jada-1.jpg',
@@ -91,9 +99,24 @@ export const MODELS: Model[] = [
     name: 'Sophia',
     city: 'TBD',
     types: ['Editorial', 'Commercial'],
+    roles: ['Model'],
     specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
-    imagePaths: ['https://ledgeramagazine.com/assets/images/hosted/d1210a97.webp'],
-    bio: 'Sophia joins the LSMG model roster for editorial, fashion, beauty and commercial opportunities. Full portfolio details are coming soon.',
+    // Original portfolio files copied from Sophia's LEDGERA Faces profile
+    // (ledgeramagazine.com/new-faces/sophia) and served locally.
+    imagePaths: [
+      '/models/sophia/sophia-01.jpg',
+      '/models/sophia/sophia-02.jpg',
+      '/models/sophia/sophia-03.jpg',
+      '/models/sophia/sophia-04.jpg',
+      '/models/sophia/sophia-05.jpg',
+      '/models/sophia/sophia-06.jpg',
+      '/models/sophia/sophia-07.jpg',
+      '/models/sophia/sophia-08.jpg',
+      '/models/sophia/sophia-09.jpg',
+      '/models/sophia/sophia-10.jpg',
+    ],
+    imageSource: 'LEDGERA Faces',
+    bio: 'Sophia joins the LSMG roster with a portfolio that moves from studio streetwear to sunlit swim and lifestyle editorial. Her range suits fashion, beauty and commercial campaigns that need both edge and ease.',
     featured: true,
   },
   {
@@ -101,16 +124,71 @@ export const MODELS: Model[] = [
     name: 'Wovie',
     city: 'TBD',
     types: ['Editorial', 'Music'],
+    roles: ['Model', 'Singer'],
     specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
     imagePaths: [
-      '/models/wovie-1.webp',
-      '/models/wovie-2.svg',
-      '/models/wovie-3.svg',
+      '/models/wovie/wovie-01.jpg',
+      '/models/wovie/wovie-02.jpg',
+      '/models/wovie/wovie-03.jpg',
     ],
-    bio: 'Wovie is represented by LSMG across modeling and music, bringing a bold visual identity to editorial, fashion and artist opportunities.',
+    videoPath: '/models/wovie/wovie-reel.mp4',
+    videoPoster: '/models/wovie/wovie-reel-poster.jpg',
+    bio: 'Wovie is represented by LSMG across modeling and music — a singer and recording artist whose visual identity carries from the camera to the stage, suited to editorial, fashion, campaign and artist opportunities.',
     featured: true,
   },
 ]
+
+/** Intrinsic pixel widths of local talent images — used to cap responsive srcsets (never upscale). */
+export const IMAGE_WIDTHS: Record<string, number> = {
+  '/models/amora-1.jpg': 864,
+  '/models/amora-10.jpg': 1440,
+  '/models/amora-2.jpg': 864,
+  '/models/amora-3.jpg': 864,
+  '/models/amora-4.jpg': 961,
+  '/models/amora-5.jpg': 896,
+  '/models/amora-6.jpg': 1200,
+  '/models/amora-7.jpg': 1440,
+  '/models/amora-8.jpg': 1440,
+  '/models/amora-9.jpg': 1440,
+  '/models/halie-1.jpg': 1290,
+  '/models/halie-2.jpg': 1290,
+  '/models/halie-3.jpg': 1290,
+  '/models/halie-4.jpg': 1365,
+  '/models/halie-5.jpg': 853,
+  '/models/hero-jada.jpg': 1080,
+  '/models/jada-1.jpg': 1365,
+  '/models/jada-2.jpg': 1440,
+  '/models/jada-3.jpg': 1440,
+  '/models/jada-4.jpg': 1440,
+  '/models/nani-1.jpg': 1440,
+  '/models/nani-2.jpg': 1440,
+  '/models/nani-3.jpg': 1440,
+  '/models/nani-4.jpg': 3072,
+  '/models/nani-5.jpg': 1440,
+  '/models/nani-6.jpg': 1440,
+  '/models/nani-7.jpg': 3072,
+  '/models/sophia/sophia-01.jpg': 1228,
+  '/models/sophia/sophia-02.jpg': 1228,
+  '/models/sophia/sophia-03.jpg': 1507,
+  '/models/sophia/sophia-04.jpg': 1152,
+  '/models/sophia/sophia-05.jpg': 1500,
+  '/models/sophia/sophia-06.jpg': 1500,
+  '/models/sophia/sophia-07.jpg': 1228,
+  '/models/sophia/sophia-08.jpg': 1365,
+  '/models/sophia/sophia-09.jpg': 1228,
+  '/models/sophia/sophia-10.jpg': 1152,
+  '/models/wovie/wovie-01.jpg': 1290,
+  '/models/wovie/wovie-02.jpg': 1188,
+  '/models/wovie/wovie-03.jpg': 1188,
+  '/models/wovie/wovie-reel-poster.jpg': 720,
+}
+
+/** Music-category order: these artists are also listed under Models. */
+export const MUSIC_TALENT_SLUGS = ['jada', 'halie', 'wovie'] as const
+
+export function hasKnownCity(model: Model) {
+  return Boolean(model.city) && model.city !== 'TBD'
+}
 
 export function getModelBySlug(slug: string) {
   return MODELS.find((model) => model.slug === slug)
