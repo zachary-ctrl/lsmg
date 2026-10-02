@@ -92,7 +92,7 @@ export const MODELS: Model[] = [
     city: 'TBD',
     types: ['Editorial', 'Commercial'],
     specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
-    imagePaths: ['/placeholder.png'],
+    imagePaths: ['https://gcdn.picsart.com/editing-temp/d1210a97-37b9-4dc3-b9b0-091c0879171a.jpeg'],
     bio: 'Sophia joins the LSMG model roster for editorial, fashion, beauty and commercial opportunities. Full portfolio details are coming soon.',
     featured: true,
   },
