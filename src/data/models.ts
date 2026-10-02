@@ -86,6 +86,30 @@ export const MODELS: Model[] = [
     bio: 'Profile coming soon. Jada joins the LSMG roster with a growing editorial portfolio; her full bio, city, and specialties will be added shortly.',
     featured: true,
   },
+  {
+    slug: 'sophia',
+    name: 'Sophia',
+    city: 'TBD',
+    types: ['Editorial', 'Commercial'],
+    specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
+    imagePaths: ['https://gcdn.picsart.com/editing-temp/d1210a97-37b9-4dc3-b9b0-091c0879171a.jpeg'],
+    bio: 'Sophia joins the LSMG model roster for editorial, fashion, beauty and commercial opportunities. Full portfolio details are coming soon.',
+    featured: true,
+  },
+  {
+    slug: 'wovie',
+    name: 'Wovie',
+    city: 'TBD',
+    types: ['Editorial', 'Music'],
+    specs: { height: 'TBD', bust: 'TBD', waist: 'TBD' },
+    imagePaths: [
+      '/models/wovie-1.svg',
+      '/models/wovie-2.svg',
+      '/models/wovie-3.svg',
+    ],
+    bio: 'Wovie is represented by LSMG across modeling and music, bringing a bold visual identity to editorial, fashion and artist opportunities.',
+    featured: true,
+  },
 ]
 
 export function getModelBySlug(slug: string) {

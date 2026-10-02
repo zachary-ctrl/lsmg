@@ -11,7 +11,7 @@ export const Route = createFileRoute('/models')({
       {
         name: 'description',
         content:
-          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and politicians.',
+          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and public figures.',
       },
       { property: 'og:title', content: 'Talent | Last Shot Media Group' },
       {
@@ -23,7 +23,7 @@ export const Route = createFileRoute('/models')({
   }),
 })
 
-const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Politicians'] as const
+const CATEGORIES = ['Models', 'Actors', 'Sports', 'Music', 'Media', 'Public Figures'] as const
 
 type Category = (typeof CATEGORIES)[number]
 
@@ -33,12 +33,13 @@ const categoryHash: Record<Category, string> = {
   Sports: 'sports',
   Music: 'music',
   Media: 'media',
-  Politicians: 'politicians',
+  'Public Figures': 'public-figures',
 }
 
 function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
+  const musicTalent = useMemo(() => MODELS.filter((talent) => ['halie', 'jada', 'wovie'].includes(talent.slug)), [])
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '').toLowerCase()
@@ -129,14 +130,14 @@ function TalentPage() {
             )}
           </div>
 
-          {activeCategory === 'Models' ? (
+          {activeCategory === 'Models' || activeCategory === 'Music' ? (
             <>
               <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
-                Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.
+                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {representedModels.map((model) => (
+                {(activeCategory === 'Music' ? musicTalent : representedModels).map((model) => (
                   <article key={model.slug} className="group">
                     <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
                       <img
@@ -153,7 +154,7 @@ function TalentPage() {
                       <div>
                         <h3 className="font-['Bebas_Neue'] text-3xl tracking-wide">{model.name}</h3>
                         <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-                          Model · {model.city}
+                          {activeCategory === 'Music' ? 'Artist · Singer' : 'Model'} · {model.city}
                         </p>
                       </div>
                       <Link
@@ -168,7 +169,7 @@ function TalentPage() {
                 ))}
               </div>
 
-              <div className="mt-20 border border-white/10 bg-[#080808] p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
+              {activeCategory === 'Models' && <div className="mt-20 border border-white/10 bg-[#080808] p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
                 <div>
                   <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
                     LEDGERA / Models
@@ -186,7 +187,7 @@ function TalentPage() {
                 >
                   Explore LEDGERA →
                 </a>
-              </div>
+              </div>}
             </>
           ) : (
             <div className="min-h-[420px] border-y border-white/10 py-16 sm:py-24">
