@@ -10,6 +10,8 @@ export type Model = {
   }
   imagePaths: string[]
   videoPath?: string
+  /** VP9/Opus copy of the reel for browsers without H.264 support. */
+  videoWebmPath?: string
   /** Poster frame for the reel (should match the video's aspect ratio). */
   videoPoster?: string
   /** Talent disciplines shown on the Talent page (e.g. Model, Singer). */
@@ -75,6 +77,7 @@ export const MODELS: Model[] = [
       '/models/nani-7.jpg',
     ],
     videoPath: '/models/nani-reel.mp4',
+    videoWebmPath: '/models/nani-reel.webm',
     bio: 'Dallas-based Nani brings warmth, clarity, and an easy connection to commercial and print assignments. Her camera-ready range is a natural fit for lifestyle campaigns, catalogs, and polished brand storytelling.',
     featured: true,
   },
@@ -132,6 +135,7 @@ export const MODELS: Model[] = [
       '/models/wovie/wovie-03.jpg',
     ],
     videoPath: '/models/wovie/wovie-reel.mp4',
+    videoWebmPath: '/models/wovie/wovie-reel.webm',
     videoPoster: '/models/wovie/wovie-reel-poster.jpg',
     bio: 'Wovie is represented by LSMG across modeling and music — a singer and recording artist whose visual identity carries from the camera to the stage, suited to editorial, fashion, campaign and artist opportunities.',
     featured: true,

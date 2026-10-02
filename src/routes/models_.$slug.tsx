@@ -121,12 +121,14 @@ function ModelProfilePage() {
           <div className="model-profile-reel-frame">
             <video
               className="model-profile-reel-video"
-              src={model.videoPath}
               poster={model.videoPoster ?? responsiveImage(model.imagePaths[0], { widths: [1100], sourceWidth: IMAGE_WIDTHS[model.imagePaths[0]] }).src}
               controls
               playsInline
               preload="metadata"
             >
+              {/* MP4 (H.264) first for Safari/iOS/Chrome/Edge; WebM fallback for browsers without H.264. */}
+              <source src={model.videoPath} type="video/mp4" />
+              {model.videoWebmPath && <source src={model.videoWebmPath} type="video/webm" />}
               Your browser does not support embedded video.{' '}
               <a href={model.videoPath}>Download {model.name}’s reel</a>.
             </video>
