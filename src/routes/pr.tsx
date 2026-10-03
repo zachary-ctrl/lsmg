@@ -48,11 +48,11 @@ function PRPage() {
       <div className="relative overflow-hidden" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)' }}>
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
         <div className="relative z-10 max-w-[1400px] mx-auto">
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Division</span>
+          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Holdings / Communications</span>
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
-            PR &amp; <span style={{ color: 'var(--red)' }}>Booking</span>
+            COMMUNICATIONS <span style={{ color: 'var(--red)' }}>/ PR</span>
           </h1>
-          <p style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75 }}>Strategic communications, public relations, press operations, and talent representation — plus end-to-end talent booking across national and international markets. We pitch, place, and protect your narrative, then put your talent on the right stages.</p>
+          <p style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75 }}>Public relations, campaigns, media strategy and press operations for talent, brands and cultural projects — with booking support connected through LEDGERA Talent / Management. We build the message, open the right rooms and help turn visibility into opportunity.</p>
           <div className="flex flex-wrap gap-3 mt-8">
             <a href="#pr-services" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '14px 28px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>PR &amp; Comms</a>
             <a href="#booking" className="inline-flex items-center hover:border-[var(--white)] transition-colors" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 3, padding: '14px 28px', background: 'transparent', color: 'var(--white)', textTransform: 'uppercase', border: '1px solid var(--red)' }}>Talent Booking</a>
@@ -68,7 +68,7 @@ function PRPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               We Tell Your Story<br />To the <span style={{ color: 'var(--red)' }}>Right Rooms.</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>Our PR division handles everything from a first press release to a full media campaign rollout.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>The Communications / PR division handles everything from a first press release to a full media campaign rollout.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 2, background: 'var(--red)' }}>
             {[
@@ -113,11 +113,11 @@ function PRPage() {
       <section style={{ padding: '120px 40px' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-16">
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>Talent Services</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LEDGERA Talent / Management</span>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               Representation That<br /><span style={{ color: 'var(--red)' }}>Moves.</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>We represent models and multimedia talent for editorial, commercial, film, and entertainment work. Dallas, Orlando, New York and Atlanta.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LEDGERA Talent / Management represents models and multidisciplinary talent for editorial, commercial, film, music, creator and entertainment opportunities across Dallas, Orlando, New York and Atlanta.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
             {[
@@ -134,11 +134,11 @@ function PRPage() {
       <section id="booking" style={{ padding: '120px 40px', background: 'var(--gray)', borderTop: '1px solid var(--border)' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-16">
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LSMG Booking</span>
+            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase' }}>LEDGERA Talent / Booking</span>
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               Every Deal.<br /><span style={{ color: 'var(--red)' }}>Every Market.</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>End-to-end talent booking for artists, performers, and public figures. National and international markets — LSMG Booking manages the full booking cycle from first offer to final show, so you can focus on the performance.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>End-to-end booking support for artists, performers and public figures within the LEDGERA Talent / Management ecosystem. National and international opportunities are managed from first offer to final show.</p>
           </div>
 
           {/* Booking Ticker */}
