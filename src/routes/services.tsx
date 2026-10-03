@@ -7,7 +7,7 @@ export const Route = createFileRoute('/services')({
       { title: 'Services | Last Shot Media Group' },
       {
         name: 'description',
-        content: 'Operating capabilities across LEDGERA Talent, LEDGERA Communications, LEDGERA Studios, booking, media training, partnerships, licensing and IP under Last Shot Media Group Holdings.',
+        content: 'Operating capabilities across LEDGERA Talent / Management, Communications / PR, LEDGERA Studios, booking, media training, partnerships, licensing and IP under Last Shot Media Group Holdings.',
       },
     ],
   }),
@@ -23,8 +23,8 @@ const services = [
   },
   {
     num: '02',
-    title: 'LEDGERA Communications',
-    copy: 'Public relations, media strategy, campaigns, publicity, editorial placement, narrative development and brand communications through LEDGERA Communications.',
+    title: 'Communications / PR',
+    copy: 'Public relations, media strategy, campaigns, publicity, editorial placement, narrative development and brand communications through the Communications / PR division.',
     href: '/pr',
     cta: 'PR & Communications',
   },
