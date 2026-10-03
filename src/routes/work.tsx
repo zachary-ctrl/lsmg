@@ -7,7 +7,7 @@ export const Route = createFileRoute('/work')({
       { title: 'Selected Work | Last Shot Media Group' },
       {
         name: 'description',
-        content: 'Selected LSMG work across media, fashion, entertainment, live events, editorial, interviews and original production.',
+        content: 'Selected work and portfolio activity across LEDGERA media, talent, communications, production, events and original IP under Last Shot Media Group Holdings.',
       },
     ],
   }),
@@ -15,27 +15,27 @@ export const Route = createFileRoute('/work')({
 
 const work = [
   {
-    type: 'Press / Editorial',
-    title: 'Media Access',
-    copy: 'Press access, interviews, junkets, editorial coverage and on-site reporting across entertainment, film, culture, fashion and live events.',
+    type: 'Communications / Media',
+    title: 'Communications / PR',
+    copy: 'Public relations, media access, campaigns, press strategy and on-site cultural coverage supported by the LSMG Holdings network.',
     href: '/pr',
   },
   {
-    type: 'Fashion / Talent',
-    title: 'Representation',
-    copy: 'Talent development, bookings, brand outreach, editorial opportunities and representation strategy built around the people on the LSMG roster.',
+    type: 'Talent / Management',
+    title: 'LEDGERA Talent',
+    copy: 'Talent development, bookings, brand outreach, editorial opportunities and representation strategy for models, artists, actors, creators and public figures.',
     href: '/models',
   },
   {
-    type: 'Original Media',
-    title: 'LSMG Studios',
-    copy: 'Podcasts, interviews, digital video, scripted development, documentaries and branded storytelling produced through the LSMG media operation.',
+    type: 'Production / Original IP',
+    title: 'LEDGERA Studios',
+    copy: 'Film, photography, podcasts, digital video, scripted development, documentaries and branded storytelling produced through LEDGERA Studios.',
     href: '/media',
   },
   {
-    type: 'Owned Media',
+    type: 'Flagship Brand',
     title: 'LEDGERA',
-    copy: 'Independent editorial publishing, cover stories, culture features, interviews and a separate LEDGERA model community connected to the broader LSMG ecosystem.',
+    copy: 'The flagship media, culture and editorial brand of Last Shot Media Group Holdings, connected to LEDGERA Studios, LEDGERA Talent / Management and the wider portfolio.',
     href: 'https://ledgeramagazine.com',
     external: true,
   },
@@ -49,7 +49,7 @@ function WorkPage() {
           <span className="editorial-kicker">LSMG / Selected Work</span>
           <h1>WORK</h1>
           <p>
-            The work moves across representation, press, editorial, live events, production and owned media. This page is a high-level view of the ecosystem; the detailed divisions remain available throughout the site.
+            The portfolio moves across media, talent, communications, production and future companies and IP. This page shows how LEDGERA operates as the flagship brand within the broader LSMG Holdings ecosystem.
           </p>
         </div>
       </section>
@@ -87,7 +87,7 @@ function WorkPage() {
             </div>
             <div className="section-intro">
               <p style={{ marginBottom: 28 }}>
-                LSMG is designed so an opportunity can move across divisions — representation can lead to press, press can lead to partnerships, partnerships can lead to production, and owned media can extend the story.
+                LSMG Holdings is designed so opportunity can move across the LEDGERA ecosystem — talent can lead to press, press can lead to partnerships, partnerships can lead to production, and media can extend the story into lasting IP.
               </p>
               <a href="/contact" className="editorial-cta red">Start a Project ↗</a>
             </div>

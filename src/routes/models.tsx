@@ -7,17 +7,17 @@ export const Route = createFileRoute('/models')({
   component: TalentPage,
   head: () => ({
     meta: [
-      { title: 'Talent | Last Shot Media Group' },
+      { title: 'LEDGERA Talent / Management | Last Shot Media Group Holdings' },
       {
         name: 'description',
         content:
-          'Explore talent represented by Last Shot Media Group across models, actors, sports, music, media, creators and public figures.',
+          'Explore LEDGERA Talent / Management, the representation division within Last Shot Media Group Holdings, spanning models, actors, sports, music, media, creators and public figures.',
       },
-      { property: 'og:title', content: 'Talent | Last Shot Media Group' },
+      { property: 'og:title', content: 'LEDGERA Talent / Management | Last Shot Media Group Holdings' },
       {
         property: 'og:description',
         content:
-          'Talent represented by Last Shot Media Group across entertainment, fashion, sports, media and public life.',
+          'Talent represented through LEDGERA Talent / Management across entertainment, fashion, sports, media and public life.',
       },
     ],
   }),
@@ -62,7 +62,7 @@ function TalentPage() {
 
         <div className="relative mx-auto max-w-[1400px]">
           <div className="mb-8 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.32em] text-white/45">
-            <span className="text-[var(--red)]">LSMG / Representation</span>
+            <span className="text-[var(--red)]">LSMG Holdings / LEDGERA Talent</span>
             <span>Dallas · Orlando · New York · Atlanta</span>
           </div>
 
@@ -72,7 +72,7 @@ function TalentPage() {
 
           <div className="mt-10 grid gap-8 border-t border-white/10 pt-8 lg:grid-cols-[1.4fr_.6fr] lg:items-end">
             <p className="max-w-3xl text-xl leading-relaxed text-white/70 sm:text-2xl">
-              Last Shot Media Group represents talent across entertainment, fashion, sports, media and public life — building careers, visibility and opportunities around the people we represent.
+              LEDGERA Talent / Management represents talent across entertainment, fashion, sports, media and public life, with Last Shot Media Group Holdings providing the business infrastructure behind representation, booking, partnerships and career development.
             </p>
             <div className="lg:text-right">
               <Link
@@ -110,7 +110,7 @@ function TalentPage() {
           <div className="mb-12 flex flex-col justify-between gap-6 border-b border-white/10 pb-8 md:flex-row md:items-end">
             <div>
               <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
-                LSMG Talent
+                LEDGERA Talent
               </div>
               <h2 className="font-['Bebas_Neue'] text-6xl uppercase leading-none sm:text-7xl lg:text-8xl">
                 {activeCategory}
@@ -124,7 +124,7 @@ function TalentPage() {
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
               >
-                Looking for LEDGERA Models?
+                Visit LEDGERA Magazine
                 <span className="text-[var(--red)] transition-transform group-hover:translate-x-1">→</span>
               </a>
             )}
@@ -133,7 +133,7 @@ function TalentPage() {
           {activeCategory === 'Models' || activeCategory === 'Music' ? (
             <>
               <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
-                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
+                {activeCategory === 'Music' ? 'Artists represented through LEDGERA Talent / Management across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented through LEDGERA Talent / Management. This roster stays intentionally focused on representation — one defining image per person, with booking and partnership inquiries supported by the LSMG Holdings infrastructure.'}
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -142,7 +142,7 @@ function TalentPage() {
                     <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
                       <img
                         src={netlifyImage(model.imagePaths[0], 800, 1000, 75)}
-                        alt={`${model.name} — represented by Last Shot Media Group`}
+                        alt={`${model.name} — represented by LEDGERA Talent / Management`}
                         className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
                         loading="lazy"
                       />
@@ -172,11 +172,11 @@ function TalentPage() {
               {activeCategory === 'Models' && <div className="mt-20 border border-white/10 bg-[#080808] p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
                 <div>
                   <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
-                    LEDGERA / Models
+                    LEDGERA / Editorial + Talent
                   </div>
-                  <h3 className="font-['Bebas_Neue'] text-5xl uppercase sm:text-6xl">Models representing LEDGERA</h3>
+                  <h3 className="font-['Bebas_Neue'] text-5xl uppercase sm:text-6xl">One talent ecosystem</h3>
                   <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/55">
-                    LEDGERA also works with its own faces for magazine editorials, campaigns, events and brand activations. Those models are presented separately from LSMG representation.
+                    LEDGERA Talent can move across representation, editorial, campaigns, events and brand activations while remaining part of one management structure under Last Shot Media Group Holdings.
                   </p>
                 </div>
                 <a
@@ -199,7 +199,7 @@ function TalentPage() {
                   {activeCategory} roster
                 </h3>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
-                  This category is now part of the new LSMG Talent architecture. Represented talent will appear here as the roster is added, using the same clean one-image representation format.
+                  This category is part of the LEDGERA Talent / Management architecture. Represented talent will appear here as the roster is added, using the same clean one-image representation format.
                 </p>
                 <Link
                   to="/contact"

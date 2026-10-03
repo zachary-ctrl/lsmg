@@ -9,7 +9,7 @@ export const Route = createFileRoute('/')({
       {
         name: 'description',
         content:
-          'Last Shot Media Group is an independent creative holding company spanning talent representation, public relations, booking, media production, communications, licensing and original content.',
+          'Last Shot Media Group Holdings is the parent company behind LEDGERA and a growing portfolio of media, entertainment, talent, production, communications and cultural ventures.',
       },
     ],
   }),
@@ -63,13 +63,13 @@ function LiveTicker() {
 }
 
 const marquee = [
-  'Talent Representation',
-  'Public Relations',
-  'Talent Booking',
-  'Media Production',
-  'Communications',
-  'Licensing & IP',
-  'LSMG Studios',
+  'LEDGERA',
+  'LEDGERA Studios',
+  'LEDGERA Talent',
+  'Communications / PR',
+  'Future Companies & IP',
+  'Original IP',
+  'LSMG Holdings',
   'Dallas · Orlando · New York · Atlanta',
 ]
 
@@ -87,16 +87,16 @@ function HomePage() {
             </h1>
             <p className="home-hero-tagline">Where Creativity Becomes Capital.</p>
             <p className="home-hero-copy">
-              An independent creative holding company operating across PR, talent booking, media production, communications strategy, licensing and merchandise. We don&apos;t just tell your story — we build your legacy.
+              An independent creative holding company building and operating brands across media, entertainment, talent, production and communications. LEDGERA is our flagship culture and entertainment brand.
             </p>
           </div>
 
           <div className="hero-index" aria-label="Explore LSMG">
-            <a href="/models">01 / Talent</a>
-            <a href="/services">02 / Services</a>
+            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">01 / LEDGERA</a>
+            <a href="/models">02 / Talent</a>
             <Link to="/media">03 / Studios</Link>
-            <a href="/work">04 / Work</a>
-            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">05 / LEDGERA</a>
+            <a href="/services">04 / Communications</a>
+            <a href="/work">05 / Portfolio</a>
           </div>
         </div>
       </section>
@@ -115,34 +115,34 @@ function HomePage() {
               <h2 className="editorial-display section-title">ONE COMPANY.<br /><span className="editorial-red">MULTIPLE ENGINES.</span></h2>
             </div>
             <p className="section-intro">
-              LSMG connects representation, communications, booking, production and owned media under one independent structure. The goal is simple: create opportunity around talent and turn visibility into durable business.
+              LSMG Holdings provides the ownership, strategy and business infrastructure behind LEDGERA. Under the LEDGERA name, LEDGERA media, LEDGERA Studios, LEDGERA Talent / Management, Communications / PR and future ventures operate as connected parts of one cultural ecosystem.
             </p>
           </div>
 
           <div className="home-feature-grid">
             <a href="/models" className="home-feature primary">
-              <span className="home-feature-number">01 / REPRESENTATION</span>
+              <span className="home-feature-number">01 / MANAGEMENT</span>
               <div>
-                <h3 className="home-feature-title">TALENT</h3>
-                <p>Models, actors, music, sports, media and public figures represented through one clear LSMG talent division.</p>
+                <h3 className="home-feature-title">LEDGERA TALENT</h3>
+                <p>Models, artists, actors, creators, athletes and public figures represented and developed through LEDGERA Talent / Management.</p>
                 <span className="home-feature-link">Explore talent <span>↗</span></span>
               </div>
             </a>
 
             <a href="/services" className="home-feature">
-              <span className="home-feature-number">02 / STRATEGY</span>
+              <span className="home-feature-number">02 / COMMUNICATIONS</span>
               <div>
-                <h3 className="home-feature-title">SERVICES</h3>
-                <p>PR, communications, booking, media training, partnerships, licensing and career strategy.</p>
-                <span className="home-feature-link">View services <span>↗</span></span>
+                <h3 className="home-feature-title">COMMUNICATIONS / PR</h3>
+                <p>Public relations, media strategy, campaigns, publicity, press operations and brand communications.</p>
+                <span className="home-feature-link">View capabilities <span>↗</span></span>
               </div>
             </a>
 
             <Link to="/media" className="home-feature">
               <span className="home-feature-number">03 / PRODUCTION</span>
               <div>
-                <h3 className="home-feature-title">STUDIOS</h3>
-                <p>Original scripted content, podcasts, documentaries, editorial content and brand productions.</p>
+                <h3 className="home-feature-title">LEDGERA STUDIOS</h3>
+                <p>Film, photography, video, podcasts, documentaries, editorial production and original entertainment IP.</p>
                 <span className="home-feature-link">Enter studios <span>↗</span></span>
               </div>
             </Link>
@@ -165,30 +165,30 @@ function HomePage() {
           <div className="proof-grid">
             <div className="proof-cell"><div className="proof-value">2022</div><div className="proof-label">Established</div></div>
             <div className="proof-cell"><div className="proof-value editorial-red">04</div><div className="proof-label">Core markets</div></div>
-            <div className="proof-cell"><div className="proof-value">06</div><div className="proof-label">Business divisions</div></div>
-            <div className="proof-cell"><div className="proof-value editorial-red">01</div><div className="proof-label">Integrated ecosystem</div></div>
+            <div className="proof-cell"><div className="proof-value">01</div><div className="proof-label">Flagship brand</div></div>
+            <div className="proof-cell"><div className="proof-value editorial-red">∞</div><div className="proof-label">Future ventures</div></div>
           </div>
         </div>
       </section>
 
       <section className="split-panel">
         <div className="split-panel-dark">
-          <span className="editorial-kicker">LSMG Studios</span>
+          <span className="editorial-kicker">LEDGERA Studios</span>
           <h2>ORIGINAL<br />CONTENT.</h2>
           <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
-            LSMG Studios develops scripted projects, podcasts, documentaries and editorial productions for digital and streaming audiences.
+            LEDGERA Studios is the production arm of the LEDGERA ecosystem, developing film, photography, video, podcasts, documentaries and original projects.
           </p>
           <Link to="/media" className="editorial-cta red">Explore Studios ↗</Link>
         </div>
 
         <div className="split-panel-red">
           <div>
-            <span className="editorial-kicker" style={{ color: '#fff', opacity: .75 }}>Owned media</span>
+            <span className="editorial-kicker" style={{ color: '#fff', opacity: .75 }}>Flagship brand</span>
             <h2 style={{ marginTop: 18 }}>LEDGERA</h2>
           </div>
           <div>
             <p style={{ marginBottom: 30 }}>
-              LSMG&apos;s independent culture and editorial platform. Explore features, interviews, covers and the separate LEDGERA model community.
+              LSMG Holdings&apos; flagship media, culture and editorial brand — connected to LEDGERA Studios, LEDGERA Talent / Management and the wider holdings ecosystem.
             </p>
             <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="editorial-cta">Visit LEDGERA ↗</a>
           </div>

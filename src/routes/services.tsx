@@ -7,7 +7,7 @@ export const Route = createFileRoute('/services')({
       { title: 'Services | Last Shot Media Group' },
       {
         name: 'description',
-        content: 'LSMG services across management, public relations, communications, booking, media production, media training, partnerships and licensing.',
+        content: 'Operating capabilities across LEDGERA Talent / Management, Communications / PR, LEDGERA Studios, booking, media training, partnerships, licensing and IP under Last Shot Media Group Holdings.',
       },
     ],
   }),
@@ -16,15 +16,15 @@ export const Route = createFileRoute('/services')({
 const services = [
   {
     num: '01',
-    title: 'Management & Representation',
-    copy: 'Career strategy and representation built around the whole person — not a single booking. LSMG develops opportunities across entertainment, fashion, media, sports, brands and public-facing work.',
+    title: 'LEDGERA Talent / Management',
+    copy: 'Career strategy, representation and opportunity development for models, artists, actors, creators, athletes and public figures through LEDGERA Talent / Management.',
     href: '/models',
     cta: 'Explore Talent',
   },
   {
     num: '02',
-    title: 'PR & Communications',
-    copy: 'Strategic press campaigns, media pitching, editorial placement, narrative development, press materials, reputation support and communications strategy for talent, brands and cultural projects.',
+    title: 'Communications / PR',
+    copy: 'Public relations, media strategy, campaigns, publicity, editorial placement, narrative development and brand communications through the Communications / PR division.',
     href: '/pr',
     cta: 'PR & Communications',
   },
@@ -37,10 +37,10 @@ const services = [
   },
   {
     num: '04',
-    title: 'Media & Production',
-    copy: 'Original scripted content, podcasts, documentaries, editorial productions, branded content and digital storytelling developed through LSMG Studios.',
+    title: 'LEDGERA Studios',
+    copy: 'Film, photography, video, podcasts, documentaries, editorial productions, branded content and original IP developed through LEDGERA Studios.',
     href: '/media',
-    cta: 'LSMG Studios',
+    cta: 'LEDGERA Studios',
   },
   {
     num: '05',
@@ -63,10 +63,10 @@ function ServicesPage() {
     <div className="editorial-shell">
       <section className="page-hero">
         <div className="editorial-container">
-          <span className="editorial-kicker">LSMG / Capabilities</span>
+          <span className="editorial-kicker">LSMG Holdings / Capabilities</span>
           <h1>SERVICES</h1>
           <p>
-            LSMG operates as an integrated creative holding company. Representation, communications, booking, production and commercial strategy work together so clients do not have to build those systems separately.
+            Last Shot Media Group Holdings provides the business infrastructure behind LEDGERA. Its operating capabilities connect talent management, communications, booking, production, partnerships and IP development without changing the services clients already use.
           </p>
         </div>
       </section>
@@ -88,10 +88,10 @@ function ServicesPage() {
 
       <section className="split-panel">
         <div className="split-panel-dark">
-          <span className="editorial-kicker">Representation</span>
+          <span className="editorial-kicker">LEDGERA Talent / Management</span>
           <h2>PEOPLE<br />FIRST.</h2>
           <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
-            The Talent division is organized by representation category — models, actors, music, sports, media and public figures — with a clean roster built for booking and business inquiries.
+            LEDGERA Talent / Management is organized by representation category — models, actors, music, sports, media and public figures — with the same roster and booking infrastructure operated within the LSMG Holdings ecosystem.
           </p>
           <a href="/models" className="editorial-cta red">Explore Talent ↗</a>
         </div>
@@ -103,7 +103,7 @@ function ServicesPage() {
           </div>
           <div>
             <p style={{ marginBottom: 30 }}>
-              For representation, press, partnerships, booking, production, licensing or communications support, contact the LSMG team directly.
+              For representation, press, partnerships, booking, production, licensing or communications support, contact the LSMG Holdings team directly.
             </p>
             <a href="/contact" className="editorial-cta">Contact LSMG ↗</a>
           </div>
