@@ -322,7 +322,7 @@ function AboutPage() {
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 112px)', lineHeight: '.88', margin: '16px 0' }}>
             This Is<br />Your <span style={{ color: 'var(--red)' }}>Last Shot.</span>
           </h2>
-          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you want to work with LEDGERA, build with one of its operating divisions, join the team or partner with LSMG Holdings on something larger — the door is open.</p>
+          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you want to work with LEDGERA, engage one of LSMG Holdings’ operating divisions, join the team or partner with the company on something larger — the door is open.</p>
           <Magnetic className="inline-block" strength={0.45}>
             <Link to="/contact" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: 3, padding: '18px 48px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
               Get In Touch
