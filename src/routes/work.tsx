@@ -16,7 +16,7 @@ export const Route = createFileRoute('/work')({
 const work = [
   {
     type: 'Communications / Media',
-    title: 'LEDGERA Communications',
+    title: 'Communications / PR',
     copy: 'Public relations, media access, campaigns, press strategy and on-site cultural coverage supported by the LSMG Holdings network.',
     href: '/pr',
   },
@@ -35,7 +35,7 @@ const work = [
   {
     type: 'Flagship Brand',
     title: 'LEDGERA',
-    copy: 'The flagship culture and entertainment brand of Last Shot Media Group Holdings, spanning editorial, talent, production, communications and experiences.',
+    copy: 'The flagship media, culture and editorial brand of Last Shot Media Group Holdings, connected to LEDGERA Studios, LEDGERA Talent / Management and the wider portfolio.',
     href: 'https://ledgeramagazine.com',
     external: true,
   },
@@ -49,7 +49,7 @@ function WorkPage() {
           <span className="editorial-kicker">LSMG / Selected Work</span>
           <h1>WORK</h1>
           <p>
-            The portfolio moves across media, talent, communications, production, live experiences and original IP. This page shows how LEDGERA operates as the flagship brand within the broader LSMG Holdings ecosystem.
+            The portfolio moves across media, talent, communications, production and future companies and IP. This page shows how LEDGERA operates as the flagship brand within the broader LSMG Holdings ecosystem.
           </p>
         </div>
       </section>
