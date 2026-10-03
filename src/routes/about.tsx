@@ -173,7 +173,7 @@ function AboutPage() {
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
             <StaggerText text="About" /> <span style={{ color: 'var(--red)' }}><span className="word-stagger" style={{ animationDelay: '0.34s' }}>LSMG</span></span>
           </h1>
-          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops brands across media, entertainment, talent, production and communications, with LEDGERA as its flagship culture and entertainment company.</p>
+          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops brands across media, culture, production, talent and communications, with LEDGERA as its flagship media, culture and editorial brand.</p>
         </div>
       </div>
 
@@ -189,7 +189,7 @@ function AboutPage() {
               <div className="w-[60px] h-[3px] my-5 line-reveal" style={{ background: 'var(--red)' }} />
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group Holdings was founded to build the business infrastructure behind creative companies, talent and original ideas. Rather than forcing media, representation, communications and production to operate in separate rooms, LSMG connects them through a shared ownership and operating system.</p>
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We operate across Dallas, Orlando, New York and Atlanta — unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>One holding company. One flagship brand. Multiple operating arms. LEDGERA brings together media and editorial, Studios, Talent / Management, Communications and Experiences, while LSMG Holdings remains the ownership, strategy and long-term development layer above the ecosystem.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>One holding company. One flagship media brand. Multiple operating divisions. The current structure includes LEDGERA, LEDGERA Studios, LEDGERA Talent / Management and Communications / PR, while LSMG Holdings remains the ownership, strategy and long-term development layer for future companies, productions, technology, events and IP.</p>
             </div>
             <div>
               <div className="grid grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
