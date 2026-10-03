@@ -21,13 +21,13 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          'Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops LEDGERA and a portfolio spanning media, talent, production, communications, experiences and original IP.',
+          'Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops LEDGERA and a portfolio spanning media, culture, production, talent, communications and future companies and IP.',
       },
       { property: 'og:title', content: 'Last Shot Media Group | Where Creativity Becomes Capital' },
       {
         property: 'og:description',
         content:
-          'Parent company behind LEDGERA and a growing portfolio across media, talent, production, communications, experiences and culture.',
+          'Parent company behind LEDGERA and a growing portfolio across media, culture, production, talent, communications and future ventures.',
       },
       { property: 'og:image', content: '/og-image.png' },
       { property: 'og:type', content: 'website' },
@@ -224,14 +224,13 @@ function Footer() {
           </div>
 
           <div>
-            <h4>LEDGERA Ecosystem</h4>
+            <h4>Portfolio & Divisions</h4>
             <ul>
-              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA Media ↗</a></li>
+              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a></li>
               <li><a href="/models">LEDGERA Talent</a></li>
               <li><Link to="/media">LEDGERA Studios</Link></li>
-              <li><a href="/pr">LEDGERA Communications</a></li>
-              <li><a href="/contact">LEDGERA Experiences</a></li>
-              <li><a href="/work">Original IP + Portfolio</a></li>
+              <li><a href="/pr">Communications / PR</a></li>
+              <li><a href="/work">Future Companies &amp; IP</a></li>
             </ul>
           </div>
 
