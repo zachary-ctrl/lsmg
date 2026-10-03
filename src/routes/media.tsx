@@ -42,7 +42,7 @@ function MediaPage() {
             </div>
             <div className="section-intro">
               <p style={{ marginBottom: 20 }}>
-                LEDGERA Studios is the production arm of the LEDGERA brand and a portfolio company within Last Shot Media Group Holdings. We develop, produce and distribute original content — from photography and branded campaigns to scripted programming, documentary and podcast work.
+                LEDGERA Studios is the film, photography, video and production division within Last Shot Media Group Holdings, built alongside the LEDGERA editorial brand. We develop, produce and distribute original content — from photography and branded campaigns to scripted programming, documentary and podcast work.
               </p>
               <p>Our approach is simple: real stories told with craft. We work with creators, directors and writers who have something to say and the talent to say it.</p>
             </div>
