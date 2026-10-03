@@ -66,8 +66,8 @@ const marquee = [
   'LEDGERA',
   'LEDGERA Studios',
   'LEDGERA Talent',
-  'LEDGERA Communications',
-  'LEDGERA Experiences',
+  'Communications / PR',
+  'Future Companies & IP',
   'Original IP',
   'LSMG Holdings',
   'Dallas · Orlando · New York · Atlanta',
@@ -115,7 +115,7 @@ function HomePage() {
               <h2 className="editorial-display section-title">ONE COMPANY.<br /><span className="editorial-red">MULTIPLE ENGINES.</span></h2>
             </div>
             <p className="section-intro">
-              LSMG Holdings provides the ownership, strategy and business infrastructure behind LEDGERA. Under the LEDGERA name, media, talent, production, communications and experiences operate as connected parts of one cultural ecosystem.
+              LSMG Holdings provides the ownership, strategy and business infrastructure behind LEDGERA. Under the LEDGERA name, LEDGERA media, LEDGERA Studios, LEDGERA Talent / Management, Communications / PR and future ventures operate as connected parts of one cultural ecosystem.
             </p>
           </div>
 
@@ -132,8 +132,8 @@ function HomePage() {
             <a href="/services" className="home-feature">
               <span className="home-feature-number">02 / COMMUNICATIONS</span>
               <div>
-                <h3 className="home-feature-title">LEDGERA COMMS</h3>
-                <p>Public relations, media strategy, campaigns, publicity, booking support and brand communications.</p>
+                <h3 className="home-feature-title">COMMUNICATIONS / PR</h3>
+                <p>Public relations, media strategy, campaigns, publicity, press operations and brand communications.</p>
                 <span className="home-feature-link">View capabilities <span>↗</span></span>
               </div>
             </a>
@@ -188,7 +188,7 @@ function HomePage() {
           </div>
           <div>
             <p style={{ marginBottom: 30 }}>
-              LSMG Holdings&apos; flagship culture and entertainment brand spanning editorial, talent, production, communications and experiences.
+              LSMG Holdings&apos; flagship media, culture and editorial brand — connected to LEDGERA Studios, LEDGERA Talent / Management and the wider holdings ecosystem.
             </p>
             <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="editorial-cta">Visit LEDGERA ↗</a>
           </div>
