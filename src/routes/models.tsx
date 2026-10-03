@@ -124,7 +124,7 @@ function TalentPage() {
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 transition hover:text-white"
               >
-                Looking for LEDGERA Models?
+                Visit LEDGERA Magazine
                 <span className="text-[var(--red)] transition-transform group-hover:translate-x-1">→</span>
               </a>
             )}
