@@ -21,13 +21,13 @@ export const Route = createRootRoute({
       {
         name: 'description',
         content:
-          'Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops LEDGERA and a portfolio spanning media, culture, production, talent, communications and future companies and IP.',
+          'Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. Talent representation, PR, booking, media production, communications, licensing and original content.',
       },
       { property: 'og:title', content: 'Last Shot Media Group | Where Creativity Becomes Capital' },
       {
         property: 'og:description',
         content:
-          'Parent company behind LEDGERA and a growing portfolio across media, culture, production, talent, communications and future ventures.',
+          'Independent creative holding company across talent, PR, booking, media production, communications and culture.',
       },
       { property: 'og:image', content: '/og-image.png' },
       { property: 'og:type', content: 'website' },
@@ -219,18 +219,20 @@ function Footer() {
           <div>
             <span className="footer-brand">LAST SHOT<br /><span className="editorial-red">MEDIA GROUP</span></span>
             <p style={{ maxWidth: 390 }}>
-              An independent creative holding company behind LEDGERA and a growing portfolio across media, entertainment, talent, production, communications and original IP. Dallas, Orlando, New York and Atlanta.
+              An independent creative holding company operating across talent representation, PR, booking, media production, communications and licensing. Dallas, Orlando, New York and Atlanta.
             </p>
           </div>
 
           <div>
-            <h4>Portfolio & Divisions</h4>
+            <h4>Representation</h4>
             <ul>
-              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a></li>
-              <li><a href="/models">LEDGERA Talent</a></li>
-              <li><Link to="/media">LEDGERA Studios</Link></li>
-              <li><a href="/pr">Communications / PR</a></li>
-              <li><a href="/work">Future Companies &amp; IP</a></li>
+              <li><a href="/models#models">Models</a></li>
+              <li><a href="/models#actors">Actors</a></li>
+              <li><a href="/models#sports">Sports</a></li>
+              <li><a href="/models#music">Music</a></li>
+              <li><a href="/models#media">Media</a></li>
+              <li><a href="/models#public-figures">Public Figures</a></li>
+              <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA Models ↗</a></li>
             </ul>
           </div>
 
@@ -238,7 +240,7 @@ function Footer() {
             <h4>Company</h4>
             <ul>
               <li><a href="/services">Services</a></li>
-              <li><Link to="/media">LEDGERA Studios</Link></li>
+              <li><Link to="/media">LSMG Studios</Link></li>
               <li><a href="/work">Selected Work</a></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/contact">Contact</Link></li>
@@ -259,7 +261,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Last Shot Media Group Holdings</span>
+          <span>© {new Date().getFullYear()} Last Shot Media Group</span>
           <span>Where Creativity Becomes Capital.</span>
         </div>
       </div>

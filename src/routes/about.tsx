@@ -19,9 +19,9 @@ type Member = {
 const TEAM: Member[] = [
   {
     name: 'Zachary Heneden',
-    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF, LEDGERA',
-    desc: 'Leads creative direction across LSMG Holdings and LEDGERA, including editorial, brand development, communications, original series and creative operations.',
-    bio: 'Zachary co-founded Last Shot Media Group Holdings to build business infrastructure behind ambitious creative companies and talent. As Creative Director and Editor in Chief of LEDGERA, he leads the flagship brand’s editorial vision, creative direction, communications, original series development and cultural positioning while remaining hands-on across the broader LSMG Holdings portfolio.',
+    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF',
+    desc: 'Handles creative direction, PR execution, original series development, editorial output, and day-to-day operational management across all LSMG divisions.',
+    bio: 'Zachary co-founded Last Shot Media Group to give creative talent the full-stack business infrastructure the industry never offered them. As Creative Director and Editor in Chief he leads creative direction, PR execution, original series development, and the editorial standard for everything LSMG publishes — from press releases to media-campaign strategy. He stays hands-on with day-to-day operations across every LSMG division, from the editorial desk to the booking floor.',
     tags: ['Co-CEO', 'Creative Director', 'Editor In Chief'],
     image: '/team/zachary.jpg',
   },
@@ -173,7 +173,7 @@ function AboutPage() {
           <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 120px)', lineHeight: '.88' }}>
             <StaggerText text="About" /> <span style={{ color: 'var(--red)' }}><span className="word-stagger" style={{ animationDelay: '0.34s' }}>LSMG</span></span>
           </h1>
-          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group Holdings is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. It owns and develops brands across media, culture, production, talent and communications, with LEDGERA as its flagship media, culture and editorial brand.</p>
+          <p className="scroll-reveal" style={{ fontSize: 20, color: '#b3b3b3', maxWidth: 600, marginTop: 24, lineHeight: 1.75, animation: 'fadeUp .7s ease .35s both' }}>Last Shot Media Group is an independent creative holding company operating across Dallas, Orlando, New York and Atlanta. We built it because the industry needed something different.</p>
         </div>
       </div>
 
@@ -187,14 +187,14 @@ function AboutPage() {
                 Built<br /><span style={{ color: 'var(--red)' }}>Different.</span>
               </h2>
               <div className="w-[60px] h-[3px] my-5 line-reveal" style={{ background: 'var(--red)' }} />
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group Holdings was founded to build the business infrastructure behind creative companies, talent and original ideas. Rather than forcing media, representation, communications and production to operate in separate rooms, LSMG connects them through a shared ownership and operating system.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group was founded with a simple principle: creative talent deserves full-stack business infrastructure. Not just a publicist. Not just a booking agent. Everything — under one roof, owned and operated by people who actually live in the culture.</p>
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We operate across Dallas, Orlando, New York and Atlanta — unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>One holding company. One flagship media brand. Multiple operating divisions. The current structure includes LEDGERA, LEDGERA Studios, LEDGERA Talent / Management and Communications / PR, while LSMG Holdings remains the ownership, strategy and long-term development layer for future companies, productions, technology, events and IP.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>Six divisions. One vision. We operate where PR, media, booking, production, training, and licensing intersect — and we build career infrastructure for artists and brands who are serious about longevity.</p>
             </div>
             <div>
               <div className="grid grid-cols-2" style={{ gap: 2, background: 'var(--red)' }}>
                 {[
-                  { value: '1', label: 'Flagship Brand' },
+                  { value: '6', label: 'Divisions' },
                   { value: '4', label: 'Cities', accent: true },
                   { value: '2022', label: 'Founded' },
                   { value: '∞', label: 'Last Shot Taken', accent: true },
@@ -225,7 +225,7 @@ function AboutPage() {
             <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: '.88', marginTop: 12 }}>
               The <span style={{ color: 'var(--red)' }}>Team</span>
             </h2>
-            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG Holdings is led by a core team of operators, creatives and strategists working across company building, media, entertainment, talent, communications and the LEDGERA ecosystem. Select a portrait to read the full bio.</p>
+            <p style={{ fontSize: 18, color: '#b3b3b3', maxWidth: 560, marginTop: 20, lineHeight: 1.75 }}>LSMG is led by a core team of operators, creatives, and strategists who have been in the culture their entire careers. Select a portrait to read the full bio.</p>
           </div>
           <div className="hm-team-grid">
             {TEAM.map((member, idx) => (
@@ -322,7 +322,7 @@ function AboutPage() {
           <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 'clamp(56px, 9vw, 112px)', lineHeight: '.88', margin: '16px 0' }}>
             This Is<br />Your <span style={{ color: 'var(--red)' }}>Last Shot.</span>
           </h2>
-          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you want to work with LEDGERA, engage one of LSMG Holdings’ operating divisions, join the team or partner with the company on something larger — the door is open.</p>
+          <p style={{ fontSize: 18, color: '#b3b3b3', marginBottom: 48, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>Whether you're looking to be a client, join the team, or partner with LSMG on something larger — the door is open.</p>
           <Magnetic className="inline-block" strength={0.45}>
             <Link to="/contact" className="inline-flex items-center hover:opacity-85 transition-opacity" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: 3, padding: '18px 48px', background: 'var(--red)', color: 'var(--white)', textTransform: 'uppercase', border: 'none' }}>
               Get In Touch
