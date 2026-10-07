@@ -40,6 +40,9 @@ function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
   const musicTalent = useMemo(() => MODELS.filter((talent) => ['halie', 'jada', 'wovie'].includes(talent.slug)), [])
+  const sportsTalent = useMemo(() => MODELS.filter((talent) => talent.types.includes('Sports')), [])
+  const rosterFor: Partial<Record<Category, typeof MODELS>> = { Models: representedModels, Music: musicTalent, Sports: sportsTalent }
+  const roleFor: Partial<Record<Category, string>> = { Models: 'Model', Music: 'Artist · Singer', Sports: 'Athlete · Model' }
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '').toLowerCase()
@@ -130,14 +133,14 @@ function TalentPage() {
             )}
           </div>
 
-          {activeCategory === 'Models' || activeCategory === 'Music' ? (
+          {rosterFor[activeCategory] ? (
             <>
               <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
-                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
+                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : activeCategory === 'Sports' ? 'Athletes represented by Last Shot Media Group across sports, fitness and brand partnerships, with booking and partnership inquiries handled through LSMG.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {(activeCategory === 'Music' ? musicTalent : representedModels).map((model) => (
+                {(rosterFor[activeCategory] ?? []).map((model) => (
                   <article key={model.slug} className="group">
                     <div className="relative aspect-[4/5] overflow-hidden bg-[#0d0d0d]">
                       <img
@@ -154,7 +157,7 @@ function TalentPage() {
                       <div>
                         <h3 className="font-['Bebas_Neue'] text-3xl tracking-wide">{model.name}</h3>
                         <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/45">
-                          {activeCategory === 'Music' ? 'Artist · Singer' : 'Model'} · {model.city}
+                          {roleFor[activeCategory]}{model.city ? ` · ${model.city}` : ''}
                         </p>
                       </div>
                       <Link

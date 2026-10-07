@@ -10,7 +10,7 @@ export const Route = createFileRoute('/models_/$slug')({
       return { meta: [{ title: 'Model Not Found | Last Shot Media Group' }] }
     }
 
-    const description = `${model.name} is a ${model.city}-based ${model.types.join(' and ')} model represented by Last Shot Media Group.`
+    const description = `${model.name} is ${model.city ? `a ${model.city}-based` : 'a'} ${model.types.join(', ')} talent represented by Last Shot Media Group.`
 
     return {
       meta: [
@@ -42,11 +42,12 @@ function ModelProfilePage() {
     )
   }
 
+  // only show measurements that are on file
   const measurements = [
     ['Height', model.specs.height],
     ['Bust', model.specs.bust],
     ['Waist', model.specs.waist],
-  ]
+  ].filter(([, value]) => value && value !== 'TBD')
 
   return (
     <article className="models-page model-profile">
@@ -66,21 +67,21 @@ function ModelProfilePage() {
           <Link to="/models" className="model-profile-back">
             ← Back to roster
           </Link>
-          <span className="mdl-eyebrow">{model.city} · LSMG Talent</span>
+          <span className="mdl-eyebrow">{model.city ? `${model.city} · ` : ''}LSMG Talent</span>
           <h1>{model.name}</h1>
           <div className="model-profile-types">
             {model.types.map((type) => (
               <span key={type}>{type}</span>
             ))}
           </div>
-          <dl className="model-profile-specs">
+          {measurements.length > 0 && <dl className="model-profile-specs">
             {measurements.map(([label, value]) => (
               <div key={label}>
                 <dt>{label}</dt>
                 <dd>{value}</dd>
               </div>
             ))}
-          </dl>
+          </dl>}
           <p className="model-profile-bio">{model.bio}</p>
           <Link to="/contact" className="mdl-btn mdl-btn-primary model-profile-book">
             Book {model.name}

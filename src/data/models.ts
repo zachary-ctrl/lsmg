@@ -1,7 +1,8 @@
 export type Model = {
   slug: string
   name: string
-  city: string
+  /** optional: leave out when the talent's location should not be shown */
+  city?: string
   types: string[]
   specs: {
     height: string
@@ -108,6 +109,20 @@ export const MODELS: Model[] = [
       '/models/wovie-3.svg',
     ],
     bio: 'Wovie is represented by LSMG across modeling and music, bringing a bold visual identity to editorial, fashion and artist opportunities.',
+    featured: true,
+  },
+  {
+    slug: 'paula-ramos',
+    name: 'Paula Ramos',
+    types: ['Sports', 'Fitness', 'Commercial'],
+    specs: { height: '', bust: '', waist: '' },
+    imagePaths: [
+      '/models/paula-ramos-1.jpg',
+      '/models/paula-ramos-2.jpg',
+      '/models/paula-ramos-3.jpg',
+      '/models/paula-ramos-4.jpg',
+    ],
+    bio: 'Paula Ramos joins the LSMG roster across modeling and sports. A volleyball athlete with a strong, fitness-forward presence, she brings natural energy to activewear, athletic and lifestyle campaigns, sports brand partnerships and commercial work.',
     featured: true,
   },
 ]
