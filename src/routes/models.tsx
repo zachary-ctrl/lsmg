@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
-import { IMAGE_WIDTHS, MODELS, MUSIC_TALENT_SLUGS, hasKnownCity, type Model } from '../data/models'
+import { IMAGE_WIDTHS, MODELS, MUSIC_TALENT_SLUGS, SPORTS_TALENT_SLUGS, hasKnownCity, type Model } from '../data/models'
 import { responsiveImage } from '../lib/netlify-image'
 
 export const Route = createFileRoute('/models')({
@@ -58,6 +58,13 @@ const categoryHash: Record<Category, string> = {
 function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
+  const sportsTalent = useMemo(
+    () =>
+      SPORTS_TALENT_SLUGS.map((slug) => MODELS.find((talent) => talent.slug === slug)).filter(
+        (talent): talent is Model => Boolean(talent),
+      ),
+    [],
+  )
   const musicTalent = useMemo(
     () =>
       MUSIC_TALENT_SLUGS.map((slug) => MODELS.find((talent) => talent.slug === slug)).filter(
@@ -162,14 +169,14 @@ function TalentPage() {
             )}
           </div>
 
-          {activeCategory === 'Models' || activeCategory === 'Music' ? (
+          {activeCategory === 'Models' || activeCategory === 'Music' || activeCategory === 'Sports' ? (
             <>
               <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
-                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
+                {activeCategory === 'Sports' ? 'Athletes represented by Last Shot Media Group across sports, fitness and brand partnerships, with booking and partnership inquiries handled through LSMG.' : activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {(activeCategory === 'Music' ? musicTalent : representedModels).map((model) => {
+                {(activeCategory === 'Music' ? musicTalent : activeCategory === 'Sports' ? sportsTalent : representedModels).map((model) => {
                   const image = cardImage(model)
                   return (
                   <article key={model.slug} className="group">

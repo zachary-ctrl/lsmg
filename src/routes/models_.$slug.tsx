@@ -61,7 +61,7 @@ function ModelProfilePage() {
     ['Height', model.specs.height],
     ['Bust', model.specs.bust],
     ['Waist', model.specs.waist],
-  ]
+  ].filter(([, value]) => value && value !== 'TBD')
 
   return (
     <article className="models-page model-profile">
@@ -92,14 +92,16 @@ function ModelProfilePage() {
               <span key={type}>{type}</span>
             ))}
           </div>
-          <dl className="model-profile-specs">
-            {measurements.map(([label, value]) => (
-              <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
+          {measurements.length > 0 && (
+            <dl className="model-profile-specs">
+              {measurements.map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
           <p className="model-profile-bio">{model.bio}</p>
           {model.imageSource && (
             <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">

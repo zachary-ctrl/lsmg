@@ -140,6 +140,22 @@ export const MODELS: Model[] = [
     bio: 'Wovie is represented by LSMG across modeling and music — a singer and recording artist whose visual identity carries from the camera to the stage, suited to editorial, fashion, campaign and artist opportunities.',
     featured: true,
   },
+  {
+    slug: 'paula-ramos',
+    name: 'Paula Ramos',
+    city: '',
+    types: ['Sports', 'Fitness', 'Commercial'],
+    roles: ['Athlete', 'Model'],
+    specs: { height: '', bust: '', waist: '' },
+    imagePaths: [
+      '/models/paula-ramos/paula-ramos-01.jpg',
+      '/models/paula-ramos/paula-ramos-02.jpg',
+      '/models/paula-ramos/paula-ramos-03.jpg',
+      '/models/paula-ramos/paula-ramos-04.jpg',
+    ],
+    bio: 'Paula Ramos joins the LSMG roster across modeling and sports. A volleyball athlete with a strong, fitness-forward presence, she brings natural energy to activewear, athletic and lifestyle campaigns, sports brand partnerships and commercial work.',
+    featured: true,
+  },
 ]
 
 /** Intrinsic pixel widths of local talent images — used to cap responsive srcsets (never upscale). */
@@ -171,6 +187,10 @@ export const IMAGE_WIDTHS: Record<string, number> = {
   '/models/nani-5.jpg': 1440,
   '/models/nani-6.jpg': 1440,
   '/models/nani-7.jpg': 3072,
+  '/models/paula-ramos/paula-ramos-01.jpg': 1500,
+  '/models/paula-ramos/paula-ramos-02.jpg': 1513,
+  '/models/paula-ramos/paula-ramos-03.jpg': 1500,
+  '/models/paula-ramos/paula-ramos-04.jpg': 1500,
   '/models/sophia/sophia-01.jpg': 1228,
   '/models/sophia/sophia-02.jpg': 1228,
   '/models/sophia/sophia-03.jpg': 1507,
@@ -186,6 +206,9 @@ export const IMAGE_WIDTHS: Record<string, number> = {
   '/models/wovie/wovie-03.jpg': 1188,
   '/models/wovie/wovie-reel-poster.jpg': 720,
 }
+
+/** Sports-category order: these athletes are also listed under Models. */
+export const SPORTS_TALENT_SLUGS = ['paula-ramos'] as const
 
 /** Music-category order: these artists are also listed under Models. */
 export const MUSIC_TALENT_SLUGS = ['jada', 'halie', 'wovie'] as const
