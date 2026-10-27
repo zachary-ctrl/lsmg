@@ -244,6 +244,8 @@ function Footer() {
               <li><a href="/work">Selected Work</a></li>
               <li><Link to="/about">About</Link></li>
               <li><Link to="/contact">Contact</Link></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms of Use</a></li>
               <li><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a></li>
             </ul>
           </div>
@@ -261,7 +263,7 @@ function Footer() {
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Last Shot Media Group</span>
+          <span>© {new Date().getFullYear()} Last Shot Media Group Holdings LLC</span>
           <span>Where Creativity Becomes Capital.</span>
         </div>
       </div>
