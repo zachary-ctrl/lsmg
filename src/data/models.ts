@@ -17,27 +17,6 @@ export type Model = {
 
 export const MODELS: Model[] = [
   {
-    slug: 'amora',
-    name: 'Amora',
-    city: 'Atlanta',
-    types: ['Editorial', 'Runway'],
-    specs: { height: "5'9\"", bust: '32"', waist: '24"' },
-    imagePaths: [
-      '/models/amora-1.jpg',
-      '/models/amora-2.jpg',
-      '/models/amora-3.jpg',
-      '/models/amora-4.jpg',
-      '/models/amora-5.jpg',
-      '/models/amora-6.jpg',
-      '/models/amora-7.jpg',
-      '/models/amora-8.jpg',
-      '/models/amora-9.jpg',
-      '/models/amora-10.jpg',
-    ],
-    bio: 'Based in Atlanta, Amora brings a confident editorial presence and fluid runway movement to every production. Her range suits fashion stories, designer showcases, and campaigns that call for polished, modern energy.',
-    featured: true,
-  },
-  {
     slug: 'halie',
     name: 'Halie',
     city: 'New York',
