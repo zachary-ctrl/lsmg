@@ -24,27 +24,6 @@ export type Model = {
 
 export const MODELS: Model[] = [
   {
-    slug: 'amora',
-    name: 'Amora',
-    city: 'Atlanta',
-    types: ['Editorial', 'Runway'],
-    specs: { height: "5'9\"", bust: '32"', waist: '24"' },
-    imagePaths: [
-      '/models/amora-1.jpg',
-      '/models/amora-2.jpg',
-      '/models/amora-3.jpg',
-      '/models/amora-4.jpg',
-      '/models/amora-5.jpg',
-      '/models/amora-6.jpg',
-      '/models/amora-7.jpg',
-      '/models/amora-8.jpg',
-      '/models/amora-9.jpg',
-      '/models/amora-10.jpg',
-    ],
-    bio: 'Based in Atlanta, Amora brings a confident editorial presence and fluid runway movement to every production. Her range suits fashion stories, designer showcases, and campaigns that call for polished, modern energy.',
-    featured: true,
-  },
-  {
     slug: 'halie',
     name: 'Halie',
     city: 'New York',
@@ -160,16 +139,16 @@ export const MODELS: Model[] = [
 
 /** Intrinsic pixel widths of local talent images — used to cap responsive srcsets (never upscale). */
 export const IMAGE_WIDTHS: Record<string, number> = {
-  '/models/amora-1.jpg': 864,
-  '/models/amora-10.jpg': 1440,
-  '/models/amora-2.jpg': 864,
-  '/models/amora-3.jpg': 864,
-  '/models/amora-4.jpg': 961,
-  '/models/amora-5.jpg': 896,
-  '/models/amora-6.jpg': 1200,
-  '/models/amora-7.jpg': 1440,
-  '/models/amora-8.jpg': 1440,
-  '/models/amora-9.jpg': 1440,
+
+
+
+
+
+
+
+
+
+
   '/models/halie-1.jpg': 1290,
   '/models/halie-2.jpg': 1290,
   '/models/halie-3.jpg': 1290,
