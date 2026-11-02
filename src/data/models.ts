@@ -24,6 +24,29 @@ export type Model = {
 
 export const MODELS: Model[] = [
   {
+    slug: 'lina-antunes',
+    name: 'Lina Antunes',
+    city: '',
+    types: ['Editorial', 'Lifestyle', 'Fashion'],
+    roles: ['Model'],
+    specs: { height: '', bust: '', waist: '' },
+    imagePaths: [
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-01.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-02.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-03.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-04.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-05.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-06.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-07.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-08.jpg',
+      'https://cdn.shopify.com/s/files/1/0659/7692/6415/files/ledgera-lina-antunes-09.jpg',
+    ],
+    imageSource: 'LEDGERA Faces',
+    bio: "Lina Antunes is a model and multidisciplinary creative with a distinctive eye for vintage fashion, Y2K nostalgia, music, and art. Inspired by her grandmother's love of thrifting, she brings storytelling, individuality, and an eclectic personal style to the LEDGERA creative community. Her interests span singing, painting, drawing, and fashion.",
+    featured: true,
+  },
+
+  {
     slug: 'halie',
     name: 'Halie',
     city: 'New York',

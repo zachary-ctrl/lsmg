@@ -17,6 +17,9 @@ export function netlifyImage(
   height?: number,
   quality = TALENT_IMAGE_QUALITY,
 ) {
+  // Shopify CDN images are already served from a permanent optimized image host.
+  if (src.startsWith('https://cdn.shopify.com/')) return src
+
   const params = new URLSearchParams({
     url: src,
     w: String(Math.round(width)),
