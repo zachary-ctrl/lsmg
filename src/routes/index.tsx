@@ -73,139 +73,168 @@ const marquee = [
   'Dallas · Orlando · New York · Atlanta',
 ]
 
+
+const categories = [
+  { name: 'Models', href: '/models#models', image: '/models/nani-1.jpg', alt: 'LSMG model Nani', description: 'Fashion, editorial, commercial and brand-facing talent.', action: 'Explore Models' },
+  { name: 'Actors', href: '/models#actors', image: '', alt: '', description: 'Screen and stage opportunities, casting and representation inquiries.', action: 'Explore Actors' },
+  { name: 'Sports', href: '/models#sports', image: '/models/paula-ramos-1.jpg', alt: 'LSMG athlete and model Paula Ramos', description: 'Athletes, sport-driven storytelling and brand appearances.', action: 'Explore Sports' },
+  { name: 'Music', href: '/models#music', image: '/models/wovie-1.svg', alt: 'LSMG artist Wovie promotional portrait', description: 'Artists, performance and creative development.', action: 'Explore Music' },
+  { name: 'Media', href: '/models#media', image: '/team/ashley.jpg', alt: 'LSMG team member Ashley Diaz', description: 'Hosts, interviews and on-camera media. Team image shown.', action: 'Explore Media' },
+  { name: 'Public Figures', href: '/models#public-figures', image: 'https://images.squarespace-cdn.com/content/v1/536e3872e4b02cbd6b6e124c/82cb18b8-a019-4534-a006-323bfa5de1e9/Sandra%2BFatmi-Hall%2C%2BHeadshot.png', alt: 'Sandra Fatmi-Hall, nonprofit leader and speaker', description: 'Public figures, community leadership and speaking engagements.', action: 'Explore Public Figures' },
+]
+
+const featuredWork = [
+  { name: 'Runway 7 / NYFW', category: 'Fashion · Editorial', role: '37-page LEDGERA special edition', link: 'https://ledgeramagazine.com/magazine/runway-7-nyfw/', label: 'View edition' },
+  { name: 'Mohamed Taher / 32B', category: 'Film · Interview', role: 'Interview and film coverage; 32B received Tribeca’s 2026 Best Narrative Short award.', link: 'https://ledgeramagazine.com/interviews/32b-mohamed-taher', label: 'Read interview' },
+  { name: 'M By Elegance', category: 'Wrestling · Feature', role: 'TNA Wrestling interview and LEDGERA Issue 05 cover.', link: 'https://ledgeramagazine.com/magazine/issue-05/', label: 'Explore issue' },
+]
+
+const overviewServices = [
+  { name: 'PR & Communications', copy: 'Media strategy, press outreach, campaigns and reputation support.', href: '/pr' },
+  { name: 'Talent Booking', copy: 'Appearances, performances, negotiations and booking coordination.', href: '/booking' },
+  { name: 'Management', copy: 'Representation and career strategy across talent categories.', href: '/models' },
+  { name: 'Studios & Photography', copy: 'Video, documentary, podcasts and branded production.', href: '/media' },
+  { name: 'Partnerships & Licensing', copy: 'Brand campaigns, sponsorships and intellectual property.', href: 'https://activation.thelsmg.com/' },
+  { name: 'Media Training', copy: 'Interview coaching, speaking preparation and public storytelling.', href: '/services' },
+]
+
+const ecosystem = [
+  { name: 'The LSMG Culture Hub', short: 'THE CULTURE HUB', eyebrow: 'Media ecosystem', copy: 'One place for our latest episodes, editions, Case Files, festival coverage and cultural stories.', href: 'https://media.thelsmg.com/', action: 'Explore the Culture Hub', image: '/logo.webp' },
+  { name: 'LSMG Brand Activations', short: 'BRAND ACTIVATIONS', eyebrow: 'Commercial partnerships', copy: 'Custom campaigns, sponsorships, advertising and coordinated placements across our owned media and creative services.', href: 'https://activation.thelsmg.com/', action: 'Build a Brand Partnership', image: '' },
+  { name: 'The Last Shot Podcast', short: 'THE LAST SHOT PODCAST', eyebrow: 'An Original LSMG Show', copy: 'Long-form conversations, full episodes, video and short-form interviews with people shaping culture.', href: 'https://lastshotpodcast.net/', action: 'Watch & Listen', image: '' },
+  { name: 'LEDGERA', short: 'LEDGERA', eyebrow: 'An LSMG Publication', copy: 'The Record of Culture. Independent editorial, fashion, film, music, features, issues and the LEDGERA creative community.', href: 'https://ledgeramagazine.com/', action: 'Visit the Publication', image: '/ledgera-logo-transparent.png' },
+  { name: 'LSMG Studios', short: 'LSMG STUDIOS', eyebrow: 'Production division', copy: 'Film, photography, video, documentaries, original projects and production services.', href: '/media', action: 'Explore Studios', image: '/team/zachary.jpg' },
+]
+
 function HomePage() {
   return (
     <div className="editorial-shell">
       <LiveTicker />
 
-      <section className="home-hero">
-        <div className="editorial-container home-hero-grid">
-          <div>
-            <span className="editorial-kicker">Independent creative holding company · Est. 2022</span>
-            <h1 className="editorial-display home-hero-title">
+      <section className="home-hero" aria-labelledby="lsmg-home-title">
+        <div className="editorial-container lsmg-new-hero">
+          <div className="lsmg-hero-copy">
+            <span className="editorial-kicker">Last Shot Media Group Holdings · Independent Creative Company</span>
+            <h1 id="lsmg-home-title" className="editorial-display home-hero-title">
               LAST SHOT<br /><span className="editorial-red">MEDIA</span><br />GROUP
             </h1>
             <p className="home-hero-tagline">Where Creativity Becomes Capital.</p>
             <p className="home-hero-copy">
-              An independent creative holding company operating across PR, talent booking, media production, communications strategy, licensing and merchandise. We don&apos;t just tell your story — we build your legacy.
+              Last Shot Media Group Holdings is the independent parent company for our talent, production and owned-media properties. We also work directly with artists, brands and organizations across PR, talent booking, media production, communications strategy, licensing and merchandise. We don&apos;t just tell your story — we build your legacy.
             </p>
+            <div className="lsmg-hero-actions">
+              <a href="/models" className="editorial-cta red">Explore Talent ↗</a>
+              <a href="/contact" className="editorial-cta">Work With Us ↗</a>
+            </div>
           </div>
-
-          <div className="hero-index" aria-label="Explore LSMG">
-            <a href="/models">01 / Talent</a>
-            <a href="/services">02 / Services</a>
-            <Link to="/media">03 / Studios</Link>
-            <a href="/work">04 / Work</a>
-            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">05 / LEDGERA</a>
+          <div className="lsmg-hero-visual">
+            <img src="/team/zachary.jpg" alt="LSMG co-CEO and Creative Director Zachary Heneden" width="900" height="1125" fetchPriority="high" />
+            <span>People / Projects / Possibility</span>
           </div>
         </div>
       </section>
 
       <div className="red-marquee" aria-hidden="true">
-        <div className="red-marquee-track">
-          {[...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item} ◆</span>)}
-        </div>
+        <div className="red-marquee-track">{[...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item} ◆</span>)}</div>
       </div>
 
-      <section className="editorial-section">
+      <section className="editorial-section" id="talent">
         <div className="editorial-container">
           <div className="section-heading-grid">
             <div>
-              <span className="editorial-kicker">The LSMG ecosystem</span>
-              <h2 className="editorial-display section-title">ONE COMPANY.<br /><span className="editorial-red">MULTIPLE ENGINES.</span></h2>
+              <span className="editorial-kicker">01 / LSMG Talent</span>
+              <h2 className="editorial-display section-title">TALENT IS<br /><span className="editorial-red">THE CENTER.</span></h2>
             </div>
-            <p className="section-intro">
-              LSMG connects representation, communications, booking, production and owned media under one independent structure. The goal is simple: create opportunity around talent and turn visibility into durable business.
-            </p>
+            <p className="section-intro">Six entry points to booking and representation. We separate LSMG-represented talent from LEDGERA&apos;s editorial model community, with clear inquiry paths for each category.</p>
           </div>
+          <div className="lsmg-talent-grid">
+            {categories.map((category) => (
+              <a href={category.href} className={`lsmg-talent-card${category.image ? '' : ' no-photo'}`} key={category.name}>
+                {category.image ? <img src={category.image} alt={category.alt} loading="lazy" decoding="async" /> : <span className="lsmg-talent-art" aria-hidden="true">LSMG</span>}
+                <span className="lsmg-talent-shade" aria-hidden="true" />
+                <span className="lsmg-talent-info">
+                  <strong>{category.name}</strong>
+                  <span>{category.description}</span>
+                  <small>{category.action} ↗</small>
+                </span>
+              </a>
+            ))}
+          </div>
+          <p className="lsmg-note">Photos identify existing LSMG talent or team members. For categories without a confirmed portrait, we show branded artwork rather than imply representation of someone not on the roster.</p>
+        </div>
+      </section>
 
-          <div className="home-feature-grid">
-            <a href="/models" className="home-feature primary">
-              <span className="home-feature-number">01 / REPRESENTATION</span>
-              <div>
-                <h3 className="home-feature-title">TALENT</h3>
-                <p>Models, actors, music, sports, media and public figures represented through one clear LSMG talent division.</p>
-                <span className="home-feature-link">Explore talent <span>↗</span></span>
-              </div>
-            </a>
+      <section className="editorial-section lsmg-work-preview" id="selected-work">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div><span className="editorial-kicker">02 / Selected Work</span><h2 className="editorial-display section-title">IN THE ROOM.<br /><span className="editorial-red">ON THE RECORD.</span></h2></div>
+            <p className="section-intro">A selection of verified interviews, specials and editorial work from our 2026 coverage portfolio. Editorial access is not a claim of sponsorship or client representation.</p>
+          </div>
+          <div className="lsmg-work-preview-grid">
+            {featuredWork.map((item, index) => <a href={item.link} key={item.name} className="lsmg-work-preview-card" target="_blank" rel="noopener noreferrer">
+              <span className="editorial-kicker">0{index + 1} / {item.category}</span><h3>{item.name}</h3><p>{item.role}</p><small>{item.label} ↗</small>
+            </a>)}
+          </div>
+          <a href="/work" className="editorial-cta lsmg-section-cta">See Coverage & Selected Work ↗</a>
+        </div>
+      </section>
 
-            <a href="/services" className="home-feature">
-              <span className="home-feature-number">02 / STRATEGY</span>
-              <div>
-                <h3 className="home-feature-title">SERVICES</h3>
-                <p>PR, communications, booking, media training, partnerships, licensing and career strategy.</p>
-                <span className="home-feature-link">View services <span>↗</span></span>
-              </div>
-            </a>
+      <section className="editorial-section" id="services">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div><span className="editorial-kicker">03 / Capabilities</span><h2 className="editorial-display section-title">WHAT WE<br /><span className="editorial-red">DO FOR YOU.</span></h2></div>
+            <p className="section-intro">The company is more than a directory of properties. Our core team offers direct services across representation, communications, commercial partnerships and production.</p>
+          </div>
+          <div className="lsmg-service-preview">
+            {overviewServices.map((item, i) => <a key={item.name} href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined} className="lsmg-service-preview-item">
+              <small>0{i + 1}</small><div><h3>{item.name}</h3><p>{item.copy}</p></div><span aria-hidden="true">↗</span>
+            </a>)}
+          </div>
+          <a href="/services" className="editorial-cta lsmg-section-cta">Explore All Services ↗</a>
+        </div>
+      </section>
 
-            <Link to="/media" className="home-feature">
-              <span className="home-feature-number">03 / PRODUCTION</span>
-              <div>
-                <h3 className="home-feature-title">STUDIOS</h3>
-                <p>Original scripted content, podcasts, documentaries, editorial content and brand productions.</p>
-                <span className="home-feature-link">Enter studios <span>↗</span></span>
+      <section className="editorial-section lsmg-ecosystem" id="ecosystem">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div><span className="editorial-kicker">04 / An LSMG Company</span><h2 className="editorial-display section-title">ONE COMPANY.<br /><span className="editorial-red">MULTIPLE ENGINES.</span></h2></div>
+            <p className="section-intro">Our properties retain distinctive identities and connect through one parent organization. LSMG Holdings leads the ecosystem while remaining available for direct client services.</p>
+          </div>
+          <div className="lsmg-ecosystem-grid">
+            {ecosystem.map((item) => <a href={item.href} key={item.name} className="lsmg-ecosystem-card" target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+              <span className="editorial-kicker">{item.eyebrow}</span>
+              <div className="lsmg-ecosystem-art">
+                {item.image ? <img src={item.image} alt="" loading="lazy" decoding="async" /> : <strong aria-hidden="true">LSMG</strong>}
               </div>
-            </Link>
+              <h3>{item.short}</h3><p>{item.copy}</p><span className="home-feature-link">{item.action} ↗</span>
+            </a>)}
           </div>
         </div>
       </section>
 
-      <section className="editorial-section" style={{ background: '#080808' }}>
+      <section className="editorial-section lsmg-story-section">
         <div className="editorial-container">
           <div className="section-heading-grid">
-            <div>
-              <span className="editorial-kicker">Built for culture</span>
-              <h2 className="editorial-display section-title">INDEPENDENT.<br /><span className="editorial-red">CONNECTED.</span></h2>
-            </div>
-            <p className="section-intro">
-              LSMG operates from Dallas, Orlando, New York and Atlanta, connecting creative talent, media relationships and production capabilities across markets without losing the speed of an independent company.
-            </p>
-          </div>
-
-          <div className="proof-grid">
-            <div className="proof-cell"><div className="proof-value">2022</div><div className="proof-label">Established</div></div>
-            <div className="proof-cell"><div className="proof-value editorial-red">04</div><div className="proof-label">Core markets</div></div>
-            <div className="proof-cell"><div className="proof-value">06</div><div className="proof-label">Business divisions</div></div>
-            <div className="proof-cell"><div className="proof-value editorial-red">01</div><div className="proof-label">Integrated ecosystem</div></div>
-          </div>
-        </div>
-      </section>
-
-      <section className="split-panel">
-        <div className="split-panel-dark">
-          <span className="editorial-kicker">LSMG Studios</span>
-          <h2>ORIGINAL<br />CONTENT.</h2>
-          <p className="editorial-copy" style={{ margin: '26px 0 34px' }}>
-            LSMG Studios develops scripted projects, podcasts, documentaries and editorial productions for digital and streaming audiences.
-          </p>
-          <Link to="/media" className="editorial-cta red">Explore Studios ↗</Link>
-        </div>
-
-        <div className="split-panel-red">
-          <div>
-            <span className="editorial-kicker" style={{ color: '#fff', opacity: .75 }}>Owned media</span>
-            <h2 style={{ marginTop: 18 }}>LEDGERA</h2>
-          </div>
-          <div>
-            <p style={{ marginBottom: 30 }}>
-              LSMG&apos;s independent culture and editorial platform. Explore features, interviews, covers and the separate LEDGERA model community.
-            </p>
-            <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="editorial-cta">Visit LEDGERA ↗</a>
-          </div>
-        </div>
-      </section>
-
-      <section className="editorial-section">
-        <div className="editorial-container">
-          <div className="section-heading-grid">
-            <div>
-              <span className="editorial-kicker">Start a conversation</span>
-              <h2 className="editorial-display section-title">THE NEXT<br /><span className="editorial-red">SHOT.</span></h2>
-            </div>
+            <div><span className="editorial-kicker">05 / Our Story</span><h2 className="editorial-display section-title">INDEPENDENT.<br /><span className="editorial-red">CONNECTED.</span></h2></div>
             <div className="section-intro">
-              <p style={{ marginBottom: 28 }}>For representation, press, partnerships, booking, production or other business inquiries, contact LSMG directly.</p>
-              <Link to="/contact" className="editorial-cta red">Work with LSMG ↗</Link>
+              <p>Founded by creative leaders, Last Shot Media Group combines editorial independence with a business structure built for enduring cultural work. Talent representation, communication, media strategy and original production work together without compromising each property&apos;s identity.</p>
+              <a href="/about" className="editorial-cta lsmg-section-cta">Our Company & Leadership ↗</a>
             </div>
+          </div>
+          <div className="proof-grid" aria-label="LSMG organization at a glance">
+            <div className="proof-cell"><div className="proof-value">06</div><div className="proof-label">Talent categories</div></div>
+            <div className="proof-cell"><div className="proof-value editorial-red">04</div><div className="proof-label">Core markets</div></div>
+            <div className="proof-cell"><div className="proof-value">05</div><div className="proof-label">Featured ecosystem properties</div></div>
+            <div className="proof-cell"><div className="proof-value editorial-red">01</div><div className="proof-label">Parent company</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section className="editorial-section lsmg-contact-section">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div><span className="editorial-kicker">Build With LSMG</span><h2 className="editorial-display section-title">THE NEXT<br /><span className="editorial-red">SHOT.</span></h2></div>
+            <div className="section-intro"><p>For representation, media strategy, press, booking, sponsorships, licensing, photography or production, speak with our team.</p><Link to="/contact" className="editorial-cta red lsmg-section-cta">Work With Us ↗</Link></div>
           </div>
         </div>
       </section>

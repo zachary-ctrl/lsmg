@@ -39,15 +39,24 @@ const categoryHash: Record<Category, string> = {
 function TalentPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Models')
   const representedModels = useMemo(() => MODELS, [])
-  const musicTalent = useMemo(() => MODELS.filter((talent) => ['halie', 'jada', 'wovie'].includes(talent.slug)), [])
+  const musicTalent = useMemo(() => MODELS.filter((talent) => talent.types.includes('Music')), [])
   const sportsTalent = useMemo(() => MODELS.filter((talent) => talent.types.includes('Sports')), [])
   const rosterFor: Partial<Record<Category, typeof MODELS>> = { Models: representedModels, Music: musicTalent, Sports: sportsTalent }
   const roleFor: Partial<Record<Category, string>> = { Models: 'Model', Music: 'Artist · Singer', Sports: 'Athlete · Model' }
 
   useEffect(() => {
-    const hash = window.location.hash.replace('#', '').toLowerCase()
-    const match = CATEGORIES.find((category) => categoryHash[category] === hash)
-    if (match) setActiveCategory(match)
+    const syncCategory = () => {
+      const hash = window.location.hash.replace('#', '').toLowerCase()
+      const match = CATEGORIES.find((category) => categoryHash[category] === hash)
+      if (match) setActiveCategory(match)
+    }
+    syncCategory()
+    window.addEventListener('hashchange', syncCategory)
+    window.addEventListener('popstate', syncCategory)
+    return () => {
+      window.removeEventListener('hashchange', syncCategory)
+      window.removeEventListener('popstate', syncCategory)
+    }
   }, [])
 
   const selectCategory = (category: Category) => {
@@ -96,6 +105,8 @@ function TalentPage() {
               key={category}
               type="button"
               onClick={() => selectCategory(category)}
+              aria-pressed={activeCategory === category}
+              aria-controls="talent-roster"
               className={`shrink-0 border-b pb-2 font-mono text-[11px] uppercase tracking-[0.2em] transition ${
                 activeCategory === category
                   ? 'border-[var(--red)] text-white'
@@ -136,7 +147,7 @@ function TalentPage() {
           {rosterFor[activeCategory] ? (
             <>
               <p className="mb-12 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg">
-                {activeCategory === 'Music' ? 'Artists represented by Last Shot Media Group across music and multidisciplinary creative work. Jada, Halie and Wovie are represented across both music and modeling.' : activeCategory === 'Sports' ? 'Athletes represented by Last Shot Media Group across sports, fitness and brand partnerships, with booking and partnership inquiries handled through LSMG.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
+                {activeCategory === 'Music' ? 'Artists whose current published LSMG profiles include music. Browse individual portfolios and contact the team for artist booking.' : activeCategory === 'Sports' ? 'Athletes represented by Last Shot Media Group across sports, fitness and brand partnerships, with booking and partnership inquiries handled through LSMG.' : 'Models represented by Last Shot Media Group. This roster is intentionally focused on representation — one defining image per person, with booking and partnership inquiries handled through LSMG.'}
               </p>
 
               <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -192,25 +203,34 @@ function TalentPage() {
                 </a>
               </div>}
             </>
-          ) : (
-            <div className="min-h-[420px] border-y border-white/10 py-16 sm:py-24">
-              <div className="max-w-3xl">
-                <div className="mb-5 font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--red)]">
-                  Representation Category
+          ) : activeCategory === 'Public Figures' ? (
+            <div className="lsmg-public-roster">
+              <article className="lsmg-public-roster-card">
+                <a href="/public-figures/sandra-fatmi-hall" className="lsmg-public-roster-photo" aria-label="View Sandra Fatmi-Hall's profile">
+                  <img src="https://images.squarespace-cdn.com/content/v1/536e3872e4b02cbd6b6e124c/82cb18b8-a019-4534-a006-323bfa5de1e9/Sandra%2BFatmi-Hall%2C%2BHeadshot.png" alt="Sandra Fatmi-Hall" loading="lazy" />
+                </a>
+                <div className="lsmg-public-roster-info">
+                  <span className="editorial-kicker">Public Figure / Speaker</span>
+                  <h3>Sandra Fatmi-Hall</h3>
+                  <p>Founder, CEO and Executive Director of the United Foundation of Central Florida. A nonprofit leader, philanthropist, mentor and speaker focused on building leaders intentionally.</p>
+                  <div className="lsmg-hero-actions">
+                    <a className="editorial-cta red" href="/public-figures/sandra-fatmi-hall">View Profile ↗</a>
+                    <a className="editorial-cta" href="/contact">Speaking Inquiry ↗</a>
+                  </div>
                 </div>
-                <h3 className="font-['Bebas_Neue'] text-5xl uppercase leading-none sm:text-7xl">
-                  {activeCategory} roster
-                </h3>
-                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/55">
-                  This category is now part of the new LSMG Talent architecture. Represented talent will appear here as the roster is added, using the same clean one-image representation format.
-                </p>
-                <Link
-                  to="/contact"
-                  className="mt-8 inline-flex border-b border-[var(--red)] pb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white"
-                >
-                  Representation & booking inquiries →
-                </Link>
+              </article>
+            </div>
+          ) : (
+            <div className="lsmg-roster-inquiry">
+              <div className="lsmg-roster-inquiry-copy">
+                <span className="editorial-kicker">Talent / {activeCategory}</span>
+                <h3>{activeCategory === 'Actors' ? 'ACTORS & CASTING' : 'MEDIA & ON-CAMERA'}</h3>
+                <p>{activeCategory === 'Actors'
+                  ? 'For screen, stage, commercial and casting inquiries, speak with LSMG about active opportunities and verified availability. Individual profiles are shared when approved for public booking.'
+                  : 'For hosts, interviewers, media personalities and brand-facing talent, our team can advise on interview production, appearances and available talent. On-camera work and editorial staffing do not automatically imply talent representation.'}</p>
+                <a href="/contact" className="editorial-cta red">Ask About {activeCategory} ↗</a>
               </div>
+              {activeCategory === 'Media' && <img src="/team/ashley.jpg" alt="LSMG team member Ashley Diaz" loading="lazy" />}
             </div>
           )}
         </div>

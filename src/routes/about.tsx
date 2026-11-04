@@ -166,7 +166,7 @@ function AboutPage() {
   return (
     <div ref={revealRef}>
       {/* Page Hero */}
-      <div className="relative overflow-hidden" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)' }}>
+      <div className="relative overflow-hidden lsmg-about-hero" style={{ padding: '120px 40px 80px', borderBottom: '1px solid var(--border)' }}>
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,16,46,.04) 0%, transparent 60%)' }} />
         <div className="relative z-10 max-w-[1400px] mx-auto">
           <span className="scroll-reveal" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: 5, color: 'var(--red)', textTransform: 'uppercase', animation: 'fadeUp .7s ease both' }}>Our Story</span>
@@ -178,7 +178,7 @@ function AboutPage() {
       </div>
 
       {/* Company Info */}
-      <section style={{ padding: '120px 40px' }}>
+      <section className="lsmg-about-info" style={{ padding: '120px 40px' }}>
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start">
             <div className="scroll-reveal">
@@ -188,7 +188,8 @@ function AboutPage() {
               </h2>
               <div className="w-[60px] h-[3px] my-5 line-reveal" style={{ background: 'var(--red)' }} />
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group was founded with a simple principle: creative talent deserves full-stack business infrastructure. Not just a publicist. Not just a booking agent. Everything — under one roof, owned and operated by people who actually live in the culture.</p>
-              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>We operate across Dallas, Orlando, New York and Atlanta — unapologetically independent. No corporate parent. No conflicting client interests. Every client gets direct attention from the founders.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Last Shot Media Group Holdings LLC is our independent parent company, with no outside corporate parent. It owns and operates a connected creative ecosystem while providing services directly to talent, brands and partners. Every client gets direct attention from our team.</p>
+              <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75, marginBottom: 20 }}>Our properties include <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA</a>, an LSMG publication; <a href="https://lastshotpodcast.net" target="_blank" rel="noopener noreferrer">The Last Shot Podcast</a>, an original LSMG show; <a href="https://media.thelsmg.com" target="_blank" rel="noopener noreferrer">the Culture Hub</a>; and <a href="https://activation.thelsmg.com" target="_blank" rel="noopener noreferrer">Brand Activations</a>. LSMG Studios connects our production work across the group.</p>
               <p style={{ fontSize: 17, color: '#bbb', lineHeight: 1.75 }}>Six divisions. One vision. We operate where PR, media, booking, production, training, and licensing intersect — and we build career infrastructure for artists and brands who are serious about longevity.</p>
             </div>
             <div>
@@ -196,7 +197,7 @@ function AboutPage() {
                 {[
                   { value: '6', label: 'Divisions' },
                   { value: '4', label: 'Cities', accent: true },
-                  { value: '2022', label: 'Founded' },
+                  { value: '2020', label: 'Founded' },
                   { value: '∞', label: 'Last Shot Taken', accent: true },
                 ].map((s, i) => (
                   <div key={s.label} className="text-center glow-hover scroll-reveal" style={{ background: 'var(--black)', padding: '48px 40px', transition: 'transform 0.3s ease, opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)', transitionDelay: `${i * 0.08}s` }}
