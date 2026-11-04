@@ -323,10 +323,10 @@ function Footer() {
         </div>
 
         <div className="lsmg-footer-ecosystem" aria-label="LSMG properties">
-          <a href="https://media.thelsmg.com/" target="_blank" rel="noopener noreferrer">Culture Hub ↗</a>
-          <a href="https://activation.thelsmg.com/" target="_blank" rel="noopener noreferrer">Brand Activations ↗</a>
-          <a href="https://lastshotpodcast.net/" target="_blank" rel="noopener noreferrer">The Last Shot Podcast ↗</a>
-          <a href="https://ledgeramagazine.com/" target="_blank" rel="noopener noreferrer">LEDGERA · An LSMG Publication ↗</a>
+          <div className="lsmg-footer-ecosystem-item"><a href="https://media.thelsmg.com/" target="_blank" rel="noopener noreferrer">LSMG Culture Hub ↗</a><small>Central discovery hub for recent episodes, editions, Case Files, coverage and the broader ecosystem.</small></div>
+          <div className="lsmg-footer-ecosystem-item"><a href="https://activation.thelsmg.com/" target="_blank" rel="noopener noreferrer">Brand Activations ↗</a><small>Advertising, sponsorships, placement guides, audience details and campaign inquiries.</small></div>
+          <div className="lsmg-footer-ecosystem-item"><a href="https://lastshotpodcast.net/" target="_blank" rel="noopener noreferrer">The Last Shot Podcast ↗</a><small>Full episodes, guest conversations and listening or viewing options.</small></div>
+          <div className="lsmg-footer-ecosystem-item"><a href="https://ledgeramagazine.com/" target="_blank" rel="noopener noreferrer">LEDGERA Magazine ↗</a><small>Articles, issues, special editions, interviews, visual editorials and LEDGERA Models.</small></div>
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Last Shot Media Group Holdings LLC</span>
