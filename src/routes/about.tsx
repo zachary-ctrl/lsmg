@@ -29,7 +29,7 @@ const TEAM: Member[] = [
     image: '/team/zachary.jpg',
   },
   {
-    name: "Julien Serrano-O'Neill",
+    name: "Julien Serrano-O'Neil",
     role: 'CO-FOUNDER · CO-CEO',
     shortRole: 'Co-Founder · Co-CEO',
     bio: 'Julien leads operational systems, business development and organizational infrastructure across LSMG. His work connects the company’s creative ambitions to the structure required to scale partnerships, talent activity and long-term business operations.',
@@ -88,12 +88,17 @@ function AboutPage() {
                 business development.
               </p>
               <p>
-                We operate independently and stay close to the work. That means strategy
-                can move quickly, talent relationships stay personal, and every division
-                can support the others instead of working in isolation.
+                Last Shot Media Group Holdings LLC is the independent parent company
+                connecting our representation, communications, production and owned media.
+                We stay close to the work, so our divisions can support talent, clients and
+                projects instead of operating in isolation.
               </p>
             </div>
           </div>
+        </div>
+        <div className="editorial-container lsmg-about-properties">
+          <p><strong>An LSMG ecosystem.</strong> <a href="https://ledgeramagazine.com/" target="_blank" rel="noopener noreferrer">LEDGERA · An LSMG Publication ↗</a> <a href="https://lastshotpodcast.net/" target="_blank" rel="noopener noreferrer">The Last Shot Podcast · An Original LSMG Show ↗</a> <a href="https://media.thelsmg.com/" target="_blank" rel="noopener noreferrer">Culture Hub ↗</a> <a href="https://activation.thelsmg.com/" target="_blank" rel="noopener noreferrer">Brand Activations ↗</a></p>
+          <p>LSMG offers direct services in talent management, PR, booking, production, photography and commercial partnerships. <a href="/services">Explore the company’s services ↗</a></p>
         </div>
       </section>
 

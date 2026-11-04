@@ -5,6 +5,7 @@ import {
   Link,
   createRootRoute,
   useMatches,
+  useLocation,
 } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { IdentityProvider } from '../lib/identity-context'
@@ -145,19 +146,38 @@ function RootComponent() {
   )
 }
 
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/models', label: 'Talent' },
-  { href: '/services', label: 'Services' },
-  { href: '/media', label: 'Studios' },
-  { href: '/work', label: 'Work' },
-  { href: '/internships', label: 'Internships' },
-  { href: '/about', label: 'About' },
-]
+const talentNav = [
+  ['All Talent', '/models'],
+  ['Models', '/models#models'],
+  ['Actors', '/models#actors'],
+  ['Sports', '/models#sports'],
+  ['Music', '/models#music'],
+  ['Media', '/models#media'],
+  ['Public Figures', '/models#public-figures'],
+] as const
+
+const serviceNav = [
+  ['All Services', '/services'],
+  ['PR & Communications', '/pr'],
+  ['Talent Booking', '/booking'],
+  ['Management', '/services'],
+  ['Studios & Production', '/media'],
+  ['Partnerships & Licensing', 'https://activation.thelsmg.com/'],
+] as const
+
+const ecosystemNav = [
+  ['LEDGERA Magazine', 'https://ledgeramagazine.com/'],
+  ['Culture Hub', 'https://media.thelsmg.com/'],
+  ['Brand Activations', 'https://activation.thelsmg.com/'],
+  ['The Last Shot Podcast', 'https://lastshotpodcast.net/'],
+] as const
 
 function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const burgerRef = useRef<HTMLButtonElement>(null)
+  const pathname = useLocation().pathname
+  const isCurrent = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href + '/'))
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -166,14 +186,36 @@ function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => setMobileOpen(false), [pathname])
+
   useEffect(() => {
-    if (!mobileOpen) return
-    const onResize = () => {
-      if (window.innerWidth > 1050) setMobileOpen(false)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      setMobileOpen(false)
+      document.querySelectorAll<HTMLDetailsElement>('.redesign-header details[open]').forEach((detail) => { detail.open = false })
+      burgerRef.current?.focus()
     }
+    const onResize = () => { if (window.innerWidth >= 1220) setMobileOpen(false) }
+    window.addEventListener('keydown', onKey)
     window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [mobileOpen])
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [])
+
+  const renderLinks = (items: readonly (readonly [string, string])[]) =>
+    items.map(([label, href]) => {
+      const external = href.startsWith('http')
+      return (
+        <a key={label} href={href} aria-current={!external && isCurrent(href.split('#')[0]) ? 'page' : undefined}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noopener noreferrer' : undefined}
+          onClick={() => setMobileOpen(false)}>
+          {label}{external ? ' ↗' : ''}
+        </a>
+      )
+    })
 
   return (
     <header className={`redesign-header${scrolled ? ' is-scrolled' : ''}`}>
@@ -181,32 +223,48 @@ function Header() {
         <Link to="/" className="redesign-logo" onClick={() => setMobileOpen(false)} aria-label="Last Shot Media Group home">
           <span style={{ color: '#fff' }}>LS</span><span style={{ color: 'var(--red)' }}>MG</span>
         </Link>
-
         <nav className="redesign-nav" aria-label="Main navigation">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href}>{item.label}</a>
-          ))}
-          <a className="nav-ledgera" href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
-          <a className="redesign-contact" href="/contact">Contact</a>
+          <a href="/" aria-current={isCurrent('/') ? 'page' : undefined}>Home</a>
+          <a href="/about" aria-current={isCurrent('/about') ? 'page' : undefined}>About</a>
+          <a href="/internships" aria-current={isCurrent('/internships') ? 'page' : undefined}>Internships</a>
+          <details className="redesign-dropdown">
+            <summary className={isCurrent('/models') || isCurrent('/public-figures') ? 'nav-current' : ''}>Talent</summary>
+            <div className="redesign-dropdown-panel">{renderLinks(talentNav)}</div>
+          </details>
+          <details className="redesign-dropdown">
+            <summary className={isCurrent('/services') || isCurrent('/pr') ? 'nav-current' : ''}>Services</summary>
+            <div className="redesign-dropdown-panel">{renderLinks(serviceNav)}</div>
+          </details>
+          <a href="/media" aria-current={isCurrent('/media') ? 'page' : undefined}>Studios</a>
+          <a href="/work" aria-current={isCurrent('/work') ? 'page' : undefined}>Our Work</a>
+          <details className="redesign-dropdown">
+            <summary>Our Ecosystem</summary>
+            <div className="redesign-dropdown-panel">{renderLinks(ecosystemNav)}</div>
+          </details>
+          <a className="redesign-contact" href="/contact" aria-current={isCurrent('/contact') ? 'page' : undefined}>Work With Us</a>
         </nav>
-
-        <button
-          className="redesign-burger"
-          type="button"
-          aria-expanded={mobileOpen}
-          aria-label="Toggle menu"
-          onClick={() => setMobileOpen((open) => !open)}
-        >
+        <button ref={burgerRef} id="lsmg-menu-toggle" className="redesign-burger" type="button"
+          aria-controls="lsmg-mobile-nav" aria-expanded={mobileOpen}
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          onClick={() => setMobileOpen((open) => !open)}>
           <span /><span /><span />
         </button>
       </div>
-
-      <nav className={`redesign-mobile${mobileOpen ? ' open' : ''}`} aria-label="Mobile navigation">
-        {navItems.map((item) => (
-          <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)}>{item.label}</a>
-        ))}
-        <a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">LEDGERA ↗</a>
-        <a href="/contact" onClick={() => setMobileOpen(false)}>Contact</a>
+      <nav id="lsmg-mobile-nav" className={`redesign-mobile${mobileOpen ? ' open' : ''}`}
+        aria-label="Mobile navigation" aria-hidden={!mobileOpen}>
+        <div className="redesign-mobile-top">
+          <span>Explore Last Shot Media Group</span>
+          <button type="button" onClick={() => { setMobileOpen(false); burgerRef.current?.focus() }}>Close ×</button>
+        </div>
+        <a href="/" aria-current={isCurrent('/') ? 'page' : undefined} onClick={() => setMobileOpen(false)}>Home</a>
+        <a href="/about" aria-current={isCurrent('/about') ? 'page' : undefined} onClick={() => setMobileOpen(false)}>About</a>
+        <a href="/internships" onClick={() => setMobileOpen(false)}>Internships</a>
+        <details><summary>Talent <span aria-hidden="true">+</span></summary><div className="redesign-mobile-sub">{renderLinks(talentNav)}</div></details>
+        <details><summary>Services <span aria-hidden="true">+</span></summary><div className="redesign-mobile-sub">{renderLinks(serviceNav)}</div></details>
+        <a href="/media" onClick={() => setMobileOpen(false)}>Studios</a>
+        <a href="/work" onClick={() => setMobileOpen(false)}>Our Work</a>
+        <details><summary>Our Ecosystem <span aria-hidden="true">+</span></summary><div className="redesign-mobile-sub">{renderLinks(ecosystemNav)}</div></details>
+        <a href="/contact" className="redesign-mobile-cta" onClick={() => setMobileOpen(false)}>Work With Us ↗</a>
       </nav>
     </header>
   )
@@ -220,7 +278,7 @@ function Footer() {
           <div>
             <span className="footer-brand">LAST SHOT<br /><span className="editorial-red">MEDIA GROUP</span></span>
             <p style={{ maxWidth: 390 }}>
-              An independent creative holding company operating across talent representation, PR, booking, media production, communications and licensing. Dallas, Orlando, New York and Atlanta.
+              Last Shot Media Group Holdings LLC is the independent parent company connecting our representation, PR, production and owned media properties. LSMG also provides direct talent, brand and production services.
             </p>
           </div>
 
@@ -264,6 +322,12 @@ function Footer() {
           </div>
         </div>
 
+        <div className="lsmg-footer-ecosystem" aria-label="LSMG properties">
+          <a href="https://media.thelsmg.com/" target="_blank" rel="noopener noreferrer">Culture Hub ↗</a>
+          <a href="https://activation.thelsmg.com/" target="_blank" rel="noopener noreferrer">Brand Activations ↗</a>
+          <a href="https://lastshotpodcast.net/" target="_blank" rel="noopener noreferrer">The Last Shot Podcast ↗</a>
+          <a href="https://ledgeramagazine.com/" target="_blank" rel="noopener noreferrer">LEDGERA · An LSMG Publication ↗</a>
+        </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Last Shot Media Group Holdings LLC</span>
           <span>Where Creativity Becomes Capital.</span>

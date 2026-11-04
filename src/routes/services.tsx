@@ -53,8 +53,15 @@ const services = [
     num: '06',
     title: 'Partnerships, Licensing & IP',
     copy: 'Brand partnerships, collaborations, sponsorship strategy, music and content licensing, intellectual-property strategy and opportunities that extend creative work into durable business.',
+    href: 'https://activation.thelsmg.com/',
+    cta: 'Explore Brand Activations',
+  },
+  {
+    num: '07',
+    title: 'Photography & Visual Production',
+    copy: 'Editorial photography, event photography, portrait work, campaign imagery and creative direction through the LSMG production team.',
     href: '/contact',
-    cta: 'Partnership Inquiry',
+    cta: 'Photography Inquiry',
   },
 ]
 
