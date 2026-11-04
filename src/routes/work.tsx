@@ -47,7 +47,7 @@ type WorkCategory = 'Film & Festivals' | 'Fashion' | 'Music' | 'Sports' | 'Wrest
 type WorkFilter = WorkCategory | 'All'
 
 const coverageHistory: { category: WorkCategory; events: string[] }[] = [
-  { category: 'Film & Festivals', events: ['Tribeca Film Festival', 'Cannes Film Festival', 'Vancouver Queer Film Festival', 'Inaugural ALZA Festival', 'Urbanfest 360 Film Festival'] },
+  { category: 'Film & Festivals', events: ['Tribeca Film Festival', 'Cannes Film Festival', 'Vancouver Queer Film Festival', 'Inaugural ALZA Festival, including short-film coverage', 'Urbanfest 360 Film Festival', '2026 Woodstock Film Festival'] },
   { category: 'Fashion', events: ['New York Fashion Week', 'Runway 7'] },
   { category: 'Music', events: ['6th Annual Heart & Soul Music Festival', 'Rolling Loud'] },
   { category: 'Sports', events: ['Dallas Cowboys', 'Texas Rangers'] },
@@ -66,8 +66,9 @@ const featuredProjects: {
   { title: 'Trey Miguel', category: 'Wrestling', role: 'Conversation on professional wrestling, life and the journey through TNA', property: 'The Last Shot Podcast / LEDGERA', status: 'Documented interview', year: '2026' },
   { title: 'Deonna Purrazzo', category: 'Wrestling', role: 'Editorial question-and-answer interview', property: 'LEDGERA', status: 'Documented Q&A', year: '2026' },
   { title: 'Eli Morris · VQFF', category: 'Film & Festivals', role: 'Conversation about the future of queer cinema', property: 'LSMG / LEDGERA', status: 'Documented conversation', year: '2026' },
-  { title: 'Jesus Land · Saila Kariat', category: 'Film & Festivals', role: 'Filmmaker interview and podcast/editorial feature in development', property: 'The Last Shot Podcast / LEDGERA', status: 'In production', year: '2026' },
-  { title: 'Inaugural ALZA Festival', category: 'Film & Festivals', role: 'Festival editorial and film reviews in development', property: 'LEDGERA', status: 'In production', year: '2026' },
+  { title: 'Jesus Land · Saila Kariat', category: 'Film & Festivals', role: 'Filmmaker interview and podcast/editorial feature in production', property: 'The Last Shot Podcast / LEDGERA', status: 'In production', year: '2026' },
+  { title: 'Inaugural ALZA Festival', category: 'Film & Festivals', role: 'Festival article and film reviews in production', property: 'LEDGERA', status: 'In production', year: '2026' },
+  { title: '2026 Woodstock Film Festival', category: 'Film & Festivals', role: 'Festival coverage and editorial documentation', property: 'LSMG / LEDGERA', status: 'Coverage history', year: '2026' },
 ]
 
 function WorkPage() {
