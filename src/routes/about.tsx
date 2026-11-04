@@ -22,7 +22,7 @@ type Member = {
 const TEAM: Member[] = [
   {
     name: 'Zachary Heneden',
-    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR IN CHIEF',
+    role: 'CO-CEO · CREATIVE DIRECTOR · EDITOR-IN-CHIEF, LEDGERA MAGAZINE',
     shortRole: 'Co-CEO · Creative Director',
     bio: 'Zachary co-founded Last Shot Media Group to build the kind of creative infrastructure talent rarely gets in one place. He leads creative direction, PR execution, original series development, editorial output and day-to-day work across LSMG properties, including LEDGERA.',
     tags: ['Co-CEO', 'Creative Director', 'Editor In Chief'],
@@ -30,10 +30,10 @@ const TEAM: Member[] = [
   },
   {
     name: "Julien Serrano-O'Neil",
-    role: 'CO-FOUNDER · CO-CEO',
-    shortRole: 'Co-Founder · Co-CEO',
+    role: 'CO-CEO · HEAD OF OPERATIONS',
+    shortRole: 'Co-CEO · Head of Operations',
     bio: 'Julien leads operational systems, business development and organizational infrastructure across LSMG. His work connects the company’s creative ambitions to the structure required to scale partnerships, talent activity and long-term business operations.',
-    tags: ['Co-Founder', 'Co-CEO', 'Operations'],
+    tags: ['Co-CEO', 'Head of Operations'],
     image: '/team/julien.jpg',
   },
   {
@@ -65,9 +65,10 @@ function AboutPage() {
             <div className="editorial-kicker">INDEPENDENT CREATIVE HOLDING COMPANY</div>
             <h1>WE BUILD<br />THE <span>INFRASTRUCTURE.</span></h1>
             <p>
-              Last Shot Media Group operates across talent, media, public relations,
-              production, partnerships and owned publishing. One company built to move
-              creative people and cultural ideas forward.
+              Last Shot Media Group is an independent, Black-owned creative holding company
+              founded in 2020 by Morehouse men Zachary Heneden and Julien Serrano-O’Neil.
+              LSMG connects talent, public relations, production, editorial publishing and
+              brand partnerships through one creative ecosystem.
             </p>
           </div>
         </div>
@@ -90,8 +91,8 @@ function AboutPage() {
               <p>
                 Last Shot Media Group Holdings LLC is the independent parent company
                 connecting our representation, communications, production and owned media.
-                We stay close to the work, so our divisions can support talent, clients and
-                projects instead of operating in isolation.
+                The company’s founding history dates to 2020; the current legal entity
+                formation date is separate and should not be read as the company’s founding date.
               </p>
             </div>
           </div>
@@ -121,8 +122,7 @@ function AboutPage() {
               <h2>THE PEOPLE<br /><span>BEHIND LSMG.</span></h2>
             </div>
             <p>
-              Portrait-first. No corporate headshot wall. Meet the people directing the
-              company, its operations and its talent relationships.
+              Meet the people directing the company, its operations and its talent relationships.
             </p>
           </div>
 
