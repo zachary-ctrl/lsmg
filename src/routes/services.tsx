@@ -63,6 +63,13 @@ const services = [
     href: '/contact',
     cta: 'Photography Inquiry',
   },
+  {
+    num: '08',
+    title: 'Festival & Event Coverage',
+    copy: 'On-location interviews, photography, red carpet reporting and multimedia coverage across film, fashion, music, sports and creator culture.',
+    href: '/contact',
+    cta: 'Coverage Inquiry',
+  },
 ]
 
 function ServicesPage() {
@@ -89,6 +96,29 @@ function ServicesPage() {
                 <a href={service.href}>{service.cta} ↗</a>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="editorial-section lsmg-process-section">
+        <div className="editorial-container">
+          <div className="section-heading-grid">
+            <div>
+              <span className="editorial-kicker">How to begin</span>
+              <h2 className="editorial-display section-title">DISCOVER.<br /><span className="editorial-red">DESIGN. ALIGN.</span></h2>
+            </div>
+            <div className="section-intro">
+              <p>We start by understanding the project, then recommend the services, creative approach and platforms that fit. Before launch, we confirm scope, deliverables, timing and reporting.</p>
+            </div>
+          </div>
+          <div className="lsmg-process-grid">
+            <article><span>01</span><h3>Discover</h3><p>Understand the project, audience, goals and timing.</p></article>
+            <article><span>02</span><h3>Design</h3><p>Recommend the services, creative approach and platforms that fit.</p></article>
+            <article><span>03</span><h3>Align</h3><p>Confirm scope, deliverables, timing and reporting before launch.</p></article>
+          </div>
+          <div className="lsmg-process-links">
+            <a href="/contact" className="editorial-cta red">Start a Direct LSMG Inquiry ↗</a>
+            <a href="https://activation.thelsmg.com/" target="_blank" rel="noopener noreferrer" className="editorial-cta">Advertising &amp; Sponsorship Campaigns ↗</a>
           </div>
         </div>
       </section>
