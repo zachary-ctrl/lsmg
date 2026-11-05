@@ -14,11 +14,11 @@ export const Route = createFileRoute('/')({
 interface TickerItem { id:number; text:string; linkUrl:string|null; linkType:string; isActive:boolean }
 const categories=['Models','Actors','Sports','Music','Media','Public Figures']
 const divisions=[
-  ['01','Talent','Representation across models, actors, sports, music, media and public figures.','/models'],
-  ['02','PR + Communications','Press campaigns, media relations, positioning, narrative strategy and reputation support.','/pr'],
-  ['03','Booking','Appearances, performances, negotiations and opportunity development across markets.','/booking'],
-  ['04','Studios','Scripted projects, podcasts, documentary, editorial and branded production.','/media'],
-  ['05','Partnerships','Brand collaborations, sponsorship strategy, licensing and commercial opportunities.','https://activation.thelsmg.com/'],
+  ['01','Talent','Talent is the starting point: representation, relationships, opportunity sourcing and career infrastructure.','/models'],
+  ['02','Narrative','PR and communications turn creative work into positioning, press and a public-facing story.','/pr'],
+  ['03','Production','Studios turn ideas into film, photography, podcasts, documentaries and branded work.','/media'],
+  ['04','Owned Media','LEDGERA and LSMG media properties publish, document and extend the work.','https://ledgeramagazine.com/'],
+  ['05','Partnerships','Commercial partners, licensing and activations connect the creative ecosystem to capital.','https://activation.thelsmg.com/'],
 ] as const
 
 function LiveTicker(){
@@ -68,7 +68,7 @@ function HomePage(){return <div className="v2-home">
     <a href="/models#media" className="v2-talent-card v2-talent-card-paper"><img src="/team/ashley.jpg" alt="Ashley Diaz, LSMG team member; media category illustration" loading="lazy" /><div><span>05</span><strong>MEDIA</strong><em>Creators + personalities ↗</em></div></a>
     <a href="/models#public-figures" className="v2-talent-card v2-talent-card-dark"><img src="https://images.squarespace-cdn.com/content/v1/536e3872e4b02cbd6b6e124c/82cb18b8-a019-4534-a006-323bfa5de1e9/Sandra%2BFatmi-Hall%2C%2BHeadshot.png" alt="Sandra Fatmi-Hall, public figure and speaker" loading="lazy" /><div><span>06</span><strong>PUBLIC FIGURES</strong><em>Public-facing representation ↗</em></div></a>
   </div><div className="v2-ledgera-link"><span>LEDGERA MODELS ARE PRESENTED SEPARATELY FROM LSMG REPRESENTATION.</span><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer">Explore LEDGERA Models ↗</a></div></div></section>
-  <section className="v2-divisions"><div className="editorial-container"><div className="v2-section-head v2-section-head-light"><div className="v2-section-index">03 / THE SYSTEM</div><h2>ONE COMPANY.<br/><span>MULTIPLE ENGINES.</span></h2></div><div className="v2-division-list">{divisions.map(([n,t,c,h])=><a href={h} className="v2-division-row" key={n}><span className="v2-division-num">{n}</span><strong>{t}</strong><p>{c}</p><span className="v2-arrow">↗</span></a>)}</div></div></section>
+  <section className="v2-divisions"><div className="editorial-container"><div className="v2-section-head v2-section-head-light"><div className="v2-section-index">03 / HOW WE WORK</div><h2>CONNECTED<br/><span>BY DESIGN.</span></h2></div><div className="v2-division-list">{divisions.map(([n,t,c,h])=><a href={h} className="v2-division-row" key={n}><span className="v2-division-num">{n}</span><strong>{t}</strong><p>{c}</p><span className="v2-arrow">↗</span></a>)}</div></div></section>
 
   <section className="v2-new-work" id="selected-work"><div className="editorial-container">
     <div className="v2-section-head"><div className="v2-section-index">04 / SELECTED WORK</div><h2>IN THE ROOM.<br/><span>ON THE RECORD.</span></h2></div>
@@ -100,6 +100,6 @@ function HomePage(){return <div className="v2-home">
       <small>{item.eyebrow}</small><strong>{item.label}</strong><p>{item.description}</p><span>{item.action} ↗</span>
     </a>)}</div>
   </div></section>
-  <section className="v2-culture-split"><div className="v2-studios-panel"><div className="v2-section-index">08 / PRODUCTION</div><h2>LSMG<br/>STUDIOS</h2><p>Original scripted content, podcasts, documentaries, editorial production and brand storytelling.</p><Link to="/media" className="v2-outline-btn">Enter Studios ↗</Link></div><div className="v2-ledgera-panel"><div className="v2-section-index">09 / OWNED MEDIA</div><h2>LEDGERA</h2><p>Independent editorial publishing, culture features, interviews, covers and the magazine&apos;s own model community.</p><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="v2-outline-btn v2-outline-dark">Visit LEDGERA ↗</a></div></section>
+  <section className="v2-culture-split"><div className="v2-studios-panel"><div className="v2-section-index">08 / PRODUCTION</div><h2>LSMG<br/>STUDIOS</h2><p>Original scripted content, podcasts, documentaries, editorial production and brand storytelling.</p><Link to="/media" className="v2-outline-btn">Enter Studios ↗</Link></div><div className="v2-ledgera-panel"><div className="v2-section-index">09 / OWNED MEDIA</div><h2><span>LEDGERA</span></h2><p>Independent editorial publishing, culture features, interviews, covers and the magazine&apos;s own model community.</p><a href="https://ledgeramagazine.com" target="_blank" rel="noopener noreferrer" className="v2-outline-btn v2-outline-dark">Visit LEDGERA ↗</a></div></section>
   <section className="v2-final-cta"><div className="editorial-container v2-final-grid"><div className="v2-section-index">10 / CONTACT</div><div><h2>MAKE THE<br/><span>NEXT MOVE.</span></h2><p>Representation. Press. Partnerships. Booking. Production. Licensing. Communications.</p><div className="v2-final-actions"><Link to="/contact" className="v2-solid-btn">Start a Conversation ↗</Link><Link to="/internships" className="v2-text-btn">College Internships →</Link></div></div></div></section>
 </div>}
