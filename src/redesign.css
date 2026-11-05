@@ -708,3 +708,23 @@ html, body { max-width:100%; overflow-x:clip; }
   .v2-section-head, .about-v3-section-head, .section-heading-grid { min-width:0; }
   .v2-section-head h2, .about-v3-section-head h2, .section-title { overflow-wrap:anywhere; }
 }
+
+/* Julien website fix pass — 2026-11-05 */
+.about-v3-hero-copy { min-width:0; }
+.about-v3-hero-copy h1 { max-width:none; font-size:clamp(72px,11vw,168px); overflow-wrap:anywhere; }
+.about-v3-hero-copy h1 span { display:inline; white-space:normal; }
+.about-v3-leadership .editorial-kicker,
+.about-v3-leadership .v2-section-index { color:#4e4942; }
+.about-v3-leadership .about-v3-section-head > p { color:#4e4942; }
+.about-v3-leadership a { color:#171717; }
+.v2-culture-split h2 { max-width:100%; overflow-wrap:anywhere; }
+.v2-ledgera-panel h2 { font-size:clamp(62px,8vw,122px); }
+.v2-ledgera-panel h2 span { color:#fff; }
+@media (max-width:900px) {
+  .about-v3-hero-copy h1 { font-size:clamp(66px,12vw,128px); }
+  .v2-ledgera-panel h2 { font-size:clamp(58px,14vw,108px); }
+}
+@media (max-width:600px) {
+  .about-v3-hero-copy h1 { font-size:clamp(54px,15vw,92px); line-height:.82; }
+  .v2-ledgera-panel h2 { font-size:clamp(52px,18vw,84px); }
+}
