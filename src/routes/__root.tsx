@@ -189,6 +189,11 @@ function Header() {
   useEffect(() => setMobileOpen(false), [pathname])
 
   useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
       setMobileOpen(false)
